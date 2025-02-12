@@ -1,0 +1,6 @@
+Enseñar glosario-> decirle que para símbolos que no hay en el teclado se usa texto 
+Enseñar repo de Jorge cisneros
+Chequear 62,64,71,74 y 78.
+Ver que mas se puede chequear.
+Mantiene Contexto
+Problema con la historia de las ciencias de la computacion, no lo asocia con el tema tratado.

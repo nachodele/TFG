@@ -1,0 +1,19 @@
+Limpia los .class, que es la version que se esta compilando de los .java
+1. mvn clean
+
+Para generar el JAR
+2. mvn clean package
+
+mvn clean install
+Este comando:
+
+    Limpia el directorio target.
+    Compila los archivos fuente.
+    Ejecuta las pruebas (si las hay).
+    Empaqueta el proyecto (por ejemplo, genera un JAR).
+    Instala el artefacto generado en tu repositorio local (~/.m2/repository).
+
+Para guardar la API Key:
+export GROQ_API_KEY="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"
+
+Meter que guarde contexto solo en la consulta de documentacion

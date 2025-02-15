@@ -29,6 +29,9 @@ public class AppGUI {
         String apiKey = System.getenv("GROQ_API_KEY");
         GrammarAutomataProcessor processor = new GrammarAutomataProcessor(apiKey);
 
+        // Variable para almacenar la pregunta anterior (únicamente la inmediatamente anterior)
+        final String[] previousQuestion = {null};
+
         // Crear el marco principal
         JFrame frame = new JFrame("Aplicación");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -39,16 +42,12 @@ public class AppGUI {
 
         // --- Panel MENÚ: Contiene título, botones e información ---
         JPanel menuPanel = new JPanel(new BorderLayout());
-
-        // Título de la aplicación
         JLabel titleLabel = new JLabel("Gramáticas regulares e independientes de contexto y autómatas finitos");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         menuPanel.add(titleLabel, BorderLayout.NORTH);
-        // Margen entre borde superior y título
         menuPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 
-        // Panel central con los botones
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton docButton = new JButton("Consulta de Documentación");
         JButton tutorButton = new JButton("Tutor Virtual");
@@ -59,73 +58,71 @@ public class AppGUI {
         tutorButton.setPreferredSize(new Dimension(300, 100));
         buttonPanel.add(docButton);
         buttonPanel.add(tutorButton);
-        // Espacio entre título y botones
         buttonPanel.add(Box.createVerticalStrut(200));
-        // Añadir el panel de botones al centro
         menuPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        // Crear un panel adicional para agrupar la imagen y el texto informativo
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
-
-        // Cargar y añadir la imagen
         ImageIcon ufvIcon = new ImageIcon(AppGUI.class.getClassLoader().getResource("ufv.png"));
         JLabel imageLabel = new JLabel(ufvIcon);
-        imageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT); // Centrar horizontalmente
+        imageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         southPanel.add(imageLabel);
-
-        // Añadir espacio entre la imagen y el texto
         southPanel.add(Box.createVerticalStrut(50));
-
-        // Añadir el texto informativo
-        String infoText = "<html><body style='text-align: center; font-size: 11px; line-height: 1.4;'>" +
-                "<b>Acerca de esta herramienta</b><br>" +
-                "Proyecto CHATBOT para JFLAP<br>" +
-                "Profesor: Juan José Escribano<br>" +
-                "Autor: Ignacio de Lecea Jiménez<br>" +
-                "Fecha: 2024-2025<br>" +
-                "Estado: En desarrollo<br><br>" +
-                "Esta herramienta permite analizar consultas relacionadas con gramáticas regulares, gramáticas independientes de contexto y autómatas finitos.<br>" +
-                "También proporciona el servicio de un tutor virtual para facilitar la resolución de problemas." +
-                "</body></html>";
-
+        String infoText = "<html><body style='text-align: center; font-size: 11px; line-height: 1.4;'>"
+                + "<b>Acerca de esta herramienta</b><br>"
+                + "Proyecto CHATBOT para JFLAP<br>"
+                + "Profesor: Juan José Escribano<br>"
+                + "Autor: Ignacio de Lecea Jiménez<br>"
+                + "Fecha: 2024-2025<br>"
+                + "Estado: En desarrollo<br><br>"
+                + "Esta herramienta permite analizar consultas relacionadas con gramáticas regulares, gramáticas independientes de contexto y autómatas finitos.<br>"
+                + "También proporciona el servicio de un tutor virtual para facilitar la resolución de problemas."
+                + "</body></html>";
         JLabel infoLabel = new JLabel(infoText);
         infoLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         southPanel.add(infoLabel);
-        // Margen entre texto informativo y borde inferior
         southPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-        // Añadir el panel sur al menú principal
         menuPanel.add(southPanel, BorderLayout.SOUTH);
 
-        // --- Panel Consulta de Documentación (DOC): Sin cabecera ni pie ---
+        // --- Panel Consulta de Documentación (DOC) ---
         JPanel docPanel = new JPanel();
         docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
-
         JLabel queryLabel = new JLabel("Ingrese su consulta:");
         queryLabel.setFont(new Font("Serif", Font.BOLD, 14));
-
         JTextArea queryInput = new JTextArea(5, 40);
         queryInput.setLineWrap(true);
         queryInput.setWrapStyleWord(true);
         JScrollPane queryScroll = new JScrollPane(queryInput);
-
         JButton processButton = new JButton("Procesar Consulta");
-
         JLabel responseLabel = new JLabel("Respuesta:");
         responseLabel.setFont(new Font("Serif", Font.BOLD, 15));
-
         JTextArea responseArea = new JTextArea(15, 60);
         responseArea.setEditable(false);
         responseArea.setLineWrap(true);
         responseArea.setWrapStyleWord(true);
         JScrollPane responseScroll = new JScrollPane(responseArea);
-
         JButton backFromDocButton = new JButton("Volver al menú");
 
         processButton.addActionListener(e -> {
-            String userQuery = queryInput.getText();
-            String rawResponse = processor.answerQuestion(userQuery);
-            String cleanedResponse = cleanResponse(rawResponse); // Limpiar la respuesta
+            String userQuery = queryInput.getText().trim();
+
+            if (userQuery.isEmpty()) {
+                responseArea.setText("Por favor, ingrese una consulta.");
+                return;
+            }
+
+            // Llamar a answerQuestion con la pregunta anterior y la actual
+            String rawResponse;
+            try {
+                rawResponse = processor.answerQuestion(userQuery, previousQuestion[0] == null ? "" : previousQuestion[0]);
+                // Actualizar la pregunta anterior solo si no hubo errores
+                previousQuestion[0] = userQuery;
+            } catch (Exception ex) {
+                rawResponse = "Error al procesar la consulta: " + ex.getMessage();
+            }
+
+            // Limpiar y mostrar la respuesta
+            String cleanedResponse = cleanResponse(rawResponse);
             responseArea.setText("Respuesta:\n" + cleanedResponse);
         });
 
@@ -134,102 +131,84 @@ public class AppGUI {
             cl.show(cardPanel, "MENU");
         });
 
-        docPanel.add(queryLabel);       // Agregar título "Consulta:"
-        docPanel.add(queryScroll);      // Área de texto para la consulta
-        docPanel.add(Box.createVerticalStrut(10)); // Espacio entre consulta y botón
-        docPanel.add(processButton);    // Botón para procesar la consulta
-        docPanel.add(Box.createVerticalStrut(20)); // Espacio entre botón y "Respuesta:"
-        docPanel.add(responseLabel);    // Título "Respuesta:"
-        docPanel.add(responseScroll);   // Área de texto para mostrar la respuesta
-        docPanel.add(Box.createVerticalStrut(10)); // Espacio antes del botón de volver
-        docPanel.add(backFromDocButton); // Botón para volver al menú
-
+        docPanel.add(queryLabel);
+        docPanel.add(queryScroll);
+        docPanel.add(Box.createVerticalStrut(10));
+        docPanel.add(processButton);
+        docPanel.add(Box.createVerticalStrut(20));
+        docPanel.add(responseLabel);
+        docPanel.add(responseScroll);
+        docPanel.add(Box.createVerticalStrut(10));
+        docPanel.add(backFromDocButton);
 
         // --- Panel Tutor Virtual ---
         JPanel tutorPanel = new JPanel();
         tutorPanel.setLayout(new BoxLayout(tutorPanel, BoxLayout.Y_AXIS));
-
-        // Etiqueta "Enunciado:" y botón "Glosario" en la misma fila (alineados a la izquierda)
         JLabel problemStatementLabel = new JLabel("Enunciado:");
         problemStatementLabel.setFont(new Font("Serif", Font.BOLD, 15));
         problemStatementLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-
         JButton glossaryButton = new JButton("Glosario");
         glossaryButton.setAlignmentX(JButton.LEFT_ALIGNMENT);
 
-            glossaryButton.addActionListener(e -> {
-        try {
-            // Leer el archivo glosario.md
-            Path glossaryPath = Paths.get(AppGUI.class.getClassLoader().getResource("glosario.md").toURI());
-            String glossaryContent = Files.readString(glossaryPath);
-
-            // Procesar el contenido del glosario para convertirlo en una tabla
-            String[] lines = glossaryContent.split("\n");
-            StringBuilder htmlTable = new StringBuilder("<html><body><table border='1' style='border-collapse: collapse; width: 100%;'>");
-
-            for (String line : lines) {
-                if (line.startsWith("|")) { // Filtrar filas de la tabla Markdown
-                    String[] cells = line.split("\\|");
-                    htmlTable.append("<tr>");
-                    for (String cell : cells) {
-                        if (!cell.trim().isEmpty()) {
-                            if (line.contains("**")) { // Detectar encabezados
-                                htmlTable.append("<th style='padding: 8px; text-align: left;'>").append(cell.trim().replace("**", "")).append("</th>");
-                            } else {
-                                htmlTable.append("<td style='padding: 8px;'>").append(cell.trim()).append("</td>");
+        glossaryButton.addActionListener(e -> {
+            try {
+                Path glossaryPath = Paths.get(AppGUI.class.getClassLoader().getResource("glosario.md").toURI());
+                String glossaryContent = Files.readString(glossaryPath);
+                String[] lines = glossaryContent.split("\n");
+                StringBuilder htmlTable = new StringBuilder("<html><body><table border='1' style='border-collapse: collapse; width: 100%;'>");
+                for (String line : lines) {
+                    if (line.startsWith("|")) {
+                        String[] cells = line.split("\\|");
+                        htmlTable.append("<tr>");
+                        for (String cell : cells) {
+                            if (!cell.trim().isEmpty()) {
+                                // Si la celda contiene markdown en negrita (**), se quitan los marcadores.
+                                String cellContent = cell.trim().replace("**", "");
+                                htmlTable.append("<td>").append(cellContent).append("</td>");
                             }
                         }
+                        htmlTable.append("</tr>");
                     }
-                    htmlTable.append("</tr>");
                 }
+                htmlTable.append("</table></body></html>");
+                JEditorPane editorPane = new JEditorPane("text/html", htmlTable.toString());
+                editorPane.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(editorPane);
+                scrollPane.setPreferredSize(new Dimension(600, 400));
+                JOptionPane.showMessageDialog(null, scrollPane, "Glosario", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cargar el glosario", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        });
 
-            htmlTable.append("</table></body></html>");
-
-            // Mostrar la tabla en un JEditorPane
-            JEditorPane editorPane = new JEditorPane("text/html", htmlTable.toString());
-            editorPane.setEditable(false);
-            JScrollPane scrollPane = new JScrollPane(editorPane);
-            scrollPane.setPreferredSize(new Dimension(600, 400));
-
-            JOptionPane.showMessageDialog(null, scrollPane, "Glosario", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al cargar el glosario", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    });
-
-
-        // Panel para agrupar "Enunciado:" y el botón "Glosario"
         JPanel enunciadoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         enunciadoPanel.add(glossaryButton);
         enunciadoPanel.add(problemStatementLabel);
         enunciadoPanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
         tutorPanel.add(enunciadoPanel);
 
-        // Área de texto para el enunciado del problema
         JTextArea problemStatementInput = new JTextArea(10, 60);
         problemStatementInput.setLineWrap(true);
         problemStatementInput.setWrapStyleWord(true);
+
         JScrollPane problemScroll = new JScrollPane(problemStatementInput);
         problemScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(problemScroll);
 
-        // Etiqueta "Escribe tu solución:" (alineada a la izquierda)
         JLabel userSolutionLabel = new JLabel("Ingrese su solución:");
         userSolutionLabel.setFont(new Font("Serif", Font.BOLD, 15));
         userSolutionLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         tutorPanel.add(userSolutionLabel);
 
-        // Área de texto para que el usuario escriba su solución
         JTextArea userSolutionInput = new JTextArea(10, 60);
         userSolutionInput.setLineWrap(true);
         userSolutionInput.setWrapStyleWord(true);
+
         JScrollPane solutionScroll = new JScrollPane(userSolutionInput);
         solutionScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(solutionScroll);
 
-        // Panel para agrupar el botón "Evaluar Solución" (alineado a la izquierda)
         JButton evaluateButton = new JButton("Evaluar Solución");
         JPanel buttonRowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonRowPanel.add(evaluateButton);
@@ -237,22 +216,20 @@ public class AppGUI {
         tutorPanel.add(Box.createVerticalStrut(10));
         tutorPanel.add(buttonRowPanel);
 
-        // Etiqueta "Feedback:"
         JLabel tutorResponseLabel = new JLabel("Feedback:");
         tutorResponseLabel.setFont(new Font("Serif", Font.BOLD, 15));
         tutorResponseLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
         tutorPanel.add(tutorResponseLabel);
 
-        // Área para mostrar el feedback del tutor
         JTextArea tutorResponseArea = new JTextArea(15, 60);
         tutorResponseArea.setEditable(false);
         tutorResponseArea.setLineWrap(true);
         tutorResponseArea.setWrapStyleWord(true);
+
         JScrollPane tutorResponseScroll = new JScrollPane(tutorResponseArea);
         tutorResponseScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(tutorResponseScroll);
 
-        // Botón "Volver al menú", también alineado a la izquierda
         JButton backFromTutorButton = new JButton("Volver al menú");
         backFromTutorButton.setAlignmentX(JButton.LEFT_ALIGNMENT);
         tutorPanel.add(backFromTutorButton);
@@ -262,31 +239,40 @@ public class AppGUI {
             cl.show(cardPanel, "MENU");
         });
 
-
+        evaluateButton.addActionListener(e -> {
+            String problemStatement = problemStatementInput.getText();
+            String userSolution = userSolutionInput.getText();
+            if (problemStatement.isEmpty() || userSolution.isEmpty()) {
+                tutorResponseArea.setText("Por favor, complete ambos campos antes de evaluar.");
+                return;
+            }
+            String rawResponse = processor.evaluateProblem(problemStatement, userSolution);
+            String cleanedResponse = cleanResponse(rawResponse);
+            tutorResponseArea.setText("Feedback:\n" + cleanedResponse);
+        });
 
         // --- Agregar los tres paneles al contenedor de tarjetas ---
         cardPanel.add(menuPanel, "MENU");
         cardPanel.add(docPanel, "DOC");
         cardPanel.add(tutorPanel, "TUTOR");
 
-        // Acciones para cambiar entre paneles
         docButton.addActionListener(e -> {
             CardLayout cl = (CardLayout) (cardPanel.getLayout());
-            queryInput.setText(""); // Limpiar el campo de consulta
-            responseArea.setText(""); // Limpiar el área de respuesta
-            cl.show(cardPanel, "DOC"); // Cambiar al panel de documentación
+            queryInput.setText("");
+            responseArea.setText("");
+            cl.show(cardPanel, "DOC");
         });
 
         tutorButton.addActionListener(e -> {
             CardLayout cl = (CardLayout) (cardPanel.getLayout());
-            problemStatementInput.setText(""); // Limpiar el enunciado del problema
-            userSolutionInput.setText(""); // Limpiar la solución del usuario
-            tutorResponseArea.setText(""); // Limpiar el feedback
-            cl.show(cardPanel, "TUTOR"); // Cambiar al panel de tutor virtual
+            problemStatementInput.setText("");
+            userSolutionInput.setText("");
+            tutorResponseArea.setText("");
+            cl.show(cardPanel, "TUTOR");
         });
 
         frame.setContentPane(cardPanel);
-        frame.setVisible(true); // Hacer visible la ventana principal
+        frame.setVisible(true);
     }
 
     /**

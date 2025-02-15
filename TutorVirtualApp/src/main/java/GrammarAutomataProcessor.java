@@ -22,18 +22,15 @@ public class GrammarAutomataProcessor {
     private String context;
     private String context2;
     private String glossary;
-    private String historyContext;
 
     public GrammarAutomataProcessor(String apiKey) {
         this.apiKey = apiKey;
         this.client = new OkHttpClient();
 
-        // Cargar los contextos necesarios
         try {
             this.context = loadDocuContext();
             this.context2 = loadExerciseContext();
             this.glossary = loadGlossary();
-            this.historyContext = loadHistoryContext(); // Cargar el contexto histórico
         } catch (IOException e) {
             System.err.println("Error al cargar los contextos: " + e.getMessage());
         }
@@ -41,10 +38,12 @@ public class GrammarAutomataProcessor {
 
     private String loadDocuContext() throws IOException {
         StringBuilder contextData = new StringBuilder();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(
-                Paths.get(getClass().getClassLoader().getResource("Docu").toURI()), "*.md")) {
-            for (Path file : stream) {
-                contextData.append(Files.readString(file)).append("\n");
+        try {
+            Path docuPath = Paths.get(getClass().getClassLoader().getResource("Docu").toURI());
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(docuPath, "*.md")) {
+                for (Path file : stream) {
+                    contextData.append(Files.readString(file)).append("\n");
+                }
             }
         } catch (URISyntaxException e) {
             throw new IOException("Error al cargar la carpeta 'Docu': " + e.getMessage());
@@ -54,10 +53,12 @@ public class GrammarAutomataProcessor {
 
     private String loadExerciseContext() throws IOException {
         StringBuilder exerciseData = new StringBuilder();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(
-                Paths.get(getClass().getClassLoader().getResource("Ejercicios").toURI()), "*.md")) {
-            for (Path file : stream) {
-                exerciseData.append(Files.readString(file)).append("\n");
+        try {
+            Path ejerciciosPath = Paths.get(getClass().getClassLoader().getResource("Ejercicios").toURI());
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(ejerciciosPath, "*.md")) {
+                for (Path file : stream) {
+                    exerciseData.append(Files.readString(file)).append("\n");
+                }
             }
         } catch (URISyntaxException e) {
             throw new IOException("Error al cargar la carpeta 'Ejercicios': " + e.getMessage());
@@ -74,21 +75,64 @@ public class GrammarAutomataProcessor {
         }
     }
 
-    private String loadHistoryContext() throws IOException {
+    /**
+     * Analiza el contexto entre la pregunta anterior y la actual.
+     * Si la pregunta anterior es nula o vacía, se devuelve la pregunta actual.
+     */
+    public String analyzeContext(String previousQuestion, String currentQuestion) {
+        if (currentQuestion == null || currentQuestion.isEmpty()) {
+            return "Error: La pregunta actual está vacía.";
+        }
+
+        if (previousQuestion == null || previousQuestion.isEmpty()) {
+            return currentQuestion;
+        }
+
         try {
-            Path historyPath = Paths.get(getClass().getClassLoader().getResource("Historia_de_las_ciencias_de_la_computacion.md").toURI());
-            return Files.readString(historyPath);
-        } catch (NullPointerException | URISyntaxException e) {
-            throw new IOException("El archivo 'Historia_de_las_ciencias_de_la_computacion.md' no existe en el directorio 'resources'.");
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", "llama-3.3-70b-versatile");
+            requestBody.put("messages", List.of(
+                Map.of("role", "user", "content", formatTemplateContextAnalysis(previousQuestion, currentQuestion))
+            ));
+            requestBody.put("temperature", 0.1);
+            requestBody.put("max_tokens", 256);
+
+            String json = new ObjectMapper().writeValueAsString(requestBody);
+            RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+            Request request = new Request.Builder()
+                    .url("https://api.groq.com/openai/v1/chat/completions")
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Error en la solicitud: Código HTTP " 
+                        + response.code() + " - " + response.body().string());
+                }
+                return new ObjectMapper().readTree(response.body().string())
+                        .get("choices").get(0).get("message").get("content").asText();
+            }
+        } catch (Exception e) {
+            return "Error al analizar el contexto: " + e.getMessage();
         }
     }
 
-    public String answerQuestion(String userInput) {
+    /**
+     * Responde a la pregunta actual utilizando la pregunta anterior como contexto.
+     */
+    public String answerQuestion(String userInput, String previousQuestion) {
+        if (userInput == null || userInput.isEmpty()) {
+            return "Error: La entrada del usuario está vacía.";
+        }
+
         try {
+            String analyzedQuestion = analyzeContext(previousQuestion, userInput);
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("model", "llama-3.3-70b-versatile"); // Incluye el modelo aquí
+            requestBody.put("model", "llama-3.3-70b-versatile");
             requestBody.put("messages", List.of(
-                Map.of("role", "user", "content", formatTemplateAnswer(userInput))
+                Map.of("role", "user", "content", formatTemplateAnswer(analyzedQuestion))
             ));
             requestBody.put("temperature", 0.1);
             requestBody.put("max_tokens", 1024);
@@ -97,23 +141,26 @@ public class GrammarAutomataProcessor {
             RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
             Request request = new Request.Builder()
-                .url("https://api.groq.com/openai/v1/chat/completions")
-                .post(body)
-                .addHeader("Authorization", "Bearer " + apiKey)
-                .build();
+                    .url("https://api.groq.com/openai/v1/chat/completions")
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .build();
 
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                throw new IOException("Error en la solicitud: Código HTTP " + response.code() + " - " + response.body().string());
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Error en la solicitud: Código HTTP " 
+                        + response.code() + " - " + response.body().string());
+                }
+                return response.body().string();
             }
-
-            return response.body().string();
-
         } catch (Exception e) {
             return "Error al procesar la consulta: " + e.getMessage();
         }
     }
 
+    /**
+     * Evalúa la solución del usuario para un problema específico.
+     */
     public String evaluateProblem(String problemStatement, String userSolution) {
         try {
             Map<String, Object> requestBody = new HashMap<>();
@@ -123,136 +170,121 @@ public class GrammarAutomataProcessor {
             ));
             requestBody.put("temperature", 0.1);
             requestBody.put("max_tokens", 1024);
-    
+
             String json = new ObjectMapper().writeValueAsString(requestBody);
             RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
             Request request = new Request.Builder()
-                .url("https://api.groq.com/openai/v1/chat/completions")
-                .post(body)
-                .addHeader("Authorization", "Bearer " + apiKey)
-                .build();
-    
-            Response response = client.newCall(request).execute();
-            if (!response.isSuccessful()) {
-                throw new IOException("Error en la solicitud: Código HTTP " + response.code() + " - " + response.body().string());
+                    .url("https://api.groq.com/openai/v1/chat/completions")
+                    .post(body)
+                    .addHeader("Authorization", "Bearer " + apiKey)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Error en la solicitud: Código HTTP " 
+                        + response.code() + " - " + response.body().string());
+                }
+                return response.body().string();
             }
-    
-            return response.body().string();
         } catch (Exception e) {
             return "Error al evaluar el problema: " + e.getMessage();
         }
     }
-    
 
-    // Formatear plantilla para responder preguntas con instrucciones detalladas
-    private String formatTemplateAnswer(String userInput) {
+    private String formatTemplateContextAnalysis(String previousQuestion, String currentQuestion) {
         return """
-               You are an expert in the subject of Regular Grammars, Context-Free Grammars, and Finite Automata.
-               Respond only with information related to this subject relying on the provided context.
-
-               Critical Instructions:
-               1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
-               - GIC stands for: Gramática Independiente de Contexto
-               - G2 stands for: Gramática Independiente de Contexto  
-               - LIC stands for: Lenguaje Independiente de contexto
-               - LICD stands for: Lenguaje Independiente de contexto Determinista
-               - LICND stands for: Lenguaje Independiente de contexto No Determinista
-               - GR stands for: Gramática Regular
-               - G3 stands for: Gramática Regular  
-               - G3LD stands for: Gramática Regular (G3) Lineal por la Derecha
-               - G3LI stands for: Gramática Regular (G3) Lineal por la Izquierda
-               - MT stands for: Máquina de Turing
-               - AP stands for: Autómata a Pila
-               - AF stands for: Autómata finito
-               - AFD stands for: Autómatas Finitos Deterministas
-               - AFND stands for: Autómatas Finitos No Deterministas
-               - APF stands for: Autómata a pila por estados finales
-               - APV stands for: Autómata a pila por vaciado
-               - FNC stands for: Forma Normal de Chomsky
-               - FNG stands for: Forma Normal de Greibach
-               - ER stands for: Expresión regular
-               - APD stands for: Autómata a Pila Determinista  
-               - APND stands for: Autómata a Pila No Determinista  
-               - GICD stands for: Gramática Independiente de Contexto Determinista  
-               - GICND stands for: Gramática Independiente de Contexto No Determinista  
-               - LR stands for: Lenguaje Regular  
-               - G0 stands for: Gramática sin restricciones
-               - G1 stands for: Gramática sensible al contexto  
-               - ERD stands for: Expresión Regular Determinista
-
-               2. Do not use abbreviations in your response.
-Quiero crear una App usando Visual Studio Code en lenguaje Java, con Visual Studio Code, que cumpla las mismas funcionalidades que el archivo app.txt:
-               3. If the user asks about any of the following figures:
-                  Alan Turing, Stephen Kleene, Von Neumann, Noam Chomsky, Grace Murray Hopper, Ada Byron, Alfred Aho, Brian Kernighan,
-                  Dennis Ritchie, Hedy Lamarr, Evelyn Berezin, Frances E. Allen, Anita Borg, Top Secret Rosies, Lynn Conway, Jude Milhon,
-                  Ángela Ruíz Robles.
-
-                  Always prioritize content from the Document about history of computational science:
-                  %s
-
-               Context from files:
-               %s
-
-               User Question:
-               %s
-
-               Based on the provided context, answer the user's question as accurately and concisely as possible. Ensure that:
-
-               1. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
-
-               2. If the user asks about any of the specified historical figures, ensure that your response is derived primarily from the historical context.
-
-               3. The answer is directly derived from the context.
-
-               4. Technical terms are preserved exactly as they appear.
-
-               5. The answer is clear and actionable.
-
-               Answer:
-               """.formatted(historyContext, context, userInput);
+                Analyze if the current question is related to the previous one. If it is related, incorporate only the essential context from the previous question to make the current question complete and standalone.
+                Previous Question:
+                %s
+                Current Question:
+                %s
+                Important:
+                - Only include context that is absolutely necessary to understand the current question.
+                - Do not add any explanations or additional information.
+                - The output should be a single, concise question that can stand on its own.
+                """.formatted(previousQuestion, currentQuestion);
     }
 
-
+    private String formatTemplateAnswer(String userInput) {
+        return """
+                You are an expert in the subject of Regular Grammars, Context-Free Grammars, and Finite Automata.
+                Respond only with information related to this subject relying on the provided context.... Critical Instructions:
+                1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
+                - GIC stands for: Gramática Independiente de Contexto
+                - G2 stands for: Gramática Independiente de Contexto  
+                - LIC stands for: Lenguaje Independiente de contexto
+                - LICD stands for: Lenguaje Independiente de contexto Determinista
+                - LICND stands for: Lenguaje Independiente de contexto No Determinista
+                - GR stands for: Gramática Regular
+                - G3 stands for: Gramática Regular  
+                - G3LD stands for: Gramática Regular (G3) Lineal por la Derecha
+                - G3LI stands for: Gramática Regular (G3) Lineal por la Izquierda
+                - MT stands for: Máquina de Turing
+                - AP stands for: Autómata a Pila
+                - AF stands for: Autómata finito
+                - AFD stands for: Autómatas Finitos Deterministas
+                - AFND stands for: Autómatas Finitos No Deterministas
+                - APF stands for: Autómata a pila por estados finales
+                - APV stands for: Autómata a pila por vaciado
+                - FNC stands for: Forma Normal de Chomsky
+                - FNG stands for: Forma Normal de Greibach
+                - ER stands for: Expresión regular
+                - APD stands for: Autómata a Pila Determinista  
+                - APND stands for: Autómata a Pila No Determinista  
+                - GICD stands for: Gramática Independiente de Contexto Determinista  
+                - GICND stands for: Gramática Independiente de Contexto No Determinista  
+                - LR stands for: Lenguaje Regular  
+                - G0 stands for: Gramática sin restricciones
+                - G1 stands for: Gramática sensible al contexto  
+                - ERD stands for: Expresión Regular Determinista
+                2. Do not use abbreviations in your response.
+                Context from files:
+                %s
+                User Question:
+                %s
+                Based on the provided context, answer the user's question as accurately and concisely as possible. Ensure that:
+                1. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
+                2. If the user asks about any of the specified historical figures, ensure that your response is derived primarily from the historical context.
+                3. The answer is directly derived from the context.
+                4. Technical terms are preserved exactly as they appear.
+                5. The answer is clear and actionable.
+                Answer:
+                """.formatted(context, userInput);
+    }
 
     private String formatTemplateProblem(String problemStatement, String userSolution) {
         return """
-               You are a virtual tutor specializing in Regular Grammars, Context-Free Grammars, and Finite Automata.
-               Your task is to evaluate the user's solution to the given problem statement step by step.
+                You are a virtual tutor specializing in Regular Grammars, Context-Free Grammars, and Finite Automata.
+                Your task is to evaluate the user's solution to the given problem statement step by step.
     
-               Context from Exercises:
-               %s
+                Context from Exercises:
+                %s
     
-               Problem Statement:
-               %s
+                Problem Statement:
+                %s
     
-               User Solution:
-               %s
+                User Solution:
+                %s
     
-               Instructions:
-               - Analyze the solution step by step.
-               - Identify any errors and explain where the user went wrong.
-               - Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
-               - If the solution is correct, confirm it and explain why it works.
+                Instructions:
+                - Analyze the solution step by step.
+                - Identify any errors and explain where the user went wrong.
+                - Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
+                - If the solution is correct, confirm it and explain why it works.
     
-               Critical Note: Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
+                Critical Note: Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
     
-               Glossary of Plain Text Symbols:
-               %s
+                Glossary of Plain Text Symbols:
+                %s
     
-               Feedback:
-               """.formatted(context2, problemStatement, userSolution, glossary);
+                Feedback:
+                """.formatted(context2, problemStatement, userSolution, glossary);
     }
-    
-    
-    // Método de ejemplo para integrar la API de JFLAP usando jflap‑lib.
-    // Se debe adaptar según la documentación de jflap-lib.
+
     public String processJflap(String input) {
         try {
-            // Ejemplo: inicializar la clase JflapProcessor (suponiendo que exista en la librería) y procesar la entrada.
-            // JflapProcessor jflapProcessor = new JflapProcessor();
-            // return jflapProcessor.process(input);
             return "Resultado de JFLAP para: " + input;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return "Error en procesamiento JFLAP: " + e.getMessage();
         }
     }

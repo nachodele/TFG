@@ -16,4 +16,7 @@ Este comando:
 Para guardar la API Key:
 export GROQ_API_KEY="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"
 
-Meter que guarde contexto solo en la consulta de documentacion
+Meter que guarde contexto solo en la consulta de documentacion-> solo de la pregunta inmediatamente anterior, porque sino sobrepasa el limite de 6mil tokens por
+minuto.
+Eliminada la logica de historia de las ciencias de la computacion porque superaba el limite de tokens.
+Añadir JFLAP

@@ -82,37 +82,74 @@ public class GrammarAutomataProcessor {
             throw new IOException("El archivo 'Historia_de_las_ciencias_de_la_computacion.md' no existe en el directorio 'resources'.");
         }
     }
-
-    public String answerQuestion(String userInput) {
+    public String analyzeContext(String previousQuestion, String currentQuestion) {
         try {
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("model", "llama-3.3-70b-versatile"); // Incluye el modelo aquí
+            requestBody.put("model", "llama-3.3-70b-versatile");
             requestBody.put("messages", List.of(
-                Map.of("role", "user", "content", formatTemplateAnswer(userInput))
+                Map.of("role", "user", "content", formatTemplateContextAnalysis(previousQuestion, currentQuestion))
             ));
             requestBody.put("temperature", 0.1);
-            requestBody.put("max_tokens", 1024);
-
+            requestBody.put("max_tokens", 256);
+    
             String json = new ObjectMapper().writeValueAsString(requestBody);
             RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-
+    
             Request request = new Request.Builder()
                 .url("https://api.groq.com/openai/v1/chat/completions")
                 .post(body)
                 .addHeader("Authorization", "Bearer " + apiKey)
                 .build();
-
+    
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
                 throw new IOException("Error en la solicitud: Código HTTP " + response.code() + " - " + response.body().string());
             }
-
+    
+            // Extraer y devolver la pregunta reformulada
+            return new ObjectMapper().readTree(response.body().string())
+                    .get("choices").get(0).get("message").get("content").asText();
+    
+        } catch (Exception e) {
+            return "Error al analizar el contexto: " + e.getMessage();
+        }
+    }
+    
+    public String answerQuestion(String userInput, String previousQuestion) {
+        try {
+            // Analizar el contexto entre la pregunta actual y la anterior
+            String analyzedQuestion = analyzeContext(previousQuestion, userInput);
+    
+            // Crear el cuerpo de la solicitud para responder a la pregunta analizada
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", "llama-3.3-70b-versatile");
+            requestBody.put("messages", List.of(
+                Map.of("role", "user", "content", formatTemplateAnswer(analyzedQuestion))
+            ));
+            requestBody.put("temperature", 0.1);
+            requestBody.put("max_tokens", 1024);
+    
+            String json = new ObjectMapper().writeValueAsString(requestBody);
+            RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+    
+            Request request = new Request.Builder()
+                .url("https://api.groq.com/openai/v1/chat/completions")
+                .post(body)
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .build();
+    
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException("Error en la solicitud: Código HTTP " + response.code() + " - " + response.body().string());
+            }
+    
             return response.body().string();
-
+    
         } catch (Exception e) {
             return "Error al procesar la consulta: " + e.getMessage();
         }
     }
+    
 
     public String evaluateProblem(String problemStatement, String userSolution) {
         try {
@@ -141,6 +178,24 @@ public class GrammarAutomataProcessor {
         } catch (Exception e) {
             return "Error al evaluar el problema: " + e.getMessage();
         }
+    }
+
+    //Mantener el contexto de la pregunta anterior
+    private String formatTemplateContextAnalysis(String previousQuestion, String currentQuestion) {
+        return """
+            Analyze if the current question is related to the previous one. If it is related, incorporate only the essential context from the previous question to make the current question complete and standalone.
+
+            Previous Question:
+            %s
+
+            Current Question:
+            %s
+
+            Important:
+            - Only include context that is absolutely necessary to understand the current question.
+            - Do not add any explanations or additional information.
+            - The output should be a single, concise question that can stand on its own.
+               """.formatted(previousQuestion, currentQuestion);
     }
     
 
@@ -213,7 +268,6 @@ Quiero crear una App usando Visual Studio Code en lenguaje Java, con Visual Stud
     }
 
 
-
     private String formatTemplateProblem(String problemStatement, String userSolution) {
         return """
                You are a virtual tutor specializing in Regular Grammars, Context-Free Grammars, and Finite Automata.
@@ -242,7 +296,6 @@ Quiero crear una App usando Visual Studio Code en lenguaje Java, con Visual Stud
                Feedback:
                """.formatted(context2, problemStatement, userSolution, glossary);
     }
-    
     
     // Método de ejemplo para integrar la API de JFLAP usando jflap‑lib.
     // Se debe adaptar según la documentación de jflap-lib.

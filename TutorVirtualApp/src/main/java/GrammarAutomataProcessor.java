@@ -193,28 +193,41 @@ public class GrammarAutomataProcessor {
 
     private String formatTemplateContextAnalysis(String previousQuestion, String currentQuestion) {
         return """
-                Analyze if the current question is related to the previous one. If it is related, incorporate only the essential context from the previous question to make the current question complete and standalone.
+                Determine if the current question is self-contained and complete.
+                If the current question does not contain ambiguous references (such as pronouns or terms like "este" o "eso") and is fully understandable on its own, output the current question exactly as provided.
+                If the current question is ambiguous or incomplete, incorporate only the minimal essential context from the previous question to remove that ambiguity.
                 Previous Question:
                 %s
                 Current Question:
                 %s
                 Important:
-                - Only include context that is absolutely necessary to understand the current question.
-                - Do not add any explanations or additional information.
-                - The output should be a single, concise question that can stand on its own.
+                - Only include context that is absolutely necessary to clarify ambiguous references in the current question.
+                - If the current question is fully self-contained, do not add any context from the previous question.
+                - Do not include any explanation, analysis, or any additional information in the output.
+                Output:
+                A single, standalone question that incorporates additional context only if needed; otherwise, output the current question unchanged.
                 """.formatted(previousQuestion, currentQuestion);
     }
 
     private String formatTemplateAnswer(String userInput) {
         return """
                 You are an expert in the subject of Regular Grammars, Context-Free Grammars, and Finite Automata.
-                Respond only with information related to this subject relying on the provided context.... Critical Instructions:
+                Context from files:
+                %s
+                User Question:
+                %s
+                Ensure that:
+                1. The answer is directly derived from the context.
+                2. Technical terms are preserved exactly as they appear in the context.
+                3. The answer is clear, precise, and actionable.
+                4. Unnecessary repetition is avoided.
+                5. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
+
+                Critical Instructions:
                 1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
                 - GIC stands for: Gramática Independiente de Contexto
                 - G2 stands for: Gramática Independiente de Contexto  
                 - LIC stands for: Lenguaje Independiente de contexto
-                - LICD stands for: Lenguaje Independiente de contexto Determinista
-                - LICND stands for: Lenguaje Independiente de contexto No Determinista
                 - GR stands for: Gramática Regular
                 - G3 stands for: Gramática Regular  
                 - G3LD stands for: Gramática Regular (G3) Lineal por la Derecha
@@ -222,8 +235,6 @@ public class GrammarAutomataProcessor {
                 - MT stands for: Máquina de Turing
                 - AP stands for: Autómata a Pila
                 - AF stands for: Autómata finito
-                - AFD stands for: Autómatas Finitos Deterministas
-                - AFND stands for: Autómatas Finitos No Deterministas
                 - APF stands for: Autómata a pila por estados finales
                 - APV stands for: Autómata a pila por vaciado
                 - FNC stands for: Forma Normal de Chomsky
@@ -233,23 +244,21 @@ public class GrammarAutomataProcessor {
                 - APND stands for: Autómata a Pila No Determinista  
                 - GICD stands for: Gramática Independiente de Contexto Determinista  
                 - GICND stands for: Gramática Independiente de Contexto No Determinista  
+                - LICD stands for: Lenguaje Independiente de contexto Determinista
+                - LICND stands for: Lenguaje Independiente de contexto No Determinista
+                - AFD stands for: Autómatas Finitos Deterministas
+                - AFND stands for: Autómatas Finitos No Deterministas
                 - LR stands for: Lenguaje Regular  
                 - G0 stands for: Gramática sin restricciones
                 - G1 stands for: Gramática sensible al contexto  
                 - ERD stands for: Expresión Regular Determinista
                 2. Do not use abbreviations in your response.
-                Context from files:
+                3. Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
+                Glossary of Plain Text Symbols:
                 %s
-                User Question:
-                %s
-                Based on the provided context, answer the user's question as accurately and concisely as possible. Ensure that:
-                1. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
-                2. If the user asks about any of the specified historical figures, ensure that your response is derived primarily from the historical context.
-                3. The answer is directly derived from the context.
-                4. Technical terms are preserved exactly as they appear.
-                5. The answer is clear and actionable.
+            
                 Answer:
-                """.formatted(context, userInput);
+                """.formatted(context, userInput, glossary);
     }
 
     private String formatTemplateProblem(String problemStatement, String userSolution) {

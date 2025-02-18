@@ -123,7 +123,7 @@ public class AppGUI {
 
             // Limpiar y mostrar la respuesta
             String cleanedResponse = cleanResponse(rawResponse);
-            responseArea.setText("Respuesta:\n" + cleanedResponse);
+            responseArea.setText(cleanedResponse);
         });
 
         backFromDocButton.addActionListener(e -> {
@@ -248,7 +248,7 @@ public class AppGUI {
             }
             String rawResponse = processor.evaluateProblem(problemStatement, userSolution);
             String cleanedResponse = cleanResponse(rawResponse);
-            tutorResponseArea.setText("Feedback:\n" + cleanedResponse);
+            tutorResponseArea.setText(cleanedResponse);
         });
 
         // --- Agregar los tres paneles al contenedor de tarjetas ---

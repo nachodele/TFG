@@ -9,19 +9,10 @@ class GrammarAutomataProcessor:
         # Cargamos variables de entorno
         load_dotenv(override=True)
 
-        # Cargamos el contexto de la Docu
         self.context = self._load_docu_context()
-
-        # Cargamos el contexto de Ejercicios
         self.context2 = self._load_exercise_context()
-
-        # Cargamos el glosario
         self.glossary = self._load_glossary()
-
         self.prev_question = None  # Almacena la pregunta anterior
-
-         # Cargar el contexto de historia de las ciencias de la computación
-        self.history_context = self._load_history_context()
 
         # Inicializamos el modelo Llama 3.3 en Groq
         self.client = self._initialize_groq()
@@ -29,16 +20,22 @@ class GrammarAutomataProcessor:
         # Plantilla de prompt para responder preguntas
         self.TEMPLATE_ANSWER = """
         You are an expert in the subject of Regular Grammars, Context-Free Grammars, and Finite Automata.
-        Respond only with information related to this subject relying on the provided context.
+        Context from files: {context}
+
+        User Question: {user_input}
+
+        Ensure that:
+        1. The answer is directly derived from the context.
+        2. Technical terms are preserved exactly as they appear in the context.
+        3. The answer is clear, precise, and actionable.
+        4. Unnecessary repetition is avoided.
+        5. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
 
         Critical Instructions:
-        1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below.
-
+        1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
         - GIC stands for: Gramática Independiente de Contexto
         - G2 stands for: Gramática Independiente de Contexto  
         - LIC stands for: Lenguaje Independiente de contexto
-        - LICD stands for: Lenguaje Independiente de contexto Determinista
-        - LICND stands for: Lenguaje Independiente de contexto No Determinista
         - GR stands for: Gramática Regular
         - G3 stands for: Gramática Regular  
         - G3LD stands for: Gramática Regular (G3) Lineal por la Derecha
@@ -46,8 +43,6 @@ class GrammarAutomataProcessor:
         - MT stands for: Máquina de Turing
         - AP stands for: Autómata a Pila
         - AF stands for: Autómata finito
-        - AFD stands for: Autómatas Finitos Deterministas
-        - AFND stands for: Autómatas Finitos No Deterministas
         - APF stands for: Autómata a pila por estados finales
         - APV stands for: Autómata a pila por vaciado
         - FNC stands for: Forma Normal de Chomsky
@@ -57,51 +52,20 @@ class GrammarAutomataProcessor:
         - APND stands for: Autómata a Pila No Determinista  
         - GICD stands for: Gramática Independiente de Contexto Determinista  
         - GICND stands for: Gramática Independiente de Contexto No Determinista  
+        - LICD stands for: Lenguaje Independiente de contexto Determinista
+        - LICND stands for: Lenguaje Independiente de contexto No Determinista
+        - AFD stands for: Autómatas Finitos Deterministas
+        - AFND stands for: Autómatas Finitos No Deterministas
         - LR stands for: Lenguaje Regular  
         - G0 stands for: Gramática sin restricciones
         - G1 stands for: Gramática sensible al contexto  
         - ERD stands for: Expresión Regular Determinista
-
         2. Do not use abbreviations in your response.
-
-        3. If the user asks about any of the following figures:
-        - Alan Turing
-        - Stephen Kleene
-        - Von Neumann
-        - Noam Chomsky
-        - Grace Murray Hopper
-        - Ada Byron
-        - Alfred Aho
-        - Brian Kernighan
-        - Dennis Ritchie
-        - Hedy Lamarr
-        - Evelyn Berezin
-        - Frances E. Allen
-        - Anita Borg
-        - Top Secret Rosies
-        - Lynn Conway
-        - Jude Milhon
-        - Ángela Ruíz Robles
-        
-        Always prioritize content from the Document about history of computational science.
-        {history_context}
-
-
-        Context from files:
-        {context}
-
-        User Question: {user_input}
-
-        Based on the provided context, answer the user's question as accurately and concisely as possible. Ensure that:
-        1. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
-        2. If the user asks about any of the specified historical figures, ensure that your response is derived primarily from {history_context}.
-        3. The answer is directly derived from the context.
-        4. Technical terms are preserved exactly as they appear.
-        5. The answer is clear and actionable.
+        3. Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
+        Glossary of Plain Text Symbols:{glossary}
 
         Answer:
         """
-
 
         # Plantilla para evaluar problemas
         self.TEMPLATE_PROBLEM = """
@@ -125,22 +89,23 @@ class GrammarAutomataProcessor:
 
         Critical Note: Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
 
-        Glossary of Plain Text Symbols:
-        {glossary}
+        Glossary of Plain Text Symbols: {glossary}
 
         Feedback:
         """
         self.TEMPLATE_CONTEXT_ANALYSIS = """
-         Previous Question: {previous_question}
-         Current Question: {current_question}
-
-         Analyze if the current question is related to the previous one. If it is related, incorporate only the essential context from the previous question to make the current question complete and standalone.
-
-         Important:
-         - Only include context that is absolutely necessary to understand the current question.
-         - Do not add any explanations or additional information.
-         - The output should be a single, concise question that can stand on its own.
-         """
+        Determine if the current question is self-contained and complete.
+        If the current question does not contain ambiguous references (such as pronouns or terms like "este" o "eso") and is fully understandable on its own, output the current question exactly as provided.
+        If the current question is ambiguous or incomplete, incorporate only the minimal essential context from the previous question to remove that ambiguity.
+        Previous Question: {previous_question}
+        Current Question: {current_question}
+        Important:
+        - Only include context that is absolutely necessary to clarify ambiguous references in the current question.
+        - If the current question is fully self-contained, do not add any context from the previous question.
+        - Do not include any explanation, analysis, or any additional information in the output.
+        Output:
+        A single, standalone question that incorporates additional context only if needed; otherwise, output the current question unchanged.
+        """
 
     def _initialize_groq(self):
         """
@@ -170,8 +135,7 @@ class GrammarAutomataProcessor:
         """
         Carga el contenido del archivo glosario.md como texto plano.
         
-        Returns:
-            str: Contenido del glosario.
+        Returns: str: Contenido del glosario.
         """
         glossary_path = Path.cwd() / "glosario.md"
 
@@ -181,18 +145,6 @@ class GrammarAutomataProcessor:
         with glossary_path.open(encoding="utf-8") as f:
             return f.read()
 
-    def _load_history_context(self) -> str:
-        """
-        Carga el contenido del archivo 'Historia_de_las_ciencias_de_la_computación.md'.
-        Returns:
-            str: Contenido del archivo.
-        """
-        history_path = Path.cwd() / "Historia_de_las_ciencias_de_la_computacion.md"
-        if not history_path.exists():
-            raise FileNotFoundError("El archivo 'Historia_de_las_ciencias_de_la_computación.md' no existe.")
-        
-        with history_path.open(encoding="utf-8") as f:
-            return f.read()
     
     def _load_exercise_context(self) -> str:
         """
@@ -212,6 +164,7 @@ class GrammarAutomataProcessor:
                 exercise_data.append(f.read())
 
         return "\n\n".join(exercise_data)
+   
 
     def analyze_context(self, previous_question: str, current_question: str) -> str:
        """
@@ -252,9 +205,9 @@ class GrammarAutomataProcessor:
             messages=[
                 {"role": "user",
                 "content": self.TEMPLATE_ANSWER.format(
-                    history_context=self.history_context,
                     context=self.context,
-                    user_input=user_input)}
+                    user_input=user_input,
+                    glossary=self.glossary)}
             ],
             temperature=0.1,
             max_completion_tokens=1024,

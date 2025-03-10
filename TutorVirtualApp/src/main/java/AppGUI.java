@@ -1,12 +1,13 @@
 import java.awt.BorderLayout;
+import java.io.IOException;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,18 +20,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AppGUI {
+
     public static void main(String[] args) {
         // Inicializar el procesador conectado a la API de JFLAP
         String apiKey = System.getenv("GROQ_API_KEY");
         GrammarAutomataProcessor processor = new GrammarAutomataProcessor(apiKey);
 
         // Variable para almacenar la pregunta anterior (únicamente la inmediatamente anterior)
-        final String[] previousQuestion = {null};
+        final String[] previousQuestion = { null };
 
         // Crear el marco principal
         JFrame frame = new JFrame("Aplicación");
@@ -49,15 +50,25 @@ public class AppGUI {
         menuPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
+        // Botón para Consulta de Documentación
         JButton docButton = new JButton("Consulta de Documentación");
+        // Botón para Tutor Virtual
         JButton tutorButton = new JButton("Tutor Virtual");
+        // Botón para iniciar JFLAP
+        JButton jflapButton = new JButton("JFLAP");
+
         Font buttonFont = new Font("Serif", Font.BOLD, 20);
         docButton.setFont(buttonFont);
         tutorButton.setFont(buttonFont);
+        jflapButton.setFont(buttonFont);
+
         docButton.setPreferredSize(new Dimension(350, 100));
         tutorButton.setPreferredSize(new Dimension(300, 100));
+        jflapButton.setPreferredSize(new Dimension(350, 100));
+
         buttonPanel.add(docButton);
         buttonPanel.add(tutorButton);
+        buttonPanel.add(jflapButton);  // Se agrega el botón JFLAP
         buttonPanel.add(Box.createVerticalStrut(200));
         menuPanel.add(buttonPanel, BorderLayout.CENTER);
 
@@ -68,6 +79,7 @@ public class AppGUI {
         imageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         southPanel.add(imageLabel);
         southPanel.add(Box.createVerticalStrut(50));
+
         String infoText = "<html><body style='text-align: center; font-size: 11px; line-height: 1.4;'>"
                 + "<b>Acerca de esta herramienta</b><br>"
                 + "Proyecto CHATBOT para JFLAP<br>"
@@ -75,7 +87,8 @@ public class AppGUI {
                 + "Autor: Ignacio de Lecea Jiménez<br>"
                 + "Fecha: 2024-2025<br>"
                 + "Estado: En desarrollo<br><br>"
-                + "Esta herramienta permite analizar consultas relacionadas con gramáticas regulares, gramáticas independientes de contexto y autómatas finitos.<br>"
+                + "Esta herramienta permite analizar consultas relacionadas con gramáticas regulares, "
+                + "gramáticas independientes de contexto y autómatas finitos.<br>"
                 + "También proporciona el servicio de un tutor virtual para facilitar la resolución de problemas."
                 + "</body></html>";
         JLabel infoLabel = new JLabel(infoText);
@@ -105,23 +118,18 @@ public class AppGUI {
 
         processButton.addActionListener(e -> {
             String userQuery = queryInput.getText().trim();
-
             if (userQuery.isEmpty()) {
                 responseArea.setText("Por favor, ingrese una consulta.");
                 return;
             }
-
             // Llamar a answerQuestion con la pregunta anterior y la actual
             String rawResponse;
             try {
                 rawResponse = processor.answerQuestion(userQuery, previousQuestion[0] == null ? "" : previousQuestion[0]);
-                // Actualizar la pregunta anterior solo si no hubo errores
                 previousQuestion[0] = userQuery;
             } catch (Exception ex) {
                 rawResponse = "Error al procesar la consulta: " + ex.getMessage();
             }
-
-            // Limpiar y mostrar la respuesta
             String cleanedResponse = cleanResponse(rawResponse);
             responseArea.setText(cleanedResponse);
         });
@@ -162,7 +170,6 @@ public class AppGUI {
                         htmlTable.append("<tr>");
                         for (String cell : cells) {
                             if (!cell.trim().isEmpty()) {
-                                // Si la celda contiene markdown en negrita (**), se quitan los marcadores.
                                 String cellContent = cell.trim().replace("**", "");
                                 htmlTable.append("<td>").append(cellContent).append("</td>");
                             }
@@ -191,7 +198,6 @@ public class AppGUI {
         JTextArea problemStatementInput = new JTextArea(10, 60);
         problemStatementInput.setLineWrap(true);
         problemStatementInput.setWrapStyleWord(true);
-
         JScrollPane problemScroll = new JScrollPane(problemStatementInput);
         problemScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(problemScroll);
@@ -204,7 +210,6 @@ public class AppGUI {
         JTextArea userSolutionInput = new JTextArea(10, 60);
         userSolutionInput.setLineWrap(true);
         userSolutionInput.setWrapStyleWord(true);
-
         JScrollPane solutionScroll = new JScrollPane(userSolutionInput);
         solutionScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(solutionScroll);
@@ -225,7 +230,6 @@ public class AppGUI {
         tutorResponseArea.setEditable(false);
         tutorResponseArea.setLineWrap(true);
         tutorResponseArea.setWrapStyleWord(true);
-
         JScrollPane tutorResponseScroll = new JScrollPane(tutorResponseArea);
         tutorResponseScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
         tutorPanel.add(tutorResponseScroll);
@@ -270,26 +274,43 @@ public class AppGUI {
             tutorResponseArea.setText("");
             cl.show(cardPanel, "TUTOR");
         });
+        
+        // Acción para el botón JFLAP: al pulsarlo se invoca el método launchJFLAP()
+        jflapButton.addActionListener(e -> launchJFLAP());
 
         frame.setContentPane(cardPanel);
         frame.setVisible(true);
     }
 
     /**
+     * Método para iniciar la aplicación JFLAP.
+     * Se asume que la clase principal de jflap-lib es "edu.duke.cs.jflap.Main".
+     */
+    private static void launchJFLAP() {
+        try {
+            Class<?> jflapClass = Class.forName("edu.duke.cs.jflap.JFLAP");
+            Method mainMethod = jflapClass.getMethod("main", String[].class);
+            mainMethod.invoke(null, (Object) new String[]{});
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al iniciar JFLAP: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+    
+
+    /**
      * Método para limpiar la respuesta eliminando metadatos JSON y extrayendo solo el contenido relevante.
      */
     private static String cleanResponse(String rawResponse) {
         try {
-            // Crear un ObjectMapper para analizar el JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            // Convertir la respuesta cruda en un árbol JSON
             JsonNode rootNode = objectMapper.readTree(rawResponse);
-            // Navegar hasta el contenido relevante: choices[0].message.content
             JsonNode choicesNode = rootNode.path("choices");
             if (choicesNode.isArray() && choicesNode.size() > 0) {
                 JsonNode messageNode = choicesNode.get(0).path("message");
                 String content = messageNode.path("content").asText();
-                // Reemplazar saltos de línea codificados con saltos reales y limpiar espacios adicionales
                 return content.replace("\\n", "\n").trim();
             } else {
                 return "Error: No se pudo procesar la respuesta.";

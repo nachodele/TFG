@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.reflect.Method;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -246,8 +248,8 @@ public class GrammarAutomataProcessor {
                 - GICND stands for: Gramática Independiente de Contexto No Determinista  
                 - LICD stands for: Lenguaje Independiente de contexto Determinista
                 - LICND stands for: Lenguaje Independiente de contexto No Determinista
-                - AFD stands for: Autómatas Finitos Deterministas
-                - AFND stands for: Autómatas Finitos No Deterministas
+                - AFD stands for: Autómata Finito Determinista
+                - AFND stands for: Autómata Finito No Determinista
                 - LR stands for: Lenguaje Regular  
                 - G0 stands for: Gramática sin restricciones
                 - G1 stands for: Gramática sensible al contexto  
@@ -292,9 +294,18 @@ public class GrammarAutomataProcessor {
 
     public String processJflap(String input) {
         try {
-            return "Resultado de JFLAP para: " + input;
+            // Ejemplo: Usar JFLAP para procesar una gramática o un autómata
+            Class<?> jflapMain = Class.forName("edu.duke.cs.jflap.file.ParseFile");
+            Method parseMethod = jflapMain.getMethod("parse", String.class);
+    
+            // Invocar el método parse con la entrada proporcionada
+            Object result = parseMethod.invoke(null, input);
+    
+            // Procesar el resultado (puedes personalizar según lo que necesites)
+            return "Resultado procesado por JFLAP: " + result.toString();
         } catch (Exception e) {
             return "Error en procesamiento JFLAP: " + e.getMessage();
         }
     }
+    
 }

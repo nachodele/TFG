@@ -1,0 +1,323 @@
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class AppGUI {
+
+    public static void main(String[] args) {
+        // Inicializar el procesador conectado a la API de JFLAP
+        String apiKey = System.getenv("GROQ_API_KEY");
+        GrammarAutomataProcessor processor = new GrammarAutomataProcessor(apiKey);
+
+        // Variable para almacenar la pregunta anterior (únicamente la inmediatamente anterior)
+        final String[] previousQuestion = { null };
+
+        // Crear el marco principal
+        JFrame frame = new JFrame("Aplicación");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1000, 900);
+
+        // Contenedor principal con CardLayout para cambiar de panel completo
+        JPanel cardPanel = new JPanel(new CardLayout());
+
+        // --- Panel MENÚ: Contiene título, botones e información ---
+        JPanel menuPanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = new JLabel("Gramáticas regulares e independientes de contexto y autómatas finitos");
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 22));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        menuPanel.add(titleLabel, BorderLayout.NORTH);
+        menuPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        // Botón para Consulta de Documentación
+        JButton docButton = new JButton("Consulta de Documentación");
+        // Botón para Tutor Virtual
+        JButton tutorButton = new JButton("Tutor Virtual");
+        // Botón para iniciar JFLAP
+        JButton jflapButton = new JButton("JFLAP");
+
+        Font buttonFont = new Font("Serif", Font.BOLD, 20);
+        docButton.setFont(buttonFont);
+        tutorButton.setFont(buttonFont);
+        jflapButton.setFont(buttonFont);
+
+        docButton.setPreferredSize(new Dimension(350, 100));
+        tutorButton.setPreferredSize(new Dimension(300, 100));
+        jflapButton.setPreferredSize(new Dimension(350, 100));
+
+        buttonPanel.add(docButton);
+        buttonPanel.add(tutorButton);
+        buttonPanel.add(jflapButton);  // Se agrega el botón JFLAP
+        buttonPanel.add(Box.createVerticalStrut(200));
+        menuPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        JPanel southPanel = new JPanel();
+        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.Y_AXIS));
+        ImageIcon ufvIcon = new ImageIcon(AppGUI.class.getClassLoader().getResource("ufv.png"));
+        JLabel imageLabel = new JLabel(ufvIcon);
+        imageLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        southPanel.add(imageLabel);
+        southPanel.add(Box.createVerticalStrut(50));
+
+        String infoText = "<html><body style='text-align: center; font-size: 11px; line-height: 1.4;'>"
+                + "<b>Acerca de esta herramienta</b><br>"
+                + "Proyecto CHATBOT para JFLAP<br>"
+                + "Profesor: Juan José Escribano<br>"
+                + "Autor: Ignacio de Lecea Jiménez<br>"
+                + "Fecha: 2024-2025<br>"
+                + "Estado: En desarrollo<br><br>"
+                + "Esta herramienta permite analizar consultas relacionadas con gramáticas regulares, "
+                + "gramáticas independientes de contexto y autómatas finitos.<br>"
+                + "También proporciona el servicio de un tutor virtual para facilitar la resolución de problemas."
+                + "</body></html>";
+        JLabel infoLabel = new JLabel(infoText);
+        infoLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        southPanel.add(infoLabel);
+        southPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        menuPanel.add(southPanel, BorderLayout.SOUTH);
+
+        // --- Panel Consulta de Documentación (DOC) ---
+        JPanel docPanel = new JPanel();
+        docPanel.setLayout(new BoxLayout(docPanel, BoxLayout.Y_AXIS));
+        JLabel queryLabel = new JLabel("Ingrese su consulta:");
+        queryLabel.setFont(new Font("Serif", Font.BOLD, 14));
+        JTextArea queryInput = new JTextArea(5, 40);
+        queryInput.setLineWrap(true);
+        queryInput.setWrapStyleWord(true);
+        JScrollPane queryScroll = new JScrollPane(queryInput);
+        JButton processButton = new JButton("Procesar Consulta");
+        JLabel responseLabel = new JLabel("Respuesta:");
+        responseLabel.setFont(new Font("Serif", Font.BOLD, 15));
+        JTextArea responseArea = new JTextArea(15, 60);
+        responseArea.setEditable(false);
+        responseArea.setLineWrap(true);
+        responseArea.setWrapStyleWord(true);
+        JScrollPane responseScroll = new JScrollPane(responseArea);
+        JButton backFromDocButton = new JButton("Volver al menú");
+
+        processButton.addActionListener(e -> {
+            String userQuery = queryInput.getText().trim();
+            if (userQuery.isEmpty()) {
+                responseArea.setText("Por favor, ingrese una consulta.");
+                return;
+            }
+            // Llamar a answerQuestion con la pregunta anterior y la actual
+            String rawResponse;
+            try {
+                rawResponse = processor.answerQuestion(userQuery, previousQuestion[0] == null ? "" : previousQuestion[0]);
+                previousQuestion[0] = userQuery;
+            } catch (Exception ex) {
+                rawResponse = "Error al procesar la consulta: " + ex.getMessage();
+            }
+            String cleanedResponse = cleanResponse(rawResponse);
+            responseArea.setText(cleanedResponse);
+        });
+
+        backFromDocButton.addActionListener(e -> {
+            CardLayout cl = (CardLayout) (cardPanel.getLayout());
+            cl.show(cardPanel, "MENU");
+        });
+
+        docPanel.add(queryLabel);
+        docPanel.add(queryScroll);
+        docPanel.add(Box.createVerticalStrut(10));
+        docPanel.add(processButton);
+        docPanel.add(Box.createVerticalStrut(20));
+        docPanel.add(responseLabel);
+        docPanel.add(responseScroll);
+        docPanel.add(Box.createVerticalStrut(10));
+        docPanel.add(backFromDocButton);
+
+        // --- Panel Tutor Virtual ---
+        JPanel tutorPanel = new JPanel();
+        tutorPanel.setLayout(new BoxLayout(tutorPanel, BoxLayout.Y_AXIS));
+        JLabel problemStatementLabel = new JLabel("Enunciado:");
+        problemStatementLabel.setFont(new Font("Serif", Font.BOLD, 15));
+        problemStatementLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        JButton glossaryButton = new JButton("Glosario");
+        glossaryButton.setAlignmentX(JButton.LEFT_ALIGNMENT);
+
+        glossaryButton.addActionListener(e -> {
+            try {
+                Path glossaryPath = Paths.get(AppGUI.class.getClassLoader().getResource("glosario.md").toURI());
+                String glossaryContent = Files.readString(glossaryPath);
+                String[] lines = glossaryContent.split("\n");
+                StringBuilder htmlTable = new StringBuilder("<html><body><table border='1' style='border-collapse: collapse; width: 100%;'>");
+                for (String line : lines) {
+                    if (line.startsWith("|")) {
+                        String[] cells = line.split("\\|");
+                        htmlTable.append("<tr>");
+                        for (String cell : cells) {
+                            if (!cell.trim().isEmpty()) {
+                                String cellContent = cell.trim().replace("**", "");
+                                htmlTable.append("<td>").append(cellContent).append("</td>");
+                            }
+                        }
+                        htmlTable.append("</tr>");
+                    }
+                }
+                htmlTable.append("</table></body></html>");
+                JEditorPane editorPane = new JEditorPane("text/html", htmlTable.toString());
+                editorPane.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(editorPane);
+                scrollPane.setPreferredSize(new Dimension(600, 400));
+                JOptionPane.showMessageDialog(null, scrollPane, "Glosario", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al cargar el glosario", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        JPanel enunciadoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        enunciadoPanel.add(glossaryButton);
+        enunciadoPanel.add(problemStatementLabel);
+        enunciadoPanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        tutorPanel.add(enunciadoPanel);
+
+        JTextArea problemStatementInput = new JTextArea(10, 60);
+        problemStatementInput.setLineWrap(true);
+        problemStatementInput.setWrapStyleWord(true);
+        JScrollPane problemScroll = new JScrollPane(problemStatementInput);
+        problemScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+        tutorPanel.add(problemScroll);
+
+        JLabel userSolutionLabel = new JLabel("Ingrese su solución:");
+        userSolutionLabel.setFont(new Font("Serif", Font.BOLD, 15));
+        userSolutionLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        tutorPanel.add(userSolutionLabel);
+
+        JTextArea userSolutionInput = new JTextArea(10, 60);
+        userSolutionInput.setLineWrap(true);
+        userSolutionInput.setWrapStyleWord(true);
+        JScrollPane solutionScroll = new JScrollPane(userSolutionInput);
+        solutionScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+        tutorPanel.add(solutionScroll);
+
+        JButton evaluateButton = new JButton("Evaluar Solución");
+        JPanel buttonRowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonRowPanel.add(evaluateButton);
+        buttonRowPanel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        tutorPanel.add(Box.createVerticalStrut(10));
+        tutorPanel.add(buttonRowPanel);
+
+        JLabel tutorResponseLabel = new JLabel("Feedback:");
+        tutorResponseLabel.setFont(new Font("Serif", Font.BOLD, 15));
+        tutorResponseLabel.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        tutorPanel.add(tutorResponseLabel);
+
+        JTextArea tutorResponseArea = new JTextArea(15, 60);
+        tutorResponseArea.setEditable(false);
+        tutorResponseArea.setLineWrap(true);
+        tutorResponseArea.setWrapStyleWord(true);
+        JScrollPane tutorResponseScroll = new JScrollPane(tutorResponseArea);
+        tutorResponseScroll.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+        tutorPanel.add(tutorResponseScroll);
+
+        JButton backFromTutorButton = new JButton("Volver al menú");
+        backFromTutorButton.setAlignmentX(JButton.LEFT_ALIGNMENT);
+        tutorPanel.add(backFromTutorButton);
+
+        backFromTutorButton.addActionListener(e -> {
+            CardLayout cl = (CardLayout) (cardPanel.getLayout());
+            cl.show(cardPanel, "MENU");
+        });
+
+        evaluateButton.addActionListener(e -> {
+            String problemStatement = problemStatementInput.getText();
+            String userSolution = userSolutionInput.getText();
+            if (problemStatement.isEmpty() || userSolution.isEmpty()) {
+                tutorResponseArea.setText("Por favor, complete ambos campos antes de evaluar.");
+                return;
+            }
+            String rawResponse = processor.evaluateProblem(problemStatement, userSolution);
+            String cleanedResponse = cleanResponse(rawResponse);
+            tutorResponseArea.setText(cleanedResponse);
+        });
+
+        // --- Agregar los tres paneles al contenedor de tarjetas ---
+        cardPanel.add(menuPanel, "MENU");
+        cardPanel.add(docPanel, "DOC");
+        cardPanel.add(tutorPanel, "TUTOR");
+
+        docButton.addActionListener(e -> {
+            CardLayout cl = (CardLayout) (cardPanel.getLayout());
+            queryInput.setText("");
+            responseArea.setText("");
+            cl.show(cardPanel, "DOC");
+        });
+
+        tutorButton.addActionListener(e -> {
+            CardLayout cl = (CardLayout) (cardPanel.getLayout());
+            problemStatementInput.setText("");
+            userSolutionInput.setText("");
+            tutorResponseArea.setText("");
+            cl.show(cardPanel, "TUTOR");
+        });
+        
+        // Acción para el botón JFLAP: al pulsarlo se invoca el método launchJFLAP()
+        jflapButton.addActionListener(e -> launchJFLAP());
+
+        frame.setContentPane(cardPanel);
+        frame.setVisible(true);
+    }
+
+    /**
+     * Método para iniciar la aplicación JFLAP.
+     * Se asume que la clase principal de jflap-lib es "edu.duke.cs.jflap.Main".
+     */
+    private static void launchJFLAP() {
+        try {
+            // Cargar la clase principal de JFLAP usando el classpath
+            Class<?> jflapMain = Class.forName("edu.duke.cs.jflap.Main");
+            // Obtener el método main(String[]) de la clase
+            Method mainMethod = jflapMain.getMethod("main", String[].class);
+            // Invocar el método main pasando un arreglo vacío
+            mainMethod.invoke(null, (Object) new String[]{});
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    "Error al iniciar JFLAP: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Método para limpiar la respuesta eliminando metadatos JSON y extrayendo solo el contenido relevante.
+     */
+    private static String cleanResponse(String rawResponse) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(rawResponse);
+            JsonNode choicesNode = rootNode.path("choices");
+            if (choicesNode.isArray() && choicesNode.size() > 0) {
+                JsonNode messageNode = choicesNode.get(0).path("message");
+                String content = messageNode.path("content").asText();
+                return content.replace("\\n", "\n").trim();
+            } else {
+                return "Error: No se pudo procesar la respuesta.";
+            }
+        } catch (Exception e) {
+            return "Error: Respuesta no válida.";
+        }
+    }
+}

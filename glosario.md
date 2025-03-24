@@ -2,8 +2,8 @@
 
 | **Expresión**   | **Texto Plano** | **No Plano**            |
 |-----------------|-----------------|-------------------------|
-| dot{x}          | ẋ               | \(\dot{x}\)             |
 | cdot            | ·               | \( \cdot \)             |
+| dots            | ...             | \( \dots \)             |
 | cup             | ∪               | \( \cup \)              |
 | cap             | ∩               | \( \cap \)              |
 | leq             | ≤               | \( \leq \)              |
@@ -13,7 +13,7 @@
 | lambda          | λ               | \( \lambda \)           |
 | neq             | ≠               | \( \neq \)              |
 | bigcup          | ⋃               | \( \bigcup \)           |
-| infty           | ∞               | \( ∈fty \)              |
+| infty           | ∞               | \( \infty \)            |
 | epsilon         | ε               | \( \epsilon \)          |
 | varepsilon      | ϵ               | \( \varepsilon \)       |
 | notin           | ∉               | \( \notin \)            |
@@ -34,15 +34,25 @@
 | sum             | ∑               | \( \sum \)              |
 | product         | ∏               | \( \prod \)             |
 | approx          | ≈               | \( \approx \)           |
-| mid             | ∣               | \( {\mid} \)            |
-| times           | x               | \( {\times} \)          |
-| hat             | ^               | \( {\hat{}} \)          |
-| mathbb{N}       | ℕ               | \( {\mathbb{N}} \)      |
-| mathbb{Z}       | ℤ               | \( {\mathbb{Z}} \)      |
-| mathbb{R}       | ℝ               | \( {\mathbb{R}} \)      |
-| mathbb{Q}       | ℚ               | \( {\mathbb{Q}} \)      |
-| mathbb{I}       | ℑ               | \( {\mathbb{I}} \)      |
+| mid             | ∣               | \( \mid \)              |
+| times           | x               | \( \times \)            |
+| hat             | ^               | \( \hat \)              |
 | alpha           | α               | \( \alpha \)            |
 | beta            | β               | \( \beta \)             |
 | emptyset        | ∅               | \( \emptyset \)         |
-| Gamma           | Γ               | \( \Gamma \)            |
+| Gamma           | Γ               | \( \Gamma\)             |
+| equiv           | ≡               | \( \equiv \)            |
+| iff             | ⇔               | \( \iff \)              |
+| leftrightarrow  | ↔               | \( \leftrightarrow \)   |
+| rightarrow      | →               | \( \rightarrow \)       |
+| leftarrow       | ←               | \( \leftarrow \)        |
+| Theta           | Θ               | \( \Theta \)            |
+| vdash           | ⊢               | \( \vdash \)            |
+| bar{x}          | x¯              | \( \bar{x} \)           |
+| dot{x}          | ẋ               | \( \dot{x}\)            |
+| overset{*}{x}   | *x              | \( \overset{*}{x} \)    |
+| mathbb{N}       | ℕ               | \( \mathbb{N} \)        |
+| mathbb{Z}       | ℤ               | \( \mathbb{Z} \)        |
+| mathbb{R}       | ℝ               | \( \mathbb{R} \)        |
+| mathbb{Q}       | ℚ               | \( \mathbb{Q} \)        |
+| mathbb{I}       | ℑ               | \( \mathbb{I} \)        |

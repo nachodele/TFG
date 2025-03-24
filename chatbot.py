@@ -1,18 +1,19 @@
 import os
-from pathlib import Path
 from dotenv import load_dotenv
 from groq import Groq
+from RAG import query_qdrant  
 
 class GrammarAutomataProcessor:
     def __init__(self):
-
         # Cargamos variables de entorno
         load_dotenv(override=True)
 
-        self.context = self._load_docu_context()
-        self.context2 = self._load_exercise_context()
-        self.glossary = self._load_glossary()
-        self.prev_question = None  # Almacena la pregunta anterior
+        # Inicializamos las colecciones en Qdrant
+        self.exercise_collection = "exercise_vectors"
+        self.documentation_collection = "documentation_vectors"
+
+        # Almacena la pregunta anterior
+        self.prev_question = None
 
         # Inicializamos el modelo Llama 3.3 en Groq
         self.client = self._initialize_groq()
@@ -20,16 +21,17 @@ class GrammarAutomataProcessor:
         # Plantilla de prompt para responder preguntas
         self.TEMPLATE_ANSWER = """
         You are an expert in the subject of Regular Grammars, Context-Free Grammars, and Finite Automata.
-        Context from files: {context}
+        Always answer in Sapnish.
+        Context from files: {context_docu}
 
         User Question: {user_input}
 
         Ensure that:
-        1. The answer is directly derived from the context.
-        2. Technical terms are preserved exactly as they appear in the context.
-        3. The answer is clear, precise, and actionable.
-        4. Unnecessary repetition is avoided.
-        5. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
+        - The answer is directly derived from the context.
+        - Technical terms are preserved exactly as they appear in the context.
+        - The answer is clear, precise, and actionable.
+        - Avoid unnecessary repetition.
+        - If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
 
         Critical Instructions:
         1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
@@ -61,8 +63,6 @@ class GrammarAutomataProcessor:
         - G1 stands for: Gramática sensible al contexto  
         - ERD stands for: Expresión Regular Determinista
         2. Do not use abbreviations in your response.
-        3. Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
-        Glossary of Plain Text Symbols:{glossary}
 
         Answer:
         """
@@ -70,10 +70,9 @@ class GrammarAutomataProcessor:
         # Plantilla para evaluar problemas
         self.TEMPLATE_PROBLEM = """
         You are a virtual tutor specializing in Regular Grammars, Context-Free Grammars, and Finite Automata.
-        Your task is to evaluate the user's solution to the given problem statement step by step.
-
+        Always answer in Spanish.
         Context from Exercises:
-        {context2}
+        {context_exercises}
 
         Problem Statement:
         {problem_statement}
@@ -82,27 +81,32 @@ class GrammarAutomataProcessor:
         {user_solution}
 
         Instructions:
-        - Analyze the solution step by step.
-        - Identify any errors and explain where the user went wrong.
-        - Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
-        - If the solution is correct, confirm it and explain why it works.
-
-        Critical Note: Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
-
-        Glossary of Plain Text Symbols: {glossary}
+        1. Evaluate the user's solution to the given problem statement step by step.
+        2. Use the provided context as a guide to identify any errors and explain where the user went wrong.
+        3. Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
+        4. If the solution is correct, confirm it and explain why it works.
+        5. Avoid unnecessary repetition.
 
         Feedback:
         """
+
+        # Plantilla para analizar contexto entre preguntas
         self.TEMPLATE_CONTEXT_ANALYSIS = """
         Determine if the current question is self-contained and complete.
+        
         If the current question does not contain ambiguous references (such as pronouns or terms like "este" o "eso") and is fully understandable on its own, output the current question exactly as provided.
+        
         If the current question is ambiguous or incomplete, incorporate only the minimal essential context from the previous question to remove that ambiguity.
+        
         Previous Question: {previous_question}
+        
         Current Question: {current_question}
+        
         Important:
         - Only include context that is absolutely necessary to clarify ambiguous references in the current question.
         - If the current question is fully self-contained, do not add any context from the previous question.
         - Do not include any explanation, analysis, or any additional information in the output.
+
         Output:
         A single, standalone question that incorporates additional context only if needed; otherwise, output the current question unchanged.
         """
@@ -112,102 +116,73 @@ class GrammarAutomataProcessor:
         Inicializa el cliente Groq con la clave API desde las variables de entorno.
         """
         return Groq(api_key=os.getenv("GROQ_API_KEY"))
-
-    def _load_docu_context(self):
-        """
-        Carga el contenido de los archivos .md en un único string para ser usado como contexto.
-
-        Los archivos deben estar en una carpeta llamada 'Docu' en el directorio actual.
-        """
-        context_dir = Path.cwd() / "Docu"
-        context_data = []
-
-        if not context_dir.exists():
-            raise FileNotFoundError("La carpeta 'Docu' no existe en el directorio actual.")
-
-        for file in context_dir.glob("*.md"):
-            with file.open(encoding="utf-8") as f:
-                context_data.append(f.read())
-
-        return "\n\n".join(context_data)
-    
-    def _load_glossary(self) -> str:
-        """
-        Carga el contenido del archivo glosario.md como texto plano.
         
-        Returns: str: Contenido del glosario.
-        """
-        glossary_path = Path.cwd() / "glosario.md"
-
-        if not glossary_path.exists():
-            raise FileNotFoundError("El archivo 'glosario.md' no existe en el directorio actual.")
-
-        with glossary_path.open(encoding="utf-8") as f:
-            return f.read()
-
-    
-    def _load_exercise_context(self) -> str:
-        """
-        Carga el contenido de los archivos .md en la carpeta 'Ejercicios' como contexto para evaluar problemas.
-        
-        Returns:
-            str: Contexto combinado de todos los archivos en la carpeta 'Ejercicios'.
-        """
-        exercise_dir = Path.cwd() / "Ejercicios"
-        exercise_data = []
-
-        if not exercise_dir.exists():
-            raise FileNotFoundError("La carpeta 'Ejercicios' no existe en el directorio actual.")
-
-        for file in exercise_dir.glob("*.md"):
-            with file.open(encoding="utf-8") as f:
-                exercise_data.append(f.read())
-
-        return "\n\n".join(exercise_data)
-   
-
     def analyze_context(self, previous_question: str, current_question: str) -> str:
-       """
-       Analiza el contexto entre la pregunta anterior y la actual para determinar si están relacionadas.
-       
-       Args:
-           previous_question (str): La pregunta anterior realizada por el usuario.
-           current_question (str): La pregunta actual realizada por el usuario.
-       
-       Returns:
-           str: Una pregunta autónoma que incorpora el contexto esencial si es necesario.
-       """
-       completion = self.client.chat.completions.create(
-           model="llama-3.3-70b-versatile",
-           messages=[
-               {"role": "user", "content": self.TEMPLATE_CONTEXT_ANALYSIS.format(
-                   previous_question=previous_question,
-                   current_question=current_question
-               )}
-           ],
-           temperature=0.1,
-           max_completion_tokens=256,
-           top_p=1,
-           stream=False,
-       )
-       
-       # Retornar la pregunta analizada
-       return completion.choices[0].message.content.strip()
+        """
+        Analiza si la pregunta actual necesita contexto de la pregunta anterior para ser comprensible.
 
-    def answer_question(self, user_input: str) -> str:
-        # Analizar contexto si hay una pregunta anterior.
-        if self.prev_question:
-            user_input = self.analyze_context(self.prev_question, user_input)
-        
-        # Procesar la respuesta.
+        Args:
+            previous_question (str): La pregunta anterior realizada por el usuario.
+            current_question (str): La pregunta actual realizada por el usuario.
+
+        Returns:
+            str: Una pregunta autónoma que incluye contexto adicional si es necesario.
+        """
+        if not previous_question:
+            # Si no hay pregunta anterior, devolvemos la pregunta actual sin cambios
+            return current_question
+
+        # Generamos el prompt para analizar el contexto
         completion = self.client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
-                {"role": "user",
-                "content": self.TEMPLATE_ANSWER.format(
-                    context=self.context,
-                    user_input=user_input,
-                    glossary=self.glossary)}
+                {"role": "user", "content": self.TEMPLATE_CONTEXT_ANALYSIS.format(
+                    previous_question=previous_question,
+                    current_question=current_question
+                )}
+            ],
+            temperature=0.1,
+            max_completion_tokens=256,
+            top_p=1,
+            stream=False,
+            stop=None,
+        )
+
+        # Retornamos la pregunta autónoma generada
+        return completion.choices[0].message.content.strip()
+    
+    def answer_question(self, user_input: str) -> dict:
+        """
+        Responde preguntas del usuario utilizando contexto recuperado desde Qdrant.
+
+        Args:
+            user_input (str): Pregunta realizada por el usuario.
+
+        Returns:
+            dict: Diccionario con la respuesta generada y el nombre del archivo relevante.
+        """
+        # Analizamos si es necesario incorporar contexto de la pregunta anterior
+        standalone_question = self.analyze_context(self.prev_question, user_input)
+
+        # Recuperar el documento más relevante desde la colección de documentación en Qdrant
+        best_doc = query_qdrant(self.documentation_collection, standalone_question)
+
+        # Si no se encuentra información relevante en Qdrant, devolvemos un mensaje predeterminado
+        if not best_doc:
+            return {"response": "No se encontró información relevante en la base de datos.", "source_file": None}
+
+        # Construimos el contexto basado únicamente en el contenido del documento más relevante
+        context_docs = best_doc["content"]
+
+        # Generamos la respuesta utilizando el modelo Llama 3.3
+        completion = self.client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "user", "content": self.TEMPLATE_ANSWER.format(
+                    context_docu=context_docs,
+                    user_input=standalone_question,
+                    glossary=self.glossary
+                )}
             ],
             temperature=0.1,
             max_completion_tokens=1024,
@@ -215,41 +190,54 @@ class GrammarAutomataProcessor:
             stream=False,
             stop=None,
         )
-        
+
         response = completion.choices[0].message.content.strip()
-        
-        # Actualizar prev_question con la pregunta actual.
+
+        # Actualizamos la pregunta anterior con la pregunta actual
         self.prev_question = user_input
-        
-        return response
 
-
-
-    def evaluate_problem(self, problem_statement: str, user_solution: str) -> str:
+        # Retornamos tanto la respuesta generada como el nombre del archivo relevante
+        return {"response": response, "source_file": best_doc["source_file"]}
+    
+    def evaluate_problem(self, problem_statement: str, user_solution: str) -> dict:
         """
-        Evalúa un problema y la solución proporcionada por el usuario.
+        Evalúa un problema y la solución proporcionada por el usuario utilizando contexto recuperado desde Qdrant.
+
         Args:
             problem_statement (str): Enunciado del problema.
             user_solution (str): Solución completa proporcionada por el usuario.
-        Returns:
-            str: Feedback detallado sobre los pasos correctos e incorrectos.
-        """
 
-        # Generar la retroalimentación usando el modelo
+        Returns:
+            dict: Diccionario con el feedback generado y el nombre del archivo relevante.
+        """
+        # Recuperar el documento más relevante desde la colección de ejercicios en Qdrant
+        best_exercise = query_qdrant(self.exercise_collection, problem_statement)
+
+        # Si no se encuentra información relevante en Qdrant, devolvemos un mensaje predeterminado
+        if not best_exercise:
+            return {"response": "No se encontró información relevante en la base de datos.", "source_file": None}
+
+        # Construimos el contexto basado únicamente en el contenido del ejercicio más relevante
+        context_exercises = best_exercise["content"]
+
+        # Generamos el feedback utilizando el modelo Llama 3.3
         completion = self.client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": self.TEMPLATE_PROBLEM.format(
-                context2=self.context2,
-                problem_statement=problem_statement,
-                user_solution=user_solution,
-                glossary=self.glossary
-                
-            )}],
+            messages=[
+                {"role": "user", "content": self.TEMPLATE_PROBLEM.format(
+                    context_exercises=context_exercises,
+                    problem_statement=problem_statement,
+                    user_solution=user_solution
+                )}
+            ],
             temperature=0.1,
             max_completion_tokens=1024,
             top_p=1,
             stream=False,
             stop=None,
         )
+        response = completion.choices[0].message.content.strip()
 
-        return completion.choices[0].message.content.strip()
+        # Retornamos tanto la respuesta generada como el nombre del archivo relevante
+        return {"response": response, "source_file": best_exercise["source_file"]}
+

@@ -27,8 +27,15 @@ if option == "Consulta de Documentación":
         if user_input:
             with st.spinner("Analizando y procesando..."):
                 # Llamar al método sin pasar 'prev_question'
-                response = processor.answer_question(user_input)
+                result = processor.answer_question(user_input)
+                response = result["response"]
+                source_file = result["source_file"]
+
                 st.success("Consulta procesada exitosamente!")
+                
+                # Mostrar la respuesta y el nombre del archivo
+                if source_file:
+                    st.write(f"**Archivo fuente:** {source_file}")
                 st.write(f"**Respuesta:**\n\n{response}")
 
         else:
@@ -43,15 +50,19 @@ elif option == "Tutor Virtual":
     if st.button("Evaluar Solución"):
         if problem_statement and user_solution:
             with st.spinner("Evaluando la solución..."):
-                feedback = processor.evaluate_problem(problem_statement, user_solution)
+                result = processor.evaluate_problem(problem_statement, user_solution)
+                response = result["response"]
+                source_file = result["source_file"]
+            
             st.success("Evaluación completada!")
-            st.write(f"**Feedback:**\n\n{feedback}")
+            st.write(f"**Archivo fuente:** {source_file}")
+            st.write(f"**Feedback:**\n\n{response}")
         else:
             st.warning("Por favor, ingrese tanto el enunciado como la solución.")
 
 
-# Cargar y mostrar la imagen encima del sidebar
 
+# Cargar y mostrar la imagen encima del sidebar
 image = Image.open("ufv.png")  
 st.sidebar.image(image, use_container_width=True)  
 
@@ -59,7 +70,7 @@ st.sidebar.image(image, use_container_width=True)
 # Barra lateral con información adicional
 st.sidebar.markdown("""
 ## Acerca de esta herramienta
-- **Proyecto:** CHATBOT para JFLAP
+- **Proyecto:** Asistente Virtual
 - **Profesor:** Juan José Escribano
 - **Autor:** Ignacio de Lecea Jiménez
 - **Fecha:** 2024/2025

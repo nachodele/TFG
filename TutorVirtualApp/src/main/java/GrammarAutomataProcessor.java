@@ -23,7 +23,6 @@ public class GrammarAutomataProcessor {
     private final OkHttpClient client;
     private String context;
     private String context2;
-    private String glossary;
 
     public GrammarAutomataProcessor(String apiKey) {
         this.apiKey = apiKey;
@@ -32,7 +31,6 @@ public class GrammarAutomataProcessor {
         try {
             this.context = loadDocuContext();
             this.context2 = loadExerciseContext();
-            this.glossary = loadGlossary();
         } catch (IOException e) {
             System.err.println("Error al cargar los contextos: " + e.getMessage());
         }
@@ -68,15 +66,6 @@ public class GrammarAutomataProcessor {
         return exerciseData.toString();
     }
 
-    private String loadGlossary() throws IOException {
-        try {
-            Path glossaryPath = Paths.get(getClass().getClassLoader().getResource("glosario.md").toURI());
-            return Files.readString(glossaryPath);
-        } catch (NullPointerException | URISyntaxException e) {
-            throw new IOException("El archivo 'glosario.md' no existe en el directorio 'resources'.");
-        }
-    }
-
     /**
      * Analiza el contexto entre la pregunta anterior y la actual.
      * Si la pregunta anterior es nula o vacía, se devuelve la pregunta actual.
@@ -108,18 +97,21 @@ public class GrammarAutomataProcessor {
                     .addHeader("Authorization", "Bearer " + apiKey)
                     .build();
 
-            try (Response response = client.newCall(request).execute()) {
-                if (!response.isSuccessful()) {
-                    throw new IOException("Error en la solicitud: Código HTTP " 
-                        + response.code() + " - " + response.body().string());
+                    try (Response response = client.newCall(request).execute()) {
+                        if (!response.isSuccessful()) {
+                            String errorBody = response.body().string();
+                            System.err.println("Error en la API: " + errorBody);
+                            return "Error en el servicio: " + errorBody; // Respuesta en texto plano
+                        }
+                        
+                        // Solo procesar como JSON si la respuesta es exitosa
+                        JsonNode rootNode = new ObjectMapper().readTree(response.body().string());
+                        return rootNode.get("choices").get(0).get("message").get("content").asText();
+                    }
+                } catch (Exception e) {
+                    return "Error crítico: " + e.getMessage();
                 }
-                return new ObjectMapper().readTree(response.body().string())
-                        .get("choices").get(0).get("message").get("content").asText();
-            }
-        } catch (Exception e) {
-            return "Error al analizar el contexto: " + e.getMessage();
-        }
-    }
+            
 
     /**
      * Responde a la pregunta actual utilizando la pregunta anterior como contexto.
@@ -224,14 +216,13 @@ public class GrammarAutomataProcessor {
                 3. The answer is clear, precise, and actionable.
                 4. Unnecessary repetition is avoided.
                 5. If the user asks about a term (e.g., "What is an AP?" or "Define what a MT is" or "Explain APV"), provide a detailed explanation of the term based on the context.
-
-                Critical Instructions:
+            Critical Instructions:
                 1. Always replace the abbreviations (e.g., "GIC", "MT") with their full terms as defined below:
                 - GIC stands for: Gramática Independiente de Contexto
-                - G2 stands for: Gramática Independiente de Contexto  
+                - G2 stands for: Gramática Independiente de Contexto
                 - LIC stands for: Lenguaje Independiente de contexto
                 - GR stands for: Gramática Regular
-                - G3 stands for: Gramática Regular  
+                - G3 stands for: Gramática Regular
                 - G3LD stands for: Gramática Regular (G3) Lineal por la Derecha
                 - G3LI stands for: Gramática Regular (G3) Lineal por la Izquierda
                 - MT stands for: Máquina de Turing
@@ -242,25 +233,21 @@ public class GrammarAutomataProcessor {
                 - FNC stands for: Forma Normal de Chomsky
                 - FNG stands for: Forma Normal de Greibach
                 - ER stands for: Expresión regular
-                - APD stands for: Autómata a Pila Determinista  
-                - APND stands for: Autómata a Pila No Determinista  
-                - GICD stands for: Gramática Independiente de Contexto Determinista  
-                - GICND stands for: Gramática Independiente de Contexto No Determinista  
+                - APD stands for: Autómata a Pila Determinista
+                - APND stands for: Autómata a Pila No Determinista
+                - GICD stands for: Gramática Independiente de Contexto Determinista
+                - GICND stands for: Gramática Independiente de Contexto No Determinista
                 - LICD stands for: Lenguaje Independiente de contexto Determinista
                 - LICND stands for: Lenguaje Independiente de contexto No Determinista
-                - AFD stands for: Autómata Finito Determinista
-                - AFND stands for: Autómata Finito No Determinista
-                - LR stands for: Lenguaje Regular  
+                - AFD stands for: Autómatas Finitos Deterministas
+                - AFND stands for: Autómatas Finitos No Deterministas
+                - LR stands for: Lenguaje Regular
                 - G0 stands for: Gramática sin restricciones
-                - G1 stands for: Gramática sensible al contexto  
+                - G1 stands for: Gramática sensible al contexto
                 - ERD stands for: Expresión Regular Determinista
-                2. Do not use abbreviations in your response.
-                3. Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
-                Glossary of Plain Text Symbols:
-                %s
-            
+
                 Answer:
-                """.formatted(context, userInput, glossary);
+                """.formatted(context, userInput);
     }
 
     private String formatTemplateProblem(String problemStatement, String userSolution) {
@@ -282,14 +269,8 @@ public class GrammarAutomataProcessor {
                 - Identify any errors and explain where the user went wrong.
                 - Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
                 - If the solution is correct, confirm it and explain why it works.
-    
-                Critical Note: Use only plain text symbols as specified in the glossary below. Do not use LaTeX or non-plain text formats.
-    
-                Glossary of Plain Text Symbols:
-                %s
-    
                 Feedback:
-                """.formatted(context2, problemStatement, userSolution, glossary);
+                """.formatted(context2, problemStatement, userSolution);
     }
 
     public String processJflap(String input) {

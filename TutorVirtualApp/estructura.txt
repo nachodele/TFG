@@ -11,7 +11,9 @@ TutorVirtualApp/
 │   ├── main/                # Código fuente principal
 │   │   ├── java/            # Clases Java principales
 │   │   │   ├── AppGUI.java  # Clase principal de tu aplicación
-│   │   │   └── GrammarAutomataProcessor.java
+│   │   │   ├── QdrantIntegration.java
+            ├── MarkdownProcessor.java
+            └── GrammarAutomataProcessor.java
 │   │   └── resources/       # Recursos adicionales (archivos estáticos, configuraciones)
 │   │       ├── Docu/
 │   │       ├── Ejercicios/
@@ -21,6 +23,7 @@ TutorVirtualApp/
 │       └── resources/       # Recursos necesarios para pruebas
 ├──lib/                     # Carpeta para dependencias locales (como JFLAP JARs)
 │       ├── jflaplib-cli-1.3-bundle.jar
+        ├──   GrammarAutomataProcessor-1.0-SNAPSHOT.jar
 │       └── jflaplib-core-1.3-bundle.jar
 ├── build/
     ├──resources/       # Recursos adicionales (archivos estáticos, configuraciones)

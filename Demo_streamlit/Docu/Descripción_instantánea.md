@@ -1,12 +1,12 @@
 # Descripción Instantánea
 
-En el contexto de los **autómatas a pila (AP)**, la **descripción instantánea** (también conocida como configuración) es una representación del estado actual del autómata durante su proceso de cómputo. Este concepto permite analizar paso a paso cómo el autómata procesa una cadena de entrada y manipula su pila.
+En el contexto de los autómatas a pila (AP), la descripción instantánea (también conocida como configuración) es una representación del estado actual del autómata durante su proceso de cómputo. Este concepto permite analizar paso a paso cómo el autómata procesa una cadena de entrada y manipula su pila.
 
 ---
 
 ## Definición Formal
 
-Una **descripción instantánea** de un autómata a pila se representa mediante una tripleta:
+Una descripción instantánea de un autómata a pila se representa mediante una tripleta:
  
 q, u, Γ
   Donde:
@@ -23,7 +23,7 @@ q, u, Γ
 
 ## Transiciones entre Descripciones Instantáneas
 
-El autómata a pila cambia de una descripción instantánea a otra mediante las **funciones de transición** definidas en su especificación. Si el autómata está en una configuración inicial:
+El autómata a pila cambia de una descripción instantánea a otra mediante las funciones de transición definidas en su especificación. Si el autómata está en una configuración inicial:
  
 q, au, XΓ
   y existe una transición definida como:
@@ -105,10 +105,10 @@ C_i ⊢ C_{i+1} ⊢ C_{i+2} ⊢ ...,
 
 Un AP puede aceptar una cadena mediante dos criterios:
 
-1. **Aceptación por Estado Final**:
+1. Aceptación por Estado Final:
    - El AP acepta si al finalizar el procesamiento alcanza un estado final ( q_f ∈ F).
 
-2. **Aceptación por Vaciado de Pila**:
+2. Aceptación por Vaciado de Pila:
    - El AP acepta si al finalizar el procesamiento su pila queda vacía ( γ = ε).
 
 Ambos criterios son equivalentes en términos del poder expresivo del AP.
@@ -118,11 +118,11 @@ Ambos criterios son equivalentes en términos del poder expresivo del AP.
 ## Importancia de las Descripciones Instantáneas
 
 Las descripciones instantáneas son esenciales para:
-1. **Simulación**:
+1. Simulación:
    - Permiten modelar paso a paso cómo un AP procesa cadenas y manipula su pila.
-2. **Verificación**:
+2. Verificación:
    - Ayudan a determinar si una cadena pertenece al lenguaje reconocido por el AP.
-3. **Análisis Formal**:
+3. Análisis Formal:
    - Proveen una base para estudiar propiedades como decidibilidad y complejidad computacional.
 
 ---

@@ -1,12 +1,12 @@
 # Funciones de Transición en un Autómata a Pila (AP)
 
-Las **funciones de transición** son el componente central en el funcionamiento de los autómatas a pila (AP). Estas funciones determinan cómo cambia el estado del autómata, cómo se manipula la pila y cómo se procesa la cadena de entrada. Debido a la capacidad de almacenar y manipular información en una pila, los AP pueden reconocer lenguajes independientes del contexto, que van más allá de las capacidades de los autómatas finitos.
+Las funciones de transición son el componente central en el funcionamiento de los autómatas a pila (AP). Estas funciones determinan cómo cambia el estado del autómata, cómo se manipula la pila y cómo se procesa la cadena de entrada. Debido a la capacidad de almacenar y manipular información en una pila, los AP pueden reconocer lenguajes independientes del contexto, que van más allá de las capacidades de los autómatas finitos.
 
 ---
 
 ## Definición Formal
 
-Un **autómata a pila** se define como una séptupla:
+Un autómata a pila se define como una séptupla:
  
 M = (Q, Σ, Γ, δ, q_0, Z_0, F)
   Donde:
@@ -32,25 +32,25 @@ La función de transición  δ(q, a, X) = (p, w)  indica que:
 
 Las transiciones en un AP pueden realizar las siguientes operaciones sobre la pila:
 
-1. **Desapilar**:
+1. Desapilar:
    - El símbolo en la cima de la pila es eliminado.
    - Ejemplo: Si la cima es  A , y se define una transición como:
      -  δ(q, a, A) = (p, ε) ,
      - Entonces  A  es eliminado.
 
-2. **Apilar**:
+2. Apilar:
    - Se añaden uno o más símbolos a la cima de la pila.
    - Ejemplo: Si se define una transición como:
      -  δ(q, a, A) = (p, BC) ,
      - Entonces  A  es reemplazado por  BC.
 
-3. **Mantener**:
+3. Mantener:
    - El símbolo en la cima no cambia.
    - Ejemplo: Si se define una transición como:
      -  δ(q, a, A) = (p, A) ,
      - Entonces  A  permanece en la cima.
 
-4. **Transición Vacía ( ε)**:
+4. Transición Vacía ( ε):
    - No se consume ningún símbolo de entrada.
    - Ejemplo: Si se define una transición como:
      -  δ(q, ε, A) = (p, B) ,
@@ -114,10 +114,10 @@ Para el AP descrito anteriormente y la cadena "aabb":
 
 Un autómata a pila puede aceptar una cadena mediante dos criterios:
 
-1. **Aceptación por Estado Final**:
+1. Aceptación por Estado Final:
    - El autómata acepta si al finalizar el procesamiento alcanza un estado final ( q_f ∈ F).
 
-2. **Aceptación por Vaciado de Pila**:
+2. Aceptación por Vaciado de Pila:
    - El autómata acepta si al finalizar el procesamiento su pila queda vacía ( v = ε).
 
 Ambos criterios son equivalentes en términos del poder expresivo del autómata.
@@ -128,23 +128,23 @@ Ambos criterios son equivalentes en términos del poder expresivo del autómata.
 
 Las funciones de transición permiten que los AP reconozcan lenguajes independientes del contexto mediante operaciones específicas sobre su pila. Por ejemplo:
 
-1. **Gramáticas Independientes del Contexto**:
+1. Gramáticas Independientes del Contexto:
    Cada regla gramatical puede interpretarse como una transición del AP que apila o desapila símbolos según las producciones.
 
-2. **Reconocimiento Jerárquico**:
+2. Reconocimiento Jerárquico:
    Los AP son capaces de manejar estructuras jerárquicas y anidadas gracias al uso eficiente de su memoria auxiliar (la pila).
 
 ---
 
 ## Aplicaciones
 
-1. **Análisis Sintáctico**:
+1. Análisis Sintáctico:
    Los analizadores sintácticos utilizados en compiladores son implementaciones prácticas basadas en AP para verificar estructuras gramaticales.
 
-2. **Procesamiento del Lenguaje Natural**:
+2. Procesamiento del Lenguaje Natural:
    Modelan estructuras jerárquicas como oraciones o expresiones lingüísticas complejas.
 
-3. **Reconocimiento y Validación**:
+3. Reconocimiento y Validación:
    Reconocen patrones como paréntesis balanceados o estructuras anidadas.
 
 ---

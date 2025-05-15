@@ -1,5 +1,4 @@
 import os
-import re
 import json
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
@@ -173,28 +172,58 @@ class MarkdownProcessor:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(chunks, f, ensure_ascii=False, indent=2)
         
-        print(f"Embeddings guardados en {output_file}")
-
 def main():
     # Ejemplo de uso
     processor = MarkdownProcessor()
     
     # Directorio con archivos Markdown
-    md_dir = "Docu"
-    output_dir = "vectors_docu"
+    md_dir_docu = "Docu"
+    output_dir_docu = "vectors_docu"
+
+    md_dir_ejer = "Ejercicios"
+    output_dir_ejer = "vectors_ejer"
+
+    md_dir_algorit = "Algoritmos"
+    output_dir_algorit = "vectors_algorit"
+
     
-    # Crear directorio de salida si no existe
-    os.makedirs(output_dir, exist_ok=True)
+    # Crear directorio de salida para la Docu vectorizada
+    os.makedirs(output_dir_docu, exist_ok=True)
     
-    # Procesar cada archivo Markdown
-    for filename in os.listdir(md_dir):
+    # Procesar cada archivo Markdown de la Documentación
+    for filename in os.listdir(md_dir_docu):
         if filename.endswith('.md'):
-            file_path = os.path.join(md_dir, filename)
-            output_file = os.path.join(output_dir, f"{os.path.splitext(filename)[0]}_embeddings.json")
+            file_path = os.path.join(md_dir_docu, filename)
+            output_file = os.path.join(output_dir_docu, f"{os.path.splitext(filename)[0]}_embeddings.json")
             
-            print(f"Procesando {file_path}...")
             chunks = processor.process_markdown_file(file_path)
             processor.save_embeddings(chunks, output_file)
+
+    # Crear directorio de salida para los ejercicios vectorizados
+    os.makedirs(output_dir_ejer, exist_ok=True)
+    
+    # Procesar cada archivo Markdown de los ejercicios
+    for filename in os.listdir(md_dir_ejer):
+        if filename.endswith('.md'):
+            file_path = os.path.join(md_dir_ejer, filename)
+            output_file = os.path.join(output_dir_ejer, f"{os.path.splitext(filename)[0]}_embeddings.json")
+            
+            chunks = processor.process_markdown_file(file_path)
+            processor.save_embeddings(chunks, output_file)
+    
+    # Crear directorio de salida para los algoritmos vectorizados
+    os.makedirs(output_dir_algorit, exist_ok=True)
+
+    # Procesar cada archivo Markdown de los algoritmos
+    for filename in os.listdir(md_dir_algorit):
+        if filename.endswith('.md'):
+            file_path = os.path.join(md_dir_algorit, filename)
+            output_file = os.path.join(output_dir_algorit, f"{os.path.splitext(filename)[0]}_embeddings.json")
+            
+            chunks = processor.process_markdown_file(file_path)
+            processor.save_embeddings(chunks, output_file)
+    
+
 
 if __name__ == "__main__":
     main()

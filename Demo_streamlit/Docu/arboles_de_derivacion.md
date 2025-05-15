@@ -1,18 +1,18 @@
 # Árboles de Derivación
 
-Los **árboles de derivación** son representaciones gráficas que muestran cómo se deriva una cadena de un lenguaje a partir del símbolo inicial de una gramática. Son herramientas fundamentales en la teoría de lenguajes formales, especialmente en gramáticas libres de contexto, ya que permiten visualizar el proceso de derivación y analizar la estructura jerárquica de las cadenas generadas.
+Los árboles de derivación son representaciones gráficas que muestran cómo se deriva una cadena de un lenguaje a partir del símbolo inicial de una gramática. Son herramientas fundamentales en la teoría de lenguajes formales, especialmente en gramáticas libres de contexto, ya que permiten visualizar el proceso de derivación y analizar la estructura jerárquica de las cadenas generadas.
 
 ---
 
 ## Definición
 
-Un **árbol de derivación** es un grafo en forma de árbol que satisface las siguientes propiedades:
-1. **Raíz**: El nodo raíz del árbol corresponde al símbolo inicial ( S ) de la gramática.
-2. **Hojas**: Las hojas del árbol corresponden a símbolos terminales o a la cadena vacía ( λ ).
-3. **Nodos interiores**: Los nodos interiores corresponden a símbolos no terminales.
-4. **Producciones**: Si un nodo está etiquetado con un símbolo no terminal  A , sus hijos (leídos de izquierda a derecha) deben corresponder a los símbolos en el lado derecho de alguna producción  A → X_1 X_2 ... X_k  de la gramática.
+Un árbol de derivación es un grafo en forma de árbol que satisface las siguientes propiedades:
+1. Raíz: El nodo raíz del árbol corresponde al símbolo inicial ( S ) de la gramática.
+2. Hojas: Las hojas del árbol corresponden a símbolos terminales o a la cadena vacía ( λ ).
+3. Nodos interiores: Los nodos interiores corresponden a símbolos no terminales.
+4. Producciones: Si un nodo está etiquetado con un símbolo no terminal  A , sus hijos (leídos de izquierda a derecha) deben corresponder a los símbolos en el lado derecho de alguna producción  A → X_1 X_2 ... X_k  de la gramática.
 
-El conjunto de hojas, leído de izquierda a derecha, forma la cadena generada por el árbol, conocida como la **producción del árbol**.
+El conjunto de hojas, leído de izquierda a derecha, forma la cadena generada por el árbol, conocida como la producción del árbol.
 
 ---
 
@@ -50,15 +50,15 @@ a   S   b
 
 ## Propiedades del Árbol de Derivación
 
-1. **Unicidad para una Derivación**:
+1. Unicidad para una Derivación:
    - Cada derivación tiene un único árbol asociado.
    - Sin embargo, una misma cadena puede tener varias derivaciones diferentes (más a la izquierda o más a la derecha).
 
-2. **Ambigüedad**:
+2. Ambigüedad:
    - Una gramática es ambigua si existe al menos una cadena que puede ser representada por más de un árbol de derivación diferente.
    - Ejemplo: Para una gramática que genera expresiones aritméticas simples, la cadena "id + id * id" puede tener dos árboles diferentes dependiendo del orden en que se evalúan las operaciones.
 
-3. **Relación con Derivaciones**:
+3. Relación con Derivaciones:
    - Si leemos las etiquetas de las hojas del árbol (de izquierda a derecha), obtenemos la cadena generada por el árbol.
    - Las derivaciones más a la izquierda o más a la derecha corresponden a diferentes formas posibles del árbol.
 
@@ -66,7 +66,7 @@ a   S   b
 
 ## Subárboles
 
-Un **subárbol** es cualquier parte del árbol cuya raíz es un nodo cualquiera y cuyos nodos son los descendientes directos e indirectos de dicho nodo.
+Un subárbol es cualquier parte del árbol cuya raíz es un nodo cualquiera y cuyos nodos son los descendientes directos e indirectos de dicho nodo.
 
 ### Propiedad
 Los nodos terminales de un subárbol, leídos de izquierda a derecha, forman una frase respecto al nodo raíz del subárbol.
@@ -78,10 +78,10 @@ En el árbol anterior para  aaabbb , el subárbol cuya raíz es el segundo  S  g
 
 ## Relación entre Árboles y Lenguajes
 
-1. **Producción del Árbol**:
+1. Producción del Árbol:
    - La cadena generada por un árbol corresponde al conjunto de etiquetas en las hojas leídas secuencialmente.
 
-2. **Teorema Fundamental**:
+2. Teorema Fundamental:
    - Sea  G = (N, T, S, P)  una gramática libre de contexto y sea  w ∈ T^* . Entonces:
      -  w ∈ L(G)  si y solo si existe un árbol de derivación en  G  cuya producción es  w .
 
@@ -124,16 +124,16 @@ Ambos árboles generan la misma cadena pero tienen estructuras diferentes; por l
 
 ## Aplicaciones
 
-1. **Análisis Sintáctico**:
+1. Análisis Sintáctico:
    - Los árboles se utilizan en compiladores para representar la estructura jerárquica del código fuente.
 
-2. **Procesamiento del Lenguaje Natural (PLN)**:
+2. Procesamiento del Lenguaje Natural (PLN):
    - Representan estructuras gramaticales en oraciones humanas.
 
-3. **Visualización y Depuración**:
+3. Visualización y Depuración:
    - Ayudan a entender y depurar reglas gramaticales complejas.
 
-4. **Validación Estructural**:
+4. Validación Estructural:
    - Verifican si una cadena pertenece al lenguaje generado por una gramática dada.
 
 ---

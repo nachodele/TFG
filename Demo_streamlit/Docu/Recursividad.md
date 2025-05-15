@@ -1,15 +1,15 @@
 # Recursividad
 
-La **recursividad** es un concepto fundamental en matemáticas, ciencias de la computación y teoría de lenguajes formales. Se refiere a la definición de un objeto, función o proceso en términos de sí mismo. En el contexto de gramáticas y lenguajes formales, la recursividad se utiliza para describir estructuras repetitivas y jerárquicas, como las cadenas generadas por una gramática o las funciones computables.
+La recursividad es un concepto fundamental en matemáticas, ciencias de la computación y teoría de lenguajes formales. Se refiere a la definición de un objeto, función o proceso en términos de sí mismo. En el contexto de gramáticas y lenguajes formales, la recursividad se utiliza para describir estructuras repetitivas y jerárquicas, como las cadenas generadas por una gramática o las funciones computables.
 
 ---
 
 ## Definición General
 
-Un proceso o definición es **recursivo** si cumple con las siguientes características:
-1. **Caso Base**: Especifica los objetos iniciales o condiciones que pertenecen al conjunto definido.
-2. **Regla Recursiva**: Define cómo construir nuevos objetos a partir de los ya existentes.
-3. **Condición de Exhaustividad**: Declara que ningún otro objeto fuera de los definidos por el caso base y las reglas recursivas pertenece al conjunto.
+Un proceso o definición es recursivo si cumple con las siguientes características:
+1. Caso Base: Especifica los objetos iniciales o condiciones que pertenecen al conjunto definido.
+2. Regla Recursiva: Define cómo construir nuevos objetos a partir de los ya existentes.
+3. Condición de Exhaustividad: Declara que ningún otro objeto fuera de los definidos por el caso base y las reglas recursivas pertenece al conjunto.
 
 Ejemplo:
 - Definición recursiva del conjunto de números pares (  {EVEN} ):
@@ -25,7 +25,7 @@ En gramáticas formales, la recursividad ocurre cuando un símbolo no terminal a
 
 ### Tipos de Recursividad
 
-1. **Recursividad por la Izquierda**:
+1. Recursividad por la Izquierda:
    - Ocurre cuando un símbolo no terminal aparece al inicio del lado derecho de una producción.
    - Ejemplo:
       
@@ -34,7 +34,7 @@ En gramáticas formales, la recursividad ocurre cuando un símbolo no terminal a
 
    - Problema: La recursividad por la izquierda puede causar bucles infinitos en algoritmos como el análisis sintáctico por descenso recursivo.
 
-2. **Recursividad por la Derecha**:
+2. Recursividad por la Derecha:
    - Ocurre cuando un símbolo no terminal aparece al final del lado derecho de una producción.
    - Ejemplo:
       
@@ -73,11 +73,11 @@ E → E + T | T
 
 ## Recursividad en Funciones
 
-En programación, una función es **recursiva** si se llama a sí misma directa o indirectamente durante su ejecución.
+En programación, una función es recursiva si se llama a sí misma directa o indirectamente durante su ejecución.
 
 ### Componentes de una Función Recursiva
-1. **Caso Base**: Detiene la recursión cuando se cumple cierta condición.
-2. **Llamada Recursiva**: La función se invoca a sí misma con parámetros modificados.
+1. Caso Base: Detiene la recursión cuando se cumple cierta condición.
+2. Llamada Recursiva: La función se invoca a sí misma con parámetros modificados.
 
 Ejemplo:
 - Factorial ( n! = n × (n-1)! ):
@@ -106,12 +106,12 @@ L = ε, 0, 1, 00, 11, 010, 101, ...
 ## Importancia de la Recursividad
 
 La recursividad es clave para modelar estructuras complejas y repetitivas en diversas áreas:
-1. **Gramáticas Formales**:
+1. Gramáticas Formales:
  - Permite definir lenguajes infinitos con reglas finitas.
  - Es esencial para describir estructuras jerárquicas como expresiones matemáticas o sentencias en lenguajes de programación.
-2. **Programación**:
+2. Programación:
  - Simplifica problemas complejos dividiéndolos en subproblemas más pequeños.
-3. **Teoría Computacional**:
+3. Teoría Computacional:
  - Relaciona funciones computables con máquinas abstractas como las máquinas de Turing.
 
 ---

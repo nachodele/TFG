@@ -1,13 +1,13 @@
 # Configuración y Movimiento en Autómatas Finitos
 
-En el contexto de los **autómatas finitos**, los conceptos de **configuración** y **movimiento** son fundamentales para describir el estado actual del autómata y cómo este cambia a medida que procesa una cadena de entrada. Estas nociones permiten modelar el comportamiento del autómata durante el reconocimiento de un lenguaje.
+En el contexto de los autómatas finitos, los conceptos de configuración y movimiento son fundamentales para describir el estado actual del autómata y cómo este cambia a medida que procesa una cadena de entrada. Estas nociones permiten modelar el comportamiento del autómata durante el reconocimiento de un lenguaje.
 
 ---
 
 ## Configuración
 
 ### Definición
-La **configuración** de un autómata finito es una representación del estado actual del autómata y la parte de la cadena que queda por procesar. Formalmente, una configuración se denota como:
+La configuración de un autómata finito es una representación del estado actual del autómata y la parte de la cadena que queda por procesar. Formalmente, una configuración se denota como:
  
 q, w
   Donde:
@@ -15,13 +15,13 @@ q, w
 -  w ∈ Σ^* : Es la subcadena restante de la entrada que aún no ha sido procesada.
 
 ### Tipos de Configuración
-1. **Configuración Inicial**:
+1. Configuración Inicial:
    - Es la configuración en la que el autómata comienza su procesamiento.
    - Se representa como  (q_0, t) , donde:
      -  q_0  es el estado inicial.
      -  t  es la cadena completa de entrada.
 
-2. **Configuración Final**:
+2. Configuración Final:
    - Es la configuración en la que el autómata ha procesado toda la cadena de entrada y se encuentra en un estado final.
    - Se representa como  (q_f, λ) , donde:
      -  q_f ∈ F  es un estado final.
@@ -32,7 +32,7 @@ q, w
 ## Movimiento
 
 ### Definición
-El **movimiento** de un autómata finito es el paso de una configuración a otra, causado por la lectura de un símbolo del alfabeto. Formalmente, se denota como:
+El movimiento de un autómata finito es el paso de una configuración a otra, causado por la lectura de un símbolo del alfabeto. Formalmente, se denota como:
  
 q, a w → q', w
   Donde:
@@ -78,16 +78,16 @@ Configuración final:  (q_2, λ) . Como  q_2 ∈ F, la cadena "abba" es aceptada
 ## Importancia
 
 Los conceptos de configuración y movimiento son esenciales porque:
-1. **Modelan el Cómputo**:
+1. Modelan el Cómputo:
    - Permiten describir paso a paso cómo un autómata procesa una cadena.
    
-2. **Verificación**:
+2. Verificación:
    - Ayudan a determinar si una cadena pertenece al lenguaje reconocido por el autómata.
 
-3. **Simulación**:
+3. Simulación:
    - Facilitan la implementación computacional de algoritmos basados en autómatas.
 
-4. **Análisis Formal**:
+4. Análisis Formal:
    - Proveen una base para estudiar propiedades como decidibilidad y complejidad computacional.
 
 ---

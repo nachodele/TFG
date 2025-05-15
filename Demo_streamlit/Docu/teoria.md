@@ -1,13 +1,13 @@
 # Lenguajes Formales
 
-Los **lenguajes formales** son estructuras fundamentales en matemáticas, lógica y ciencias de la computación. Se definen como lenguajes artificiales cuyos símbolos y reglas están rigurosamente especificados, permitiendo la creación de cadenas válidas o fórmulas bien formadas. Estas estructuras son esenciales para modelar sistemas computacionales, analizar lenguajes de programación y estudiar problemas de decisión.
+Los lenguajes formales son estructuras fundamentales en matemáticas, lógica y ciencias de la computación. Se definen como lenguajes artificiales cuyos símbolos y reglas están rigurosamente especificados, permitiendo la creación de cadenas válidas o fórmulas bien formadas. Estas estructuras son esenciales para modelar sistemas computacionales, analizar lenguajes de programación y estudiar problemas de decisión.
 
 ## Definición
 
-Un **lenguaje formal** se compone de:
-1. **Alfabeto ( Σ )**: Un conjunto finito de símbolos primitivos.
-2. **Palabras**: Secuencias finitas de símbolos del alfabeto.
-3. **Lenguaje**: Un subconjunto del conjunto universal de todas las palabras posibles sobre el alfabeto ( Σ^* ).
+Un lenguaje formal se compone de:
+1. Alfabeto ( Σ ): Un conjunto finito de símbolos primitivos.
+2. Palabras: Secuencias finitas de símbolos del alfabeto.
+3. Lenguaje: Un subconjunto del conjunto universal de todas las palabras posibles sobre el alfabeto ( Σ^* ).
 
 ### Ejemplo:
 Si  Σ = a, b , entonces:
@@ -16,7 +16,7 @@ Si  Σ = a, b , entonces:
 
 ## Gramáticas Formales
 
-Una **gramática formal** es un sistema que genera un lenguaje formal. Está definida por una 4-tupla  G = (V, Σ, P, S) :
+Una gramática formal es un sistema que genera un lenguaje formal. Está definida por una 4-tupla  G = (V, Σ, P, S) :
 -  V : Conjunto finito de símbolos no terminales.
 -  Σ : Conjunto finito de símbolos terminales ( V ∩ Σ = ∅ ).
 -  P : Conjunto finito de reglas de producción ( X → Y , donde  X, Y ∈ (V ∪ Σ)^* ).
@@ -62,27 +62,27 @@ Noam Chomsky clasificó los lenguajes formales en cuatro tipos según las restri
 
 Los lenguajes formales permiten realizar diversas operaciones algebraicas:
 
-1. **Unión**: Si  L_1, L_2  son lenguajes sobre el mismo alfabeto:
+1. Unión: Si  L_1, L_2  son lenguajes sobre el mismo alfabeto:
    -  L_1 ∪ L_2 = x : x ∈ L_1  { o } x ∈ L_2 .
 
-2. **Concatenación**: Si  L_1, L_2  son lenguajes:
+2. Concatenación: Si  L_1, L_2  son lenguajes:
    -  L_1L_2 = xy : x ∈ L_1, y ∈ L_2 .
 
-3. **Cerradura de Kleene**:
+3. Cerradura de Kleene:
    -  L^* = L^0 ∪ L^1 ∪ L^2 ... = ⋃_{i=0}^{∈fty}L^i, donde  L^i = LL...L ( i-veces).
 
-4. **Intersección y Complemento**:
+4. Intersección y Complemento:
    - Si los lenguajes son regulares o libres de contexto.
 
 ## Aplicaciones
 
 Los lenguajes formales tienen aplicaciones en múltiples áreas:
-- **Compiladores**: Análisis léxico y sintáctico.
-- **Procesamiento del lenguaje natural**: Modelado lingüístico.
-- **Criptografía**: Diseño de algoritmos seguros.
-- **Teoría de autómatas**: Modelado matemático de sistemas computacionales.
-- **Bases de Datos**: Diseño y validación de consultas estructuradas (SQL).
-- **Reconocimiento de Patrones**: Aplicaciones en visión artificial y procesamiento de señales.
+- Compiladores: Análisis léxico y sintáctico.
+- Procesamiento del lenguaje natural: Modelado lingüístico.
+- Criptografía: Diseño de algoritmos seguros.
+- Teoría de autómatas: Modelado matemático de sistemas computacionales.
+- Bases de Datos: Diseño y validación de consultas estructuradas (SQL).
+- Reconocimiento de Patrones: Aplicaciones en visión artificial y procesamiento de señales.
 
 ## Conclusión
 

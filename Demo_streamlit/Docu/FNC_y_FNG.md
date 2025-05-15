@@ -1,32 +1,32 @@
 # Forma Normal de Chomsky (FNC) y Forma Normal de Greibach (FNG)
 
-La **Forma Normal de Chomsky (FNC)** y la **Forma Normal de Greibach (FNG)** son dos formas estandarizadas de representar gramáticas libres de contexto (GIC). Estas normalizaciones son fundamentales en la teoría de lenguajes formales, ya que simplifican el análisis y procesamiento de las gramáticas, permitiendo su uso en algoritmos como el análisis sintáctico y la construcción de autómatas.
+La Forma Normal de Chomsky (FNC) y la Forma Normal de Greibach (FNG) son dos formas estandarizadas de representar gramáticas libres de contexto (GIC). Estas normalizaciones son fundamentales en la teoría de lenguajes formales, ya que simplifican el análisis y procesamiento de las gramáticas, permitiendo su uso en algoritmos como el análisis sintáctico y la construcción de autómatas.
 
 ---
 
 ## Forma Normal de Chomsky (FNC)
 
 ### Definición
-Una gramática libre de contexto  G = (N, T, P, S)  está en **Forma Normal de Chomsky** si todas sus producciones tienen una de las siguientes formas:
+Una gramática libre de contexto  G = (N, T, P, S)  está en Forma Normal de Chomsky si todas sus producciones tienen una de las siguientes formas:
 1.  A → BC , donde  A, B, C ∈ N  y  B, C ≠ S .
 2.  A → a , donde  A ∈ N  y  a ∈ T .
 
-**Restricciones**:
+Restricciones:
 - No se permiten producciones con más de dos símbolos no terminales en el lado derecho.
 - No se permiten producciones con cadenas vacías ( ε ), excepto si el lenguaje incluye explícitamente  ε .
 
 ### Propiedades
 - Toda gramática libre de contexto puede transformarse en una gramática equivalente en FNC.
-- Los árboles de derivación asociados a gramáticas en FNC son **binarios**, lo que simplifica el análisis sintáctico.
+- Los árboles de derivación asociados a gramáticas en FNC son binarios, lo que simplifica el análisis sintáctico.
 
 ### Algoritmo para Convertir a FNC
-1. **Eliminar producciones nulas ( ε )**:
+1. Eliminar producciones nulas ( ε ):
    - Identificar los símbolos anulables y modificar las reglas afectadas.
-2. **Eliminar producciones unitarias ( A → B )**:
+2. Eliminar producciones unitarias ( A → B ):
    - Sustituir cada regla unitaria por las producciones del símbolo al que deriva.
-3. **Eliminar símbolos inútiles**:
+3. Eliminar símbolos inútiles:
    - Eliminar símbolos inaccesibles e improductivos.
-4. **Transformar las producciones restantes**:
+4. Transformar las producciones restantes:
    - Dividir reglas con más de dos símbolos no terminales en varias reglas binarias.
 
 #### Ejemplo
@@ -52,7 +52,7 @@ P' = S → AB; A → aA; A → a; B → bB; B → b.
 ## Forma Normal de Greibach (FNG)
 
 ### Definición
-Una gramática libre de contexto  G = (N, T, P, S)  está en **Forma Normal de Greibach** si todas sus producciones tienen la forma:
+Una gramática libre de contexto  G = (N, T, P, S)  está en Forma Normal de Greibach si todas sus producciones tienen la forma:
  
 A → aα
   Donde:
@@ -60,7 +60,7 @@ A → aα
 -  a ∈ T ,
 -  α ∈ N^*  (cero o más no terminales).
 
-**Restricciones**:
+Restricciones:
 - Cada producción comienza con un símbolo terminal seguido por una cadena opcional de no terminales.
 - No se permiten producciones con cadenas vacías ( ε ), excepto si el lenguaje incluye explícitamente  ε .
 
@@ -97,7 +97,7 @@ P'' = S → Aa; A → abZ; Z → bZ | b.
 
 ## Comparación entre FNC y FNG
 
-| **Característica**         | **FNC**                                  | **FNG**                                  |
+| Característica         | FNC                                  | FNG                                  |
 |----------------------------|------------------------------------------|------------------------------------------|
 | Restricción principal      | Producción binaria o terminal única      | Producción inicia con un terminal        |
 | Uso principal              | Análisis sintáctico y algoritmos CYK     | Construcción de autómatas y parsers LL(1) |

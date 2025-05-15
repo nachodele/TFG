@@ -1,6 +1,6 @@
 # Paso de APV a APF
 
-Un **autómata a pila por vaciado (APV)** acepta una cadena si, al finalizar su procesamiento, la pila queda completamente vacía, independientemente del estado en el que se encuentre el autómata. Por otro lado, un **autómata a pila por estados finales (APF)** acepta una cadena si, al finalizar su procesamiento, el autómata se encuentra en un estado final, sin importar el contenido de la pila. Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, y es posible transformar un APV en un APF que acepte el mismo lenguaje.
+Un autómata a pila por vaciado (APV) acepta una cadena si, al finalizar su procesamiento, la pila queda completamente vacía, independientemente del estado en el que se encuentre el autómata. Por otro lado, un autómata a pila por estados finales (APF) acepta una cadena si, al finalizar su procesamiento, el autómata se encuentra en un estado final, sin importar el contenido de la pila. Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, y es posible transformar un APV en un APF que acepte el mismo lenguaje.
 
 ---
 
@@ -15,18 +15,18 @@ La idea principal para convertir un APV en un APF consiste en:
 
 Dado un APV M = (Q, Σ, Γ, δ, q_0, Z_0), construimos un APF equivalente M' = (Q̄, Σ, Γ, δ̄, q_0, Z_0, F') siguiendo estos pasos:
 
-1. **Definir los nuevos componentes**:
+1. Definir los nuevos componentes:
    - Q̄ = Q ∪ {q_f}, donde q_f es un nuevo estado final.
    - F' = {q_f}, el conjunto de estados finales contiene únicamente q_f.
 
-2. **Añadir transiciones-ε**:
+2. Añadir transiciones-ε:
    - Para cada estado q ∈ Q, añadir una transición-ε hacia q_f si la pila está vacía:
      - δ̄(q, ε, Z_0) = (q_f, Z_0).
 
-3. **Mantener las transiciones originales**:
+3. Mantener las transiciones originales:
    - Todas las transiciones originales del APV se mantienen sin cambios.
 
-4. **Eliminar la aceptación por vaciado de pila**:
+4. Eliminar la aceptación por vaciado de pila:
    - El nuevo autómata acepta únicamente si termina en el estado final  q_f.
 
 ---
@@ -73,13 +73,13 @@ El nuevo autómata acepta únicamente si alcanza el estado final  q_f, independi
 
 ## Observaciones
 
-1. **Equivalencia Garantizada**:
+1. Equivalencia Garantizada:
    - El lenguaje aceptado por el APF resultante es exactamente el mismo que el aceptado por el APV original.
 
-2. **Eficiencia**:
+2. Eficiencia:
    - La conversión no altera significativamente la complejidad del autómata.
 
-3. **Aplicabilidad Recíproca**:
+3. Aplicabilidad Recíproca:
    - De manera similar al paso de APF a APV descrito anteriormente, también es posible convertir un APV en un APF equivalente añadiendo nuevos estados finales y transiciones- ε.
 
 ---

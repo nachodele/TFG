@@ -1,6 +1,6 @@
 # Equivalencia y Minimización de AFDs
 
-Los **autómatas finitos deterministas (AFDs)** son modelos matemáticos que reconocen lenguajes regulares. En este contexto, los conceptos de **equivalencia** y **minimización** son fundamentales para optimizar la representación de un lenguaje sin alterar su reconocimiento.
+Los autómatas finitos deterministas (AFDs) son modelos matemáticos que reconocen lenguajes regulares. En este contexto, los conceptos de equivalencia y minimización son fundamentales para optimizar la representación de un lenguaje sin alterar su reconocimiento.
 
 ---
 
@@ -22,7 +22,7 @@ Dos estados  p ∈ Q_1  y  q ∈ Q_2  son equivalentes si:
 
 ## Algoritmo para Comprobar la Equivalencia de AFDs
 
-1. **Construcción del Producto Cruzado**:
+1. Construcción del Producto Cruzado:
    - Crear un nuevo autómata  M = (Q, Σ, δ, (q_0^1, q_0^2), F) , donde:
      -  Q = Q_1   x Q_2 ,
      -  F = (F_1   x F_2) ∪ ((Q_1 - F_1)   x (Q_2 - F_2)) ,
@@ -30,17 +30,17 @@ Dos estados  p ∈ Q_1  y  q ∈ Q_2  son equivalentes si:
         
        δ((p, q), a) = (δ_1(p, a), δ_2(q, a))
          
-2. **Verificar Accesibilidad**:
+2. Verificar Accesibilidad:
    - Comprobar si todos los estados alcanzables desde el estado inicial cumplen con la condición de equivalencia.
 
-3. **Resultado**:
+3. Resultado:
    - Si todos los estados alcanzables son consistentes con respecto a las transiciones hacia estados finales o no finales, los AFDs son equivalentes.
 
 ---
 
 ## Minimización de AFDs
 
-La **minimización** de un AFD consiste en transformar un autómata en otro equivalente con el menor número posible de estados. Esto permite optimizar recursos y simplificar el análisis del autómata.
+La minimización de un AFD consiste en transformar un autómata en otro equivalente con el menor número posible de estados. Esto permite optimizar recursos y simplificar el análisis del autómata.
 
 ### Propiedades del AFD Mínimo
 1. Es único (hasta isomorfismos).
@@ -105,11 +105,11 @@ El autómata mínimo tiene:
 
 ## Comparación entre Equivalencia y Minimización
 
-| **Aspecto**            | **Equivalencia**                         | **Minimización**                        |
+| Aspecto            | Equivalencia                         | Minimización                        |
 |-------------------------|------------------------------------------|-----------------------------------------|
-| **Propósito**           | Comparar dos autómatas para verificar si reconocen el mismo lenguaje. | Reducir el número de estados manteniendo el lenguaje reconocido. |
-| **Resultado**           | Determina si dos autómatas son equivalentes. | Genera un AFD mínimo equivalente al original. |
-| **Método Principal**    | Producto cruzado y verificación de accesibilidad. | Eliminación de inaccesibles y refinamiento iterativo de particiones. |
+| Propósito           | Comparar dos autómatas para verificar si reconocen el mismo lenguaje. | Reducir el número de estados manteniendo el lenguaje reconocido. |
+| Resultado           | Determina si dos autómatas son equivalentes. | Genera un AFD mínimo equivalente al original. |
+| Método Principal    | Producto cruzado y verificación de accesibilidad. | Eliminación de inaccesibles y refinamiento iterativo de particiones. |
 
 ---
 

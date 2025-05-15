@@ -1,6 +1,6 @@
 # AFD como Reconocedor de Lenguaje Regular
 
-Un **Autómata Finito Determinista (AFD)** es un modelo matemático que se utiliza para reconocer lenguajes regulares. Su capacidad para procesar cadenas de entrada y determinar si pertenecen a un lenguaje regular lo convierte en una herramienta fundamental en la teoría de lenguajes formales y en aplicaciones prácticas como el análisis léxico.
+Un Autómata Finito Determinista (AFD) es un modelo matemático que se utiliza para reconocer lenguajes regulares. Su capacidad para procesar cadenas de entrada y determinar si pertenecen a un lenguaje regular lo convierte en una herramienta fundamental en la teoría de lenguajes formales y en aplicaciones prácticas como el análisis léxico.
 
 ---
 
@@ -16,7 +16,7 @@ M = (Q, Σ, δ, q_0, F)
 -  q_0 ∈ Q : Estado inicial.
 -  F ⊆ Q : Conjunto de estados finales o de aceptación.
 
-El **lenguaje reconocido por el AFD** es el conjunto de todas las cadenas  w ∈ Σ^*  que llevan al autómata desde el estado inicial  q_0  a uno de los estados finales  F . Formalmente:
+El lenguaje reconocido por el AFD es el conjunto de todas las cadenas  w ∈ Σ^*  que llevan al autómata desde el estado inicial  q_0  a uno de los estados finales  F . Formalmente:
  
 L(M) =  w : δ^*(q_0, w) ∈ F 
   Donde  δ^*  es la extensión de la función de transición para cadenas completas.
@@ -25,12 +25,12 @@ L(M) =  w : δ^*(q_0, w) ∈ F
 
 ## Funcionamiento del AFD como Reconocedor
 
-1. **Entrada**:
+1. Entrada:
    - Una cadena  w = a_1a_2...a_n , donde  a_i ∈ Σ .
-2. **Procesamiento**:
+2. Procesamiento:
    - El autómata comienza en el estado inicial  q_0 .
    - Para cada símbolo  a_i  en la cadena, aplica la función de transición  q_{i+1} = δ(q_i, a_i) .
-3. **Aceptación o Rechazo**:
+3. Aceptación o Rechazo:
    - Si después de procesar toda la cadena el autómata está en un estado final ( q_n ∈ F ), entonces acepta la cadena ( w ∈ L(M) ).
    - Si no termina en un estado final, rechaza la cadena ( w ∉ L(M) ).
 
@@ -42,11 +42,11 @@ L(M) =  w : δ^*(q_0, w) ∈ F
 Todo lenguaje regular puede ser reconocido por un AFD, y todo lenguaje reconocido por un AFD es regular.
 
 ### Justificación
-1. **De Expresión Regular a AFD**:
+1. De Expresión Regular a AFD:
    - Una expresión regular que describe un lenguaje regular puede transformarse en un autómata finito no determinista (AFND) utilizando el algoritmo de Thompson.
    - El AFND resultante puede convertirse en un AFD equivalente mediante el método del conjunto potencia.
 
-2. **De AFD a Expresión Regular**:
+2. De AFD a Expresión Regular:
    - Dado un AFD, se puede construir una expresión regular que describa exactamente el lenguaje reconocido por el autómata utilizando métodos como sistemas de ecuaciones o el lema de Arden.
 
 ---
@@ -80,14 +80,14 @@ La cadena termina en un estado no final ( q_1 ∉ F), por lo que es rechazada.
 ## Propiedades del AFD como Reconocedor
 
 ### Ventajas
-1. **Determinismo**:
+1. Determinismo:
    - Cada configuración tiene una única transición definida.
    - Esto permite implementar los AFD fácilmente en software y hardware.
    
-2. **Eficiencia**:
+2. Eficiencia:
    - Procesan cadenas en tiempo lineal respecto al tamaño de la entrada ( O(n) ).
 
-3. **Equivalencia con Expresiones Regulares**:
+3. Equivalencia con Expresiones Regulares:
    - Los lenguajes reconocidos por AFD son exactamente los lenguajes regulares.
 
 ### Limitaciones

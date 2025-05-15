@@ -1,6 +1,6 @@
 # Normalización de Gramáticas
 
-La **normalización de gramáticas** es el proceso mediante el cual se transforman las reglas de producción de una gramática en formas estándar, manteniendo el lenguaje generado intacto. Este proceso es fundamental en la teoría de lenguajes formales, ya que permite simplificar gramáticas, facilitar su análisis y hacerlas más adecuadas para aplicaciones prácticas como el diseño de compiladores o la construcción de autómatas.
+La normalización de gramáticas es el proceso mediante el cual se transforman las reglas de producción de una gramática en formas estándar, manteniendo el lenguaje generado intacto. Este proceso es fundamental en la teoría de lenguajes formales, ya que permite simplificar gramáticas, facilitar su análisis y hacerlas más adecuadas para aplicaciones prácticas como el diseño de compiladores o la construcción de autómatas.
 
 ---
 
@@ -15,11 +15,11 @@ El objetivo principal de la normalización es transformar una gramática en una 
 
 ## Formas Normales
 
-Existen dos formas principales de normalización para gramáticas libres de contexto (GIC): la **Forma Normal de Chomsky (FNC)** y la **Forma Normal de Greibach (FNG)**.
+Existen dos formas principales de normalización para gramáticas libres de contexto (GIC): la Forma Normal de Chomsky (FNC) y la Forma Normal de Greibach (FNG).
 
 ### 1. Forma Normal de Chomsky (FNC)
 
-Una gramática  G = (N, T, P, S)  está en **Forma Normal de Chomsky** si todas sus producciones tienen una de las siguientes formas:
+Una gramática  G = (N, T, P, S)  está en Forma Normal de Chomsky si todas sus producciones tienen una de las siguientes formas:
 1.  A → BC , donde  A, B, C ∈ N  y  B, C ≠ S .
 2.  A → a , donde  A ∈ N  y  a ∈ T .
 
@@ -28,14 +28,14 @@ Una gramática  G = (N, T, P, S)  está en **Forma Normal de Chomsky** si todas 
 - No se permiten producciones con cadenas vacías ( ε ), excepto si el lenguaje incluye explícitamente  ε .
 
 #### Algoritmo para Convertir a FNC
-1. **Eliminar producciones nulas ( ε )**:
+1. Eliminar producciones nulas ( ε ):
    - Identificar los símbolos anulables (aquellos que pueden derivar  ε ).
    - Modificar las reglas afectadas para incluir todas las combinaciones posibles sin los símbolos anulables.
-2. **Eliminar producciones unitarias ( A → B )**:
+2. Eliminar producciones unitarias ( A → B ):
    - Sustituir cada regla unitaria por las producciones del símbolo al que deriva.
-3. **Eliminar símbolos inútiles**:
+3. Eliminar símbolos inútiles:
    - Eliminar símbolos inaccesibles e improductivos.
-4. **Transformar las producciones restantes**:
+4. Transformar las producciones restantes:
    - Dividir las reglas con más de dos símbolos no terminales en varias reglas binarias.
 
 #### Ejemplo
@@ -62,7 +62,7 @@ P' = S → AB; A → aA; A → a; B → bB; B → b.
 
 ### 2. Forma Normal de Greibach (FNG)
 
-Una gramática  G = (N, T, P, S)  está en **Forma Normal de Greibach** si todas sus producciones tienen la forma:
+Una gramática  G = (N, T, P, S)  está en Forma Normal de Greibach si todas sus producciones tienen la forma:
  
 A → aα
   Donde:
@@ -103,7 +103,7 @@ P'' = S → Aa; A → abZ; Z → bZ | b.
 
 ## Comparación entre FNC y FNG
 
-| **Característica**         | **FNC**                                  | **FNG**                                  |
+| Característica         | FNC                                  | FNG                                  |
 |----------------------------|------------------------------------------|------------------------------------------|
 | Restricción principal      | Producción binaria o terminal única      | Producción inicia con un terminal        |
 | Uso principal              | Análisis sintáctico y algoritmos CYK     | Construcción de autómatas y parsers LL(1) |
@@ -114,9 +114,9 @@ P'' = S → Aa; A → abZ; Z → bZ | b.
 ## Importancia de la Normalización
 
 La normalización es crucial porque:
-1. **Facilita el análisis sintáctico**: Las formas normales simplifican los algoritmos utilizados para procesar lenguajes formales.
-2. **Optimiza compiladores**: Las gramáticas normalizadas son más eficientes para ser procesadas por herramientas computacionales.
-3. **Garantiza consistencia**: Ayuda a evitar ambigüedades y errores estructurales en las gramáticas.
+1. Facilita el análisis sintáctico: Las formas normales simplifican los algoritmos utilizados para procesar lenguajes formales.
+2. Optimiza compiladores: Las gramáticas normalizadas son más eficientes para ser procesadas por herramientas computacionales.
+3. Garantiza consistencia: Ayuda a evitar ambigüedades y errores estructurales en las gramáticas.
 
 ---
 

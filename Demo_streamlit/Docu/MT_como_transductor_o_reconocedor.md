@@ -1,10 +1,10 @@
 # Máquina de Turing como Transductor o Reconocedor
 
-Las máquinas de Turing (MT) son dispositivos teóricos fundamentales en la teoría de la computabilidad y los lenguajes formales. Estas pueden desempeñar dos roles principales: **como transductores**, transformando cadenas de entrada en cadenas de salida, o **como reconocedores**, determinando si una cadena pertenece a un lenguaje específico.
+Las máquinas de Turing (MT) son dispositivos teóricos fundamentales en la teoría de la computabilidad y los lenguajes formales. Estas pueden desempeñar dos roles principales: como transductores, transformando cadenas de entrada en cadenas de salida, o como reconocedores, determinando si una cadena pertenece a un lenguaje específico.
 
-## **Máquina de Turing como Transductor**
+## Máquina de Turing como Transductor
 
-### **Definición**
+### Definición
 Una Máquina de Turing actúa como transductor cuando implementa una función que transforma una cadena de entrada  w  en una cadena de salida  u . Esta transformación se define formalmente como:
  
 f(w) = u {si } q_0 w ⊢^* q_f u,
@@ -14,14 +14,14 @@ f(w) = u {si } q_0 w ⊢^* q_f u,
 -  w : Cadena de entrada.
 -  u : Cadena resultante en la cinta tras la ejecución.
 
-### **Características**
-1. **Transformación de cadenas**: La MT puede escribir en la cinta símbolos diferentes a los que lee, generando así una salida distinta a la entrada.
-2. **Turing-computabilidad**: Una función se considera *Turing-computable* si existe una MT que la implemente. Esto implica que cualquier función computable puede ser modelada por una MT.
-3. **Ejemplo**:
+### Características
+1. Transformación de cadenas: La MT puede escribir en la cinta símbolos diferentes a los que lee, generando así una salida distinta a la entrada.
+2. Turing-computabilidad: Una función se considera *Turing-computable* si existe una MT que la implemente. Esto implica que cualquier función computable puede ser modelada por una MT.
+3. Ejemplo:
    - Representar enteros positivos mediante cadenas de símbolos:  n  se representa como  a^n .
    - Suma de dos números representados como  a^n b a^m  produce  a^{n+m} .
 
-### **Construcción**
+### Construcción
 Para construir MT transductoras más complejas, se pueden combinar varias MT simples. Por ejemplo:
 - Una MT realiza una operación inicial sobre la cinta.
 - Al finalizar, otra MT continúa desde el estado y configuración resultantes.
@@ -30,28 +30,28 @@ Este enfoque modular permite diseñar máquinas que implementen funciones comple
 
 ---
 
-## **Máquina de Turing como Reconocedor**
+## Máquina de Turing como Reconocedor
 
-### **Definición**
+### Definición
 Una Máquina de Turing actúa como reconocedor cuando decide si una cadena pertenece a un lenguaje determinado. El lenguaje aceptado por una MT, denotado como  L(M) , se define como:
  
 L(M) =  w   ∣ q_0 w ⊢^* q_f, q_f ∈ F,
   donde  F  es el conjunto de estados finales.
 
-### **Características**
-1. **Aceptación y rechazo**:
+### Características
+1. Aceptación y rechazo:
    - Una cadena es aceptada si, al procesarla, la MT alcanza un estado final y se detiene.
    - Una cadena es rechazada si no puede alcanzar un estado final o si entra en un bucle infinito.
-2. **Lenguajes reconocidos**:
+2. Lenguajes reconocidos:
    - Los lenguajes reconocidos por las MT son los *lenguajes recursivamente enumerables (RE)*.
    - Si una MT siempre se detiene (ya sea aceptando o rechazando), el lenguaje reconocido es *recursivo*.
-3. **Ejemplo**:
+3. Ejemplo:
    - Diseñar una MT que acepte el lenguaje  L = a^n b^n   ∣ n ≥ 1 :
      - La máquina verifica que el número de símbolos  a  sea igual al número de símbolos  b , eliminándolos uno a uno.
 
 ---
 
-## **Comparación entre Transductor y Reconocedor**
+## Comparación entre Transductor y Reconocedor
 
 | Aspecto                | Transductor                                  | Reconocedor                              |
 |------------------------|---------------------------------------------|------------------------------------------|
@@ -62,7 +62,7 @@ L(M) =  w   ∣ q_0 w ⊢^* q_f, q_f ∈ F,
 
 ---
 
-## **Máquinas Universales y Generalidad**
+## Máquinas Universales y Generalidad
 
 La Máquina Universal de Turing (MTU) combina ambas capacidades:
 1. Como *transductor*, simula cualquier otra MT, transformando su descripción y entrada en el resultado esperado.

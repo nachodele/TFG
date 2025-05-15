@@ -1,19 +1,19 @@
 # Estados Accesibles y Autómatas Conexos
 
-En la teoría de autómatas finitos, los conceptos de **estados accesibles** y **autómatas conexos** son fundamentales para analizar y simplificar autómatas sin alterar el lenguaje que reconocen. Estos conceptos permiten optimizar los autómatas eliminando estados innecesarios.
+En la teoría de autómatas finitos, los conceptos de estados accesibles y autómatas conexos son fundamentales para analizar y simplificar autómatas sin alterar el lenguaje que reconocen. Estos conceptos permiten optimizar los autómatas eliminando estados innecesarios.
 
 ---
 
 ## Estados Accesibles
 
 ### Definición
-Un estado  p ∈ Q  de un autómata finito es **accesible** desde el estado inicial  q_0  si existe una cadena  x ∈ Σ^*  tal que, al procesarla desde  q_0 , el autómata llega al estado  p . Formalmente:
+Un estado  p ∈ Q  de un autómata finito es accesible desde el estado inicial  q_0  si existe una cadena  x ∈ Σ^*  tal que, al procesarla desde  q_0 , el autómata llega al estado  p . Formalmente:
  
 f'(q_0, x) = p
   Donde:
 -  f'(q_0, x)  es la extensión de la función de transición para cadenas completas.
 
-Si no existe tal cadena, el estado  p  se considera **inaccesible**.
+Si no existe tal cadena, el estado  p  se considera inaccesible.
 
 ### Propiedades
 1. El estado inicial  q_0  siempre es accesible.
@@ -59,11 +59,11 @@ Todos los estados son accesibles en este caso.
 ## Autómatas Conexos
 
 ### Definición
-Un **autómata finito conexo** es aquel en el que todos sus estados son accesibles desde el estado inicial. Formalmente:
+Un autómata finito conexo es aquel en el que todos sus estados son accesibles desde el estado inicial. Formalmente:
  
 ∀ p ∈ Q ; f'(q_0, x) = p\; (x ∈ Σ^*)
   
-Si un autómata tiene estados inaccesibles, se dice que es **no conexo**.
+Si un autómata tiene estados inaccesibles, se dice que es no conexo.
 
 ### Propiedades
 1. Un autómata conexo reconoce el mismo lenguaje que su versión no conexa equivalente.
@@ -112,16 +112,16 @@ El lenguaje reconocido no cambia.
 
 ## Importancia de los Estados Accesibles y Autómatas Conexos
 
-1. **Simplificación del Autómata**:
+1. Simplificación del Autómata:
    - La eliminación de estados inaccesibles reduce la complejidad del autómata sin cambiar el lenguaje reconocido.
    
-2. **Optimización**:
+2. Optimización:
    - Los autómatas conexos son más eficientes en términos de almacenamiento y procesamiento.
 
-3. **Construcción del Autómata Mínimo**:
+3. Construcción del Autómata Mínimo:
    - La identificación de los estados accesibles es un paso previo necesario para minimizar un autómata finito.
 
-4. **Análisis Formal**:
+4. Análisis Formal:
    - Facilita la verificación y validación del comportamiento del autómata.
 
 ---

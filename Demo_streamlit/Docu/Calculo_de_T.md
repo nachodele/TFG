@@ -6,7 +6,7 @@ El cálculo de  T^*  en autómatas finitos está relacionado con la determinaci�
 
 ## Definición Formal
 
-Sea un **autómata finito determinista (AFD)** definido como:
+Sea un autómata finito determinista (AFD) definido como:
  
 M = (Q, Σ, δ, q_0, F)
   Donde:
@@ -31,13 +31,13 @@ La función de transición extendida  T^* : Q   x Σ^* → Q  se define como:
 
 ## Propiedades de  T^* 
 
-1. **Determinismo**:
+1. Determinismo:
    - En un AFD, para cada estado  q ∈ Q  y cada cadena  w ∈ Σ^* , existe exactamente un estado alcanzable mediante  T^*(q, w) .
 
-2. **Composición**:
+2. Composición:
    - La función extendida se puede interpretar como una composición iterativa de la función de transición básica ( δ(q, a) ).
 
-3. **Reconocimiento del Lenguaje**:
+3. Reconocimiento del Lenguaje:
    - Una cadena  w ∈ Σ^*  es aceptada por el autómata si:
       
      T^*(q_0, w) ∈ F

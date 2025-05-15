@@ -1,12 +1,12 @@
 # Autómatas a Pila (AP)
 
-Los **autómatas a pila (AP)** son modelos matemáticos que extienden los autómatas finitos al incorporar una memoria auxiliar en forma de pila. Esta característica les permite reconocer lenguajes más complejos, específicamente los **lenguajes independientes de contexto**, que no pueden ser reconocidos por autómatas finitos.
+Los autómatas a pila (AP) son modelos matemáticos que extienden los autómatas finitos al incorporar una memoria auxiliar en forma de pila. Esta característica les permite reconocer lenguajes más complejos, específicamente los lenguajes independientes de contexto, que no pueden ser reconocidos por autómatas finitos.
 
 ---
 
 ## Definición Formal
 
-Un **autómata a pila** se define como una séptupla:
+Un autómata a pila se define como una séptupla:
  
 M = (Q, Σ, Γ, δ, q_0, Z_0, F)
   Donde:
@@ -32,25 +32,25 @@ La función  δ(q, a, X) = (p, w)  significa que:
 ## Funcionamiento del Autómata a Pila
 
 El autómata a pila procesa una cadena de entrada mientras realiza operaciones sobre su pila. Estas operaciones incluyen:
-1. **Apilar**: Insertar símbolos en la pila.
-2. **Desapilar**: Eliminar símbolos de la cima de la pila.
-3. **Mantener**: No modificar la pila.
+1. Apilar: Insertar símbolos en la pila.
+2. Desapilar: Eliminar símbolos de la cima de la pila.
+3. Mantener: No modificar la pila.
 
 El autómata acepta una cadena si:
-1. Al finalizar el procesamiento, alcanza un estado final (**aceptación por estado final**), o
-2. La pila queda vacía (**aceptación por vaciado de pila**).
+1. Al finalizar el procesamiento, alcanza un estado final (aceptación por estado final), o
+2. La pila queda vacía (aceptación por vaciado de pila).
 
 ---
 
 ## Lenguajes Reconocidos
 
-Los autómatas a pila reconocen exactamente los **lenguajes independientes de contexto**, según los siguientes teoremas fundamentales:
+Los autómatas a pila reconocen exactamente los lenguajes independientes de contexto, según los siguientes teoremas fundamentales:
 
-1. **Teorema 1**: Para cada gramática independiente del contexto  G , existe un autómata a pila  M  tal que:
+1. Teorema 1: Para cada gramática independiente del contexto  G , existe un autómata a pila  M  tal que:
     
    L(G) = L(M)
      
-2. **Teorema 2**: Para cada autómata a pila  M , existe una gramática independiente del contexto  G  tal que:
+2. Teorema 2: Para cada autómata a pila  M , existe una gramática independiente del contexto  G  tal que:
     
    L(M) = L(G)
      
@@ -120,13 +120,13 @@ Un AP es no determinista si permite múltiples transiciones para una misma confi
 
 ## Aplicaciones
 
-1. **Análisis Sintáctico**:
+1. Análisis Sintáctico:
    - Los analizadores sintácticos utilizados en compiladores son implementaciones prácticas de autómatas a pila.
 
-2. **Procesamiento del Lenguaje Natural**:
+2. Procesamiento del Lenguaje Natural:
    - Se utilizan para modelar estructuras gramaticales jerárquicas en lenguas humanas.
 
-3. **Reconocimiento y Validación**:
+3. Reconocimiento y Validación:
    - Reconocen patrones complejos como expresiones aritméticas o estructuras anidadas.
 
 ---

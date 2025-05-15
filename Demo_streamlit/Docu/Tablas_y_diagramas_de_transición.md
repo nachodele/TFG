@@ -1,16 +1,16 @@
 # Tablas y Diagramas de Transición
 
-Los **tablas y diagramas de transición** son representaciones fundamentales para describir el comportamiento de los autómatas finitos. Estas herramientas permiten visualizar y analizar cómo un autómata procesa cadenas de entrada para determinar si pertenecen al lenguaje que reconoce.
+Los tablas y diagramas de transición son representaciones fundamentales para describir el comportamiento de los autómatas finitos. Estas herramientas permiten visualizar y analizar cómo un autómata procesa cadenas de entrada para determinar si pertenecen al lenguaje que reconoce.
 
 ---
 
 ## Diagramas de Transición
 
-Un **diagrama de transición** es una representación gráfica del funcionamiento de un autómata finito. Es un grafo dirigido donde:
-- Cada **nodo** representa un estado del autómata.
-- Cada **arco** entre nodos está etiquetado con un símbolo del alfabeto que indica la transición entre estados.
-- El **estado inicial** se señala con una flecha que apunta hacia él.
-- Los **estados finales** se indican con un doble círculo o un asterisco.
+Un diagrama de transición es una representación gráfica del funcionamiento de un autómata finito. Es un grafo dirigido donde:
+- Cada nodo representa un estado del autómata.
+- Cada arco entre nodos está etiquetado con un símbolo del alfabeto que indica la transición entre estados.
+- El estado inicial se señala con una flecha que apunta hacia él.
+- Los estados finales se indican con un doble círculo o un asterisco.
 
 ### Ejemplo
 Consideremos un autómata finito determinista (AFD) que reconoce el lenguaje  L = w : w; termina en 01 . Este AFD tiene:
@@ -38,7 +38,7 @@ El diagrama de transición es:
 
 ## Tablas de Transición
 
-Una **tabla de transición** es una representación tabular que describe la función de transición ( δ ) de un autómata. Cada fila corresponde a un estado y cada columna a un símbolo del alfabeto. Las celdas indican el estado al que se llega desde el estado actual al procesar el símbolo correspondiente.
+Una tabla de transición es una representación tabular que describe la función de transición ( δ ) de un autómata. Cada fila corresponde a un estado y cada columna a un símbolo del alfabeto. Las celdas indican el estado al que se llega desde el estado actual al procesar el símbolo correspondiente.
 
 ### Ejemplo
 Para el mismo AFD anterior, la tabla de transición sería:
@@ -57,26 +57,26 @@ Para el mismo AFD anterior, la tabla de transición sería:
 
 ## Comparación entre Diagramas y Tablas
 
-| **Característica**            | **Diagrama de Transición**                | **Tabla de Transición**                  |
+| Característica            | Diagrama de Transición                | Tabla de Transición                  |
 |--------------------------------|------------------------------------------|------------------------------------------|
-| **Visualización**              | Gráfica e intuitiva                      | Tabular y compacta                       |
-| **Facilidad para grandes autómatas** | Difícil de manejar si hay muchos estados o transiciones. | Más adecuada para grandes autómatas.     |
-| **Uso en algoritmos**          | Menos práctica para implementaciones     | Ideal para implementaciones computacionales. |
+| Visualización              | Gráfica e intuitiva                      | Tabular y compacta                       |
+| Facilidad para grandes autómatas | Difícil de manejar si hay muchos estados o transiciones. | Más adecuada para grandes autómatas.     |
+| Uso en algoritmos          | Menos práctica para implementaciones     | Ideal para implementaciones computacionales. |
 
 ---
 
 ## Aplicaciones
 
-1. **Análisis Léxico en Compiladores**:
+1. Análisis Léxico en Compiladores:
    - Los diagramas y tablas se utilizan para modelar cómo se reconocen tokens en lenguajes de programación.
 
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Permiten buscar patrones en cadenas mediante expresiones regulares.
 
-3. **Sistemas Secuenciales y Controladores Lógicos Programables (PLC)**:
+3. Sistemas Secuenciales y Controladores Lógicos Programables (PLC):
    - Modelan sistemas con estados definidos y transiciones entre ellos.
 
-4. **Diseño Teórico y Simulación**:
+4. Diseño Teórico y Simulación:
    - Facilitan la comprensión y simulación del comportamiento de los autómatas.
 
 ---

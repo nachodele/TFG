@@ -1,0 +1,56 @@
+# Problema:
+## Enunciado
+Diseñe un autómata finito determinista (AFD) que acepte el lenguaje L = {w ∈ {a, b}* | w contiene al menos una 'a' y ninguna 'b' aislada}.  
+
+Componentes del AFD:
+- Estados: Q = {q0, q1, q2}  
+- Alfabeto: Σ = {a, b}  
+- Estado inicial: q0  
+- Estados de aceptación: F = {q1}  
+- Función de transición:  
+
+| Estado | a   | b   |
+|--------|-----|-----|
+| q0     | q1  | q2  |
+| q1     | q1  | q0  |
+| q2     | q2  | q2  |
+
+---
+
+## Solución
+### Paso 1: Definición de estados
+- q0: No se ha leído ninguna 'a' y no hay 'b' aisladas.
+- q1: Se ha leído al menos una 'a' y no hay 'b' aisladas (estado de aceptación).
+- q2: Se detectó una 'b' aislada (estado de rechazo).
+
+### Paso 2: Validación con ejemplos
+#### Cadena válida: "aab"
+- q0 → q1 (a) → q1 (a) → q1 (b).
+
+#### Cadena inválida: "ab"
+- q0 → q1 (a) → q0 (b).
+
+#### Cadena inválida: "baa"
+- q0 → q2 (b) → q2 (a) → q2 (a).
+
+### Paso 3: Diagrama de transiciones
+    a          b
+→ q0 ───→ q1 ←───┐
+  |        ↑      |
+  b        |      b
+  ↓        |      |
+  q2 ←───────────┘
+
+Conclusión: El AFD cumple con las condiciones de L.
+
+---
+
+### Errores ocultos:
+1. Transición q1 con 'b':  
+   La transición q1 → q0 con 'b' permite que "aab" sea aceptada, pero según la definición del lenguaje, ninguna 'b' puede estar aislada (debe estar precedida por otra 'b'). En "aab", la última 'b' está aislada.
+
+2. Estado q2 inalcanzable:  
+   El estado q2 solo se activa con una 'b' en q0, pero en realidad, cualquier 'b' no precedida por otra 'b' debería llegar a q2, incluso si ocurre después de una 'a'.
+
+3. Falta de verificación de 'b' consecutivas:  
+   El autómata no garantiza que las 'b' aparezcan en pares. Por ejemplo, la cadena "abb" sería procesada como q0 → q1 → q0 → q2, rechazándola incorrectamente, aunque cumple con el lenguaje (contiene 'a' y las 'b' no están aisladas).

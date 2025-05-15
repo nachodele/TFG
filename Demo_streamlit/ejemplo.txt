@@ -1,0 +1,97 @@
+## Enunciado:  
+Construye un Autómata Finito Determinista (AFD) que acepte el lenguaje  L  definido sobre el alfabeto  Σ = {0, 1} , donde  L  contiene todas las cadenas que terminan en "01".  
+
+El autómata debe cumplir las siguientes condiciones:  
+1. Debe ser completamente determinista.  
+2. Debe incluir un estado inicial, un conjunto de estados finales, y transiciones que cubran todos los posibles símbolos del alfabeto para cada estado.  
+
+## Solución Buena:  
+Para construir el AFD que acepte cadenas que terminan en "01", seguimos estos pasos:
+
+### Paso 1: Análisis del lenguaje  
+El lenguaje  L  contiene todas las cadenas sobre  Σ = {0, 1}  que terminan en "01". Esto significa que el autómata debe recordar los últimos dos símbolos leídos para verificar si son "01".  
+
+### Paso 2: Identificación de los estados  
+Definimos los estados necesarios para rastrear las combinaciones relevantes de los últimos símbolos leídos:  
+-  q_0 : Estado inicial, no se ha leído nada relevante aún.  
+-  q_1 : Se ha leído un "0", pero no está claro si la cadena termina en "01".  
+-  q_2 : Se ha leído "01", por lo que la cadena es aceptada.  
+
+### Paso 3: Transiciones entre estados  
+Diseñamos las transiciones para cubrir todos los casos posibles:  
+- Desde  q_0 :  
+  - Leer "0" lleva a  q_1 .  
+  - Leer "1" mantiene al autómata en  q_0 .  
+
+- Desde  q_1 :  
+  - Leer "0" mantiene al autómata en  q_1 .  
+  - Leer "1" lleva a  q_2 .  
+
+- Desde  q_2 :  
+  - Leer "0" lleva a  q_1 .  
+  - Leer "1" mantiene al autómata en  q_0 .  
+
+### Paso 4: Tabla de transiciones del AFD  
+
+| Estado | Símbolo leído | Nuevo estado |
+|--------|---------------|--------------|
+|  q_0  | 0             |  q_1     |
+|  q_0  | 1             |  q_0     |
+|  q_1  | 0             |  q_1     |
+|  q_1  | 1             |  q_2     |
+|  q_2  | 0             |  q_1     |
+|  q_2  | 1             |  q_0     |
+
+### Paso 5: Estados finales  
+El único estado final es  q_2 , ya que representa que la cadena termina en "01".  
+
+
+### Paso 6: Verificación del AFD  
+Probamos el autómata con algunas cadenas:
+- Para la cadena "101": El autómata pasa por los estados  q_0, q_0, q_1, q_2 , terminando en el estado final (q_2), por lo que la cadena es aceptada.
+- Para la cadena "110": El autómata pasa por los estados  q_0, q_0, q_0, q_1, terminando en un estado no final (q_1), por lo que la cadena no es aceptada.
+
+
+## Solución Errónea:  
+
+### Paso 1: Análisis del lenguaje  
+El autómata debe aceptar cualquier cadena que contenga "01" en cualquier parte, no necesariamente al final.
+
+### Paso 2: Identificación de los estados  
+Definimos los estados para rastrear cualquier aparición de "01", no solo al final:  
+-  q_0 : Estado inicial, no se ha leído nada relevante aún.  
+-  q_1 : Se ha leído un "0", pero no está claro si se formará "01".  
+-  q_2 : Se ha leído "01", por lo que la cadena es aceptada.  
+
+### Paso 3: Transiciones entre estados  
+Diseñamos las transiciones basándonos en la aparición de "01" en cualquier parte:  
+- Desde  q_0 :  
+  - Leer "0" lleva a  q_1 .  
+  - Leer "1" mantiene al autómata en  q_0 .  
+
+- Desde  q_1 :  
+  - Leer "0" mantiene al autómata en  q_1 .  
+  - Leer "1" lleva a  q_2 .  
+
+- Desde  q_2 :  
+  - Leer cualquier símbolo mantiene al autómata en  q_2.  
+
+### Paso 4: Tabla de transiciones del AFD
+
+| Estado | Símbolo leído | Nuevo estado |
+|--------|---------------|--------------|
+|  q_0  | 0             |  q_1     |
+|  q_0  | 1             |  q_0     |
+|  q_1  | 0             |  q_1     |
+|  q_1  | 1             |  q_2     |
+|  q_2  | 0             |  q_2     |
+|  q_2  | 1             |  q_2     |
+
+### Paso 5: Estados finales
+El único estado final es definido como  q_2.
+
+### Paso 6: Verificación del AFD
+Probamos el autómata con algunas cadenas:
+- Para la cadena "101": El autómata pasa por los estados  q_0, q_0, q_1, q_2 , terminando en el estado final (q_2), por lo que la cadena es aceptada.
+- Para la cadena "11010": El autómata pasa por los estados  q_0, q_0, q_1, q_2, q_2, q_2, terminando en el estado final (q_2).
+- Para la cadena "100": El autómata pasa por los estados  q_0, q_1, q_1, q_1, terminando en un estado no final (q_1).

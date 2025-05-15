@@ -1,22 +1,22 @@
 # Problemas Irresolubles: Problema de Parada y Problema de Correspondencia de Post
 
-En la teoría de la computación, los **problemas irresolubles** representan límites fundamentales del cálculo algorítmico. Estos problemas no pueden ser resueltos por ningún algoritmo o máquina de Turing, independientemente de los recursos disponibles. Dos ejemplos clásicos son el **Problema de Parada** y el **Problema de Correspondencia de Post**, ambos cruciales para entender la indecidibilidad y los límites de la computación.
+En la teoría de la computación, los problemas irresolubles representan límites fundamentales del cálculo algorítmico. Estos problemas no pueden ser resueltos por ningún algoritmo o máquina de Turing, independientemente de los recursos disponibles. Dos ejemplos clásicos son el Problema de Parada y el Problema de Correspondencia de Post, ambos cruciales para entender la indecidibilidad y los límites de la computación.
 
 ---
 
-## **1. Problema de Parada**
+## 1. Problema de Parada
 
-### **Definición**
-El **Problema de Parada** consiste en determinar si una Máquina de Turing  M , dada una entrada  w , se detendrá después de un número finito de pasos o continuará ejecutándose indefinidamente.
+### Definición
+El Problema de Parada consiste en determinar si una Máquina de Turing  M , dada una entrada  w , se detendrá después de un número finito de pasos o continuará ejecutándose indefinidamente.
 
 Formalmente, el problema puede expresarse como:
  
  {Dado } M  { (una Máquina de Turing) y } w  { (una entrada), decidir si } M(w)  { termina.}
   
-### **Indecidibilidad**
-Alan Turing demostró en 1936 que el Problema de Parada es **indecidible**, es decir, no existe una Máquina de Turing que pueda resolver este problema para todas las posibles combinaciones de  M  y  w .
+### Indecidibilidad
+Alan Turing demostró en 1936 que el Problema de Parada es indecidible, es decir, no existe una Máquina de Turing que pueda resolver este problema para todas las posibles combinaciones de  M  y  w .
 
-#### **Demostración por contradicción**
+#### Demostración por contradicción
 1. Supongamos que existe una Máquina de Turing  H  que resuelve el Problema de Parada. Esta máquina toma como entrada  (M, w)  y:
    - Devuelve "sí" si  M(w)  se detiene.
    - Devuelve "no" si  M(w)  no se detiene.
@@ -31,16 +31,16 @@ Alan Turing demostró en 1936 que el Problema de Parada es **indecidible**, es d
 
 Por lo tanto, la existencia de  H  lleva a una contradicción lógica, demostrando que el Problema de Parada es indecidible.
 
-### **Implicaciones**
+### Implicaciones
 - El Problema de Parada establece límites fundamentales para la computación: no es posible predecir con certeza si un programa terminará o no.
 - Este resultado tiene aplicaciones prácticas, como en la detección automática de bucles infinitos en programas.
 
 ---
 
-## **2. Problema de Correspondencia de Post**
+## 2. Problema de Correspondencia de Post
 
-### **Definición**
-El **Problema de Correspondencia de Post (PCP)** fue propuesto por Emil Post y se define como sigue:
+### Definición
+El Problema de Correspondencia de Post (PCP) fue propuesto por Emil Post y se define como sigue:
 
 Dado un alfabeto finito y dos conjuntos finitos de cadenas sobre dicho alfabeto:
  
@@ -49,15 +49,15 @@ A = u_1, u_2, ..., u_k,      B = v_1, v_2, ..., v_k,
  
 u_{i_1} u_{i_2} ... u_{i_n} = v_{i_1} v_{i_2} ... v_{i_n}.
   
-### **Indecidibilidad**
+### Indecidibilidad
 El PCP es un problema indecidible; no existe un algoritmo general que pueda determinar si existe o no una solución para cualquier instancia arbitraria del problema.
 
-#### **Relación con el Problema de Parada**
+#### Relación con el Problema de Parada
 La indecidibilidad del PCP puede demostrarse mediante *reducción* desde el Problema de Parada:
 - Si existiera un algoritmo para resolver el PCP, también podría usarse para resolver el Problema de Parada.
 - Sin embargo, dado que el Problema de Parada es indecidible, esto implica que el PCP también lo es.
 
-### **Ejemplo**
+### Ejemplo
 Supongamos:
  
 A = u_1 = "a", u_2 = "ab",      B = v_1 = "aa", v_2 = "b".
@@ -74,7 +74,7 @@ Sin embargo, no existe un algoritmo general para determinar si tal secuencia exi
 
 ---
 
-## **Comparación entre los Problemas**
+## Comparación entre los Problemas
 
 | Aspecto                        | Problema de Parada                          | Problema de Correspondencia de Post         |
 |--------------------------------|---------------------------------------------|---------------------------------------------|
@@ -86,5 +86,5 @@ Sin embargo, no existe un algoritmo general para determinar si tal secuencia exi
 
 ---
 
-## **Conclusión**
+## Conclusión
 Tanto el Problema de Parada como el Problema de Correspondencia de Post son ejemplos fundamentales en la teoría computacional que ilustran los límites del cálculo algorítmico. Estos problemas nos enseñan que hay preguntas dentro del ámbito computacional que ninguna máquina o algoritmo puede responder completamente. La comprensión y estudio de estos problemas son esenciales para delimitar lo que es posible y lo que está fuera del alcance del cómputo.

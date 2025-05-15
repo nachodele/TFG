@@ -1,6 +1,6 @@
 # Máquinas de Turing (MT)
 
-Las **Máquinas de Turing (MT)** son dispositivos teóricos fundamentales en la teoría de la computación. Fueron introducidas por Alan Turing en 1936 como un modelo matemático para formalizar el concepto de algoritmo y computación. Las MT son más potentes que otros modelos de autómatas, ya que pueden simular cualquier proceso computacional que sea "algorítmicamente resoluble".
+Las Máquinas de Turing (MT) son dispositivos teóricos fundamentales en la teoría de la computación. Fueron introducidas por Alan Turing en 1936 como un modelo matemático para formalizar el concepto de algoritmo y computación. Las MT son más potentes que otros modelos de autómatas, ya que pueden simular cualquier proceso computacional que sea "algorítmicamente resoluble".
 
 ---
 
@@ -23,23 +23,23 @@ M = (Q, Σ, Γ, δ, q_0, B, F)
 
 ## Funcionamiento
 
-1. **Cinta**:
+1. Cinta:
    - La cinta es infinita hacia la derecha y está dividida en celdas.
    - Cada celda puede contener un símbolo del alfabeto  Γ .
 
-2. **Cabeza lectora/escritora**:
+2. Cabeza lectora/escritora:
    - Lee el contenido de una celda.
    - Escribe un nuevo símbolo en la celda actual.
    - Se mueve a la izquierda ( L ) o a la derecha ( R ).
 
-3. **Estados**:
+3. Estados:
    - La máquina comienza en el estado inicial ( q_0 ).
    - Según el estado actual y el símbolo leído, la función de transición  δ(q, X) = (q', Y, D)  determina:
      - El nuevo estado ( q' ).
      - El símbolo que se escribe ( Y ).
      - La dirección del movimiento ( D = L, R).
 
-4. **Aceptación**:
+4. Aceptación:
    - Una cadena es aceptada si, después de una secuencia finita de transiciones, la máquina alcanza un estado final ( q_f ∈ F).
 
 ---
@@ -78,17 +78,17 @@ Sea una MT que acepta cadenas con igual número de  a's seguidos por  b's:
 ## Clasificación y Extensiones
 
 ### Tipos de Máquinas de Turing
-1. **Determinista**:
+1. Determinista:
    - Para cada estado y símbolo leído hay una única transición definida.
-2. **No determinista**:
+2. No determinista:
    - Puede haber múltiples transiciones posibles para un mismo estado y símbolo.
 
 ### Extensiones
-1. **MT Multicinta**:
+1. MT Multicinta:
    - Tiene varias cintas con cabezas independientes.
-2. **MT Multidimensional**:
+2. MT Multidimensional:
    - La cinta tiene más dimensiones (e.g., bidimensional).
-3. **MT Universal**:
+3. MT Universal:
    - Puede simular cualquier otra máquina de Turing.
 
 ---
@@ -118,11 +118,11 @@ Turing demostró que este problema es indecidible.
 
 ## Aplicaciones
 
-1. **Modelado Teórico**:
+1. Modelado Teórico:
    - Base para estudiar computabilidad y complejidad algorítmica.
-2. **Simulación Computacional**:
+2. Simulación Computacional:
    - Las MT son el fundamento teórico detrás del funcionamiento de las computadoras modernas.
-3. **Resolución Algorítmica**:
+3. Resolución Algorítmica:
    - Permiten analizar qué problemas pueden resolverse mediante algoritmos.
 
 ---

@@ -1,12 +1,12 @@
 # Símbolo, Alfabeto y Palabra
 
-En el estudio de los lenguajes formales, los conceptos de **símbolo**, **alfabeto** y **palabra** son fundamentales. Estos elementos forman la base para la construcción de lenguajes formales y su análisis, siendo esenciales en áreas como la teoría de autómatas, gramáticas y lenguajes computacionales.
+En el estudio de los lenguajes formales, los conceptos de símbolo, alfabeto y palabra son fundamentales. Estos elementos forman la base para la construcción de lenguajes formales y su análisis, siendo esenciales en áreas como la teoría de autómatas, gramáticas y lenguajes computacionales.
 
-## **Símbolo**
+## Símbolo
 
-Un **símbolo** es una entidad abstracta que no tiene un significado intrínseco definido, similar al concepto de un punto en geometría. En el contexto de los lenguajes formales, se utiliza como unidad básica para construir palabras y lenguajes.
+Un símbolo es una entidad abstracta que no tiene un significado intrínseco definido, similar al concepto de un punto en geometría. En el contexto de los lenguajes formales, se utiliza como unidad básica para construir palabras y lenguajes.
 
-- **Características**:
+- Características:
   - Representa cualquier cosa o concepto.
   - Puede ser una letra, dígito, carácter especial o incluso una palabra.
   - Ejemplos:
@@ -14,35 +14,35 @@ Un **símbolo** es una entidad abstracta que no tiene un significado intrínseco
     - Dígitos: 0, 1, 2.
     - Palabras: `IF`, `THEN`, `ELSE`.
 
-- **Representación**:
+- Representación:
   - Se representan comúnmente mediante letras, números o combinaciones de caracteres.
 
-## **Alfabeto**
+## Alfabeto
 
-El **alfabeto** es un conjunto finito y no vacío de símbolos. Es el conjunto base a partir del cual se construyen las palabras y los lenguajes.
+El alfabeto es un conjunto finito y no vacío de símbolos. Es el conjunto base a partir del cual se construyen las palabras y los lenguajes.
 
-- **Definición formal**:
+- Definición formal:
    
   Σ = a_1, a_2, ..., a_n
       donde a_i son los símbolos del alfabeto.
 
-- **Ejemplos de alfabetos**:
+- Ejemplos de alfabetos:
   -  Σ_1 = A, B, C, ..., Z : Letras mayúsculas.
   -  Σ_2 = 0, 1 : Dígitos binarios.
   -  Σ_3 =  {IF},  {THEN},  {ELSE} : Palabras reservadas de un lenguaje de programación.
 
-- **Propiedades**:
+- Propiedades:
   - Todo alfabeto es finito.
   - Cada símbolo del alfabeto es único.
 
-## **Palabra**
+## Palabra
 
-Una **palabra** (o cadena) es una secuencia finita de símbolos tomados del alfabeto. Es el elemento básico que forma parte de un lenguaje formal.
+Una palabra (o cadena) es una secuencia finita de símbolos tomados del alfabeto. Es el elemento básico que forma parte de un lenguaje formal.
 
 ### Definición Formal
 Sea  Σ  un alfabeto. Una palabra sobre  Σ  es cualquier secuencia finita de símbolos pertenecientes a  Σ . El conjunto de todas las palabras posibles sobre  Σ  se denota como  Σ^* .
 
-- **Ejemplos**:
+- Ejemplos:
   - Si  Σ_1 = A, B , entonces algunas palabras son: `A`, `B`, `AB`, `BAA`.
   - Si  Σ_2 = 0, 1 , entonces algunas palabras son: `0`, `1`, `01`, `110`.
   - Si  Σ_3 =  {IF},  {THEN},  {ELSE} , entonces una palabra puede ser: `IFTHENELSE`.
@@ -71,19 +71,19 @@ El conjunto de todas las palabras que pueden formarse con los símbolos de un al
 
 Las palabras permiten realizar diversas operaciones algebraicas:
 
-1. **Concatenación**:
+1. Concatenación:
    Dados dos palabras  x = a_1a_2... a_m  e  y = b_1b_2... b_n , su concatenación se define como:
     
    xy = a_1a_2... a_m b_1b_2... b_n
         Ejemplo: Si  x = AB e  y = BA, entonces  xy = ABBA.
 
-2. **Reflexión o Inversa**:
+2. Reflexión o Inversa:
    La reflexión (o inversa) de una palabra  x = a_1a_2... a_n es la palabra formada por los mismos símbolos en orden inverso:
     
    x^{-1} = a_n... a_2a_1
         Ejemplo: Si  x = ABBA, entonces  x^{-1} = ABBA.
 
-3. **Potencia**:
+3. Potencia:
    La potencia de una palabra se define como su concatenación consigo misma varias veces. Para una palabra  x:
    -  x^0 = λ
    -  x^k = x^{k-1}x, para  k > 0.

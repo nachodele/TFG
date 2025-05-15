@@ -1,6 +1,6 @@
 # Gramáticas Tipo 3 (Regulares)
 
-Las **gramáticas tipo 3**, también conocidas como **gramáticas regulares**, representan el nivel más restrictivo dentro de la **Jerarquía de Chomsky**. Estas gramáticas generan los **lenguajes regulares**, que son reconocidos por autómatas finitos y descritos mediante expresiones regulares. Debido a su simplicidad, las gramáticas regulares son fundamentales en el análisis léxico de lenguajes de programación y en la teoría de autómatas.
+Las gramáticas tipo 3, también conocidas como gramáticas regulares, representan el nivel más restrictivo dentro de la Jerarquía de Chomsky. Estas gramáticas generan los lenguajes regulares, que son reconocidos por autómatas finitos y descritos mediante expresiones regulares. Debido a su simplicidad, las gramáticas regulares son fundamentales en el análisis léxico de lenguajes de programación y en la teoría de autómatas.
 
 ---
 
@@ -10,29 +10,29 @@ Una gramática regular se define como una cuádrupla:
  
 G = (N, T, P, S)
   Donde:
--  N : Conjunto finito de **símbolos no terminales**.
--  T : Conjunto finito de **símbolos terminales**, con  N ∩ T = ∅ .
--  P : Conjunto finito de **producciones**. Cada producción tiene una de las siguientes formas:
+-  N : Conjunto finito de símbolos no terminales.
+-  T : Conjunto finito de símbolos terminales, con  N ∩ T = ∅ .
+-  P : Conjunto finito de producciones. Cada producción tiene una de las siguientes formas:
   -  A  → aB , donde  A, B ∈ N  y  a ∈ T .
   -  A  → a , donde  A ∈ N  y  a ∈ T .
   -  A  → ε  (opcional, para incluir la cadena vacía), donde  A ∈ N .
--  S : **Símbolo inicial**, con  S ∈ N .
+-  S : Símbolo inicial, con  S ∈ N .
 
 ### Clasificación
 Las gramáticas regulares pueden ser:
-1. **Regulares por la derecha**:
+1. Regulares por la derecha:
    - Las producciones tienen la forma  A → aB  o  A → a , donde el símbolo no terminal aparece al final del lado derecho.
-2. **Regulares por la izquierda**:
+2. Regulares por la izquierda:
    - Las producciones tienen la forma  A → Ba  o  A → a , donde el símbolo no terminal aparece al inicio del lado derecho.
 
 ---
 
 ## Lenguajes Generados
 
-El conjunto de lenguajes generados por las gramáticas regulares se denomina **lenguajes regulares**. Estos lenguajes tienen las siguientes características:
-1. **Reconocibles por Autómatas Finitos**:
+El conjunto de lenguajes generados por las gramáticas regulares se denomina lenguajes regulares. Estos lenguajes tienen las siguientes características:
+1. Reconocibles por Autómatas Finitos:
    - Todo lenguaje generado por una gramática regular puede ser reconocido por un autómata finito determinista (AFD) o no determinista (AFND).
-2. **Equivalencia con Expresiones Regulares**:
+2. Equivalencia con Expresiones Regulares:
    - Los lenguajes regulares pueden describirse mediante expresiones regulares.
 
 Ejemplo: El lenguaje  L = a^n b^n : n ≥ 0  no es regular porque requiere memoria para contar, pero lenguajes como  L = a^n b : n ≥ 0  sí lo son.
@@ -68,7 +68,7 @@ L(G) = L = a^n b : n ≥ 0.
 
 Las gramáticas tipo 3 son las más restrictivas dentro de la Jerarquía de Chomsky y están relacionadas con otros tipos según su potencia:
 
-| **Tipo** | **Restricciones en las Producciones**       | **Lenguaje Generado**            | **Máquina Reconocedora**      |
+| Tipo | Restricciones en las Producciones       | Lenguaje Generado            | Máquina Reconocedora      |
 |----------|--------------------------------------------|-----------------------------------|--------------------------------|
 | Tipo 0   | Sin restricciones                          | Lenguajes recursivamente enumerables | Máquina de Turing             |
 | Tipo 1   | Sensibles al contexto ( |α| ≤ |β| ) | Lenguajes sensibles al contexto   | Autómata linealmente acotado   |
@@ -80,33 +80,33 @@ Las gramáticas tipo 3 son las más restrictivas dentro de la Jerarquía de Chom
 ## Propiedades Fundamentales
 
 ### Ventajas
-1. **Simplicidad**:
+1. Simplicidad:
    - Las reglas son fáciles de interpretar y procesar.
-2. **Reconocimiento Eficiente**:
+2. Reconocimiento Eficiente:
    - Los lenguajes regulares pueden ser reconocidos en tiempo lineal mediante autómatas finitos.
-3. **Equivalencia con Expresiones Regulares**:
+3. Equivalencia con Expresiones Regulares:
    - Permiten describir patrones comunes en cadenas.
 
 ### Limitaciones
-1. **Memoria Limitada**:
+1. Memoria Limitada:
    - No pueden describir lenguajes que requieran memoria para contar o realizar comparaciones complejas.
-2. **Ausencia de Estructuras Jerárquicas**:
+2. Ausencia de Estructuras Jerárquicas:
    - No pueden modelar estructuras anidadas como los paréntesis balanceados.
 
 ---
 
 ## Aplicaciones
 
-1. **Análisis Léxico**:
+1. Análisis Léxico:
    - Las gramáticas regulares se utilizan para definir los tokens en compiladores.
    
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Se emplean para buscar y reemplazar patrones en cadenas mediante expresiones regulares.
 
-3. **Modelado de Protocolos Simples**:
+3. Modelado de Protocolos Simples:
    - Describen secuencias válidas en protocolos de comunicación.
 
-4. **Diseño Teórico**:
+4. Diseño Teórico:
    - Son esenciales para estudiar propiedades formales y límites computacionales.
 
 ---

@@ -1,14 +1,14 @@
 # Gramáticas Tipo 0 (No Restringidas)
 
-Las **gramáticas tipo 0**, también conocidas como **gramáticas sin restricciones**, representan el nivel más general y poderoso de la clasificación de gramáticas en la **Jerarquía de Chomsky**. Estas gramáticas son capaces de generar todos los lenguajes que son **recursivamente enumerables**, es decir, aquellos lenguajes que pueden ser reconocidos por una máquina de Turing.
+Las gramáticas tipo 0, también conocidas como gramáticas sin restricciones, representan el nivel más general y poderoso de la clasificación de gramáticas en la Jerarquía de Chomsky. Estas gramáticas son capaces de generar todos los lenguajes que son recursivamente enumerables, es decir, aquellos lenguajes que pueden ser reconocidos por una máquina de Turing.
 
 ---
 
 ## Definición Formal
 
-Una gramática  G = (N, T, S, P)  es de **tipo 0** si cumple las siguientes características:
--  N : Conjunto finito de símbolos **no terminales**.
--  T : Conjunto finito de símbolos **terminales**, con  N ∩ T = ∅ .
+Una gramática  G = (N, T, S, P)  es de tipo 0 si cumple las siguientes características:
+-  N : Conjunto finito de símbolos no terminales.
+-  T : Conjunto finito de símbolos terminales, con  N ∩ T = ∅ .
 -  S : Símbolo inicial, con  S ∈ N .
 -  P : Conjunto finito de reglas de producción de la forma:
    
@@ -25,9 +25,9 @@ Una gramática  G = (N, T, S, P)  es de **tipo 0** si cumple las siguientes cara
 
 ## Lenguajes Generados
 
-El conjunto de lenguajes generados por las gramáticas tipo 0 se denomina **lenguajes recursivamente enumerables**. Estos lenguajes tienen las siguientes propiedades:
-1. **Reconocibles por máquinas de Turing**: Una máquina de Turing puede aceptar cualquier lenguaje generado por una gramática tipo 0.
-2. **No necesariamente decidibles**: Aunque una máquina de Turing puede reconocer estos lenguajes, no siempre puede determinar si una palabra pertenece o no al lenguaje en un tiempo finito.
+El conjunto de lenguajes generados por las gramáticas tipo 0 se denomina lenguajes recursivamente enumerables. Estos lenguajes tienen las siguientes propiedades:
+1. Reconocibles por máquinas de Turing: Una máquina de Turing puede aceptar cualquier lenguaje generado por una gramática tipo 0.
+2. No necesariamente decidibles: Aunque una máquina de Turing puede reconocer estos lenguajes, no siempre puede determinar si una palabra pertenece o no al lenguaje en un tiempo finito.
 
 Ejemplo:
 - El lenguaje  L = a^n b^n c^n : n ≥ 1  es recursivamente enumerable y puede ser generado por una gramática tipo 0.
@@ -61,7 +61,7 @@ L(G) = a^n b^n : n ≥ 1.
 
 Las gramáticas tipo 0 son las más generales dentro de la Jerarquía de Chomsky. A continuación se presenta su relación con otros tipos:
 
-| **Tipo** | **Restricciones en las Producciones**       | **Lenguaje Generado**            | **Máquina Reconocedora**      |
+| Tipo | Restricciones en las Producciones       | Lenguaje Generado            | Máquina Reconocedora      |
 |----------|--------------------------------------------|-----------------------------------|--------------------------------|
 | Tipo 0   | Sin restricciones                          | Lenguajes recursivamente enumerables | Máquina de Turing             |
 | Tipo 1   | Sensibles al contexto ( |α| ≤ |β| ) | Lenguajes sensibles al contexto   | Autómata linealmente acotado   |
@@ -72,14 +72,14 @@ Las gramáticas tipo 0 son las más generales dentro de la Jerarquía de Chomsky
 
 ## Propiedades Fundamentales
 
-1. **Generalidad**:
+1. Generalidad:
    - Las gramáticas tipo 0 no están limitadas por restricciones estructurales como las gramáticas libres de contexto o regulares.
    - Pueden describir cualquier lenguaje que sea computacionalmente reconocible.
 
-2. **Complejidad Computacional**:
+2. Complejidad Computacional:
    - Los lenguajes generados por estas gramáticas pueden ser extremadamente complejos y difíciles (o imposibles) de decidir.
 
-3. **Equivalencia con Máquinas de Turing**:
+3. Equivalencia con Máquinas de Turing:
    - Todo lenguaje generado por una gramática tipo 0 puede ser aceptado por una máquina de Turing.
    - Inversamente, para cada máquina de Turing existe una gramática tipo 0 equivalente que genera el mismo lenguaje.
 
@@ -109,16 +109,16 @@ Para generar el palíndromo "abba":
 
 Las gramáticas tipo 0 tienen un papel crucial en la teoría computacional debido a su generalidad y capacidad para describir cualquier lenguaje computable. Algunas aplicaciones incluyen:
 
-1. **Modelado Teórico**:
+1. Modelado Teórico:
    - Describen problemas computacionales complejos que no pueden resolverse con modelos más restrictivos como autómatas finitos o autómatas con pila.
 
-2. **Análisis del Problema de la Palabra**:
+2. Análisis del Problema de la Palabra:
    - Determinar si una palabra pertenece al lenguaje generado por una gramática tipo 0 está relacionado con problemas fundamentales en lógica y computación.
 
-3. **Diseño de Máquinas Universales**:
+3. Diseño de Máquinas Universales:
    - Las máquinas universales (como las máquinas de Turing) pueden representarse mediante gramáticas tipo 0.
 
-4. **Lenguajes Naturales y Reconocimiento del Habla**:
+4. Lenguajes Naturales y Reconocimiento del Habla:
    - Aunque los lenguajes naturales suelen modelarse con gramáticas más restrictivas (libres de contexto), algunas estructuras complejas pueden requerir gramáticas sin restricciones.
 
 ---

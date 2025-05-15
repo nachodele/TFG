@@ -1,19 +1,19 @@
 # Paso de APF a APV
 
-Un **autómata a pila por estados finales (APF)** es un modelo que acepta una cadena si, al finalizar su procesamiento, el autómata se encuentra en un estado final. Por otro lado, un **autómata a pila por vaciado (APV)** acepta una cadena si, al finalizar su procesamiento, la pila queda completamente vacía. Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, y es posible transformar un APF en un APV que acepte el mismo lenguaje.
+Un autómata a pila por estados finales (APF) es un modelo que acepta una cadena si, al finalizar su procesamiento, el autómata se encuentra en un estado final. Por otro lado, un autómata a pila por vaciado (APV) acepta una cadena si, al finalizar su procesamiento, la pila queda completamente vacía. Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, y es posible transformar un APF en un APV que acepte el mismo lenguaje.
 
 ---
 
 ## Estrategia para Convertir un APF en un APV
 
 Para transformar un APF en un APV:
-1. **Añadir un nuevo símbolo inicial de la pila** ( Z' ):
+1. Añadir un nuevo símbolo inicial de la pila ( Z' ):
    - Este símbolo servirá para marcar la base de la pila y garantizar que el autómata pueda vaciarla al final.
-2. **Modificar las transiciones iniciales**:
+2. Modificar las transiciones iniciales:
    - Al iniciar el autómata, apilar  Z'  junto con el símbolo inicial original de la pila ( Z_0 ).
-3. **Añadir transiciones para vaciar la pila**:
+3. Añadir transiciones para vaciar la pila:
    - Crear transiciones- ε  desde los estados finales originales hacia un nuevo estado que se encargue de vaciar la pila.
-4. **Eliminar la dependencia de los estados finales**:
+4. Eliminar la dependencia de los estados finales:
    - El nuevo autómata aceptará únicamente cuando la pila quede vacía, independientemente del estado final.
 
 ---
@@ -22,13 +22,13 @@ Para transformar un APF en un APV:
 
 Dado un APF M = (Q, Σ, Γ, δ, q_0, Z_0, F), construimos un APV equivalente M' = (Q̄, Σ, Γ̄, δ̄, q̄_0, Z̄_0) siguiendo estos pasos:
 
-1. **Definir los nuevos componentes**:
+1. Definir los nuevos componentes:
    - Q̄ = Q ∪ {q_v}, donde q_v es un nuevo estado encargado de vaciar la pila.
    - Γ̄ = Γ ∪ {Z'}, donde Z' es el nuevo símbolo inicial de la pila.
    - q̄_0 = q_0, el estado inicial permanece igual.
    - Z̄_0 = Z', el nuevo símbolo inicial de la pila.
 
-2. **Modificar las transiciones**:
+2. Modificar las transiciones:
    - Al iniciar el autómata, apilar Z'Z_0:
      - δ̄(q_0, ε, Z') = (q_0, Z'Z_0).
    - Para cada estado final f ∈ F, añadir una transición-ε hacia q_v:
@@ -37,7 +37,7 @@ Dado un APF M = (Q, Σ, Γ, δ, q_0, Z_0, F), construimos un APV equivalente M' 
      - Para cada símbolo X ∈ Γ:
        - δ̄(q_v, ε, X) = (q_v, ε).
 
-3. **Eliminar los estados finales**:
+3. Eliminar los estados finales:
    - El conjunto de estados finales del nuevo autómata queda vacío (F' = ∅).
 
 ---
@@ -87,13 +87,13 @@ El nuevo autómata acepta únicamente si la pila queda completamente vacía al f
 
 ## Observaciones
 
-1. **Equivalencia Garantizada**:
+1. Equivalencia Garantizada:
    - El lenguaje aceptado por el APV resultante es exactamente el mismo que el aceptado por el APF original.
 
-2. **Eficiencia**:
+2. Eficiencia:
    - Aunque se añaden nuevas transiciones y símbolos a la pila durante la conversión, no se altera significativamente la complejidad del autómata.
 
-3. **Aplicabilidad Recíproca**:
+3. Aplicabilidad Recíproca:
    - De manera similar al paso de APF a APV descrito aquí, también es posible convertir un APV en un APF equivalente añadiendo nuevos estados finales y transiciones- ε.
 
 ---

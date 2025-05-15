@@ -1,6 +1,6 @@
 # Aceptación de Lenguajes por un Autómata a Pila (AP): Por Vaciado de Pila (APV) o por Estados Finales (APF)
 
-Los **autómatas a pila (AP)** son máquinas abstractas que reconocen lenguajes independientes del contexto (LIC). Existen dos criterios principales mediante los cuales un AP puede aceptar un lenguaje: **por vaciado de pila** (APV) o **por estados finales** (APF). Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, aunque su implementación y análisis pueden diferir.
+Los autómatas a pila (AP) son máquinas abstractas que reconocen lenguajes independientes del contexto (LIC). Existen dos criterios principales mediante los cuales un AP puede aceptar un lenguaje: por vaciado de pila (APV) o por estados finales (APF). Ambos criterios son equivalentes en términos del conjunto de lenguajes que pueden reconocer, aunque su implementación y análisis pueden diferir.
 
 ---
 
@@ -51,11 +51,11 @@ Todo lenguaje aceptado por un AP mediante vaciado de pila también puede ser ace
 L_{ {APV}} = L_{ {APF}}.
   
 #### Demostración Intuitiva
-1. **De APV a APF**:
+1. De APV a APF:
    - Añadir un nuevo estado final  q_f .
    - Crear una transición- ε desde cualquier configuración donde la pila esté vacía hacia  q_f .
 
-2. **De APF a APV**:
+2. De APF a APV:
    - Añadir un nuevo símbolo inicial para la pila ( X_0).
    - Crear transiciones para vaciar la pila al alcanzar un estado final.
 
@@ -92,22 +92,22 @@ Acepta si termina en  q_f.
 
 ## Ventajas y Desventajas
 
-| **Criterio**           | **Ventajas**                                                                 | **Desventajas**                                                              |
+| Criterio           | Ventajas                                                                 | Desventajas                                                              |
 |-------------------------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------|
-| **Por Vaciado de Pila** | No requiere definir estados finales.                                         | Puede ser menos intuitivo para modelar ciertos lenguajes.                    |
-| **Por Estados Finales** | Extiende naturalmente la idea de aceptación en autómatas finitos.            | Requiere manejar explícitamente los estados finales y las transiciones asociadas. |
+| Por Vaciado de Pila | No requiere definir estados finales.                                         | Puede ser menos intuitivo para modelar ciertos lenguajes.                    |
+| Por Estados Finales | Extiende naturalmente la idea de aceptación en autómatas finitos.            | Requiere manejar explícitamente los estados finales y las transiciones asociadas. |
 
 ---
 
 ## Aplicaciones
 
-1. **Análisis Sintáctico**:
+1. Análisis Sintáctico:
    - Los analizadores sintácticos basados en gramáticas libres de contexto suelen utilizar autómatas a pila con aceptación por estados finales.
 
-2. **Modelado Teórico**:
+2. Modelado Teórico:
    - La aceptación por vaciado simplifica pruebas teóricas sobre lenguajes independientes del contexto.
 
-3. **Conversión entre Representaciones**:
+3. Conversión entre Representaciones:
    - La equivalencia entre ambos criterios permite elegir el enfoque más conveniente según el problema.
 
 ---

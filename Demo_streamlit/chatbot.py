@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from groq import Groq
 from sentence_transformers import SentenceTransformer
 from qdrant_client import QdrantClient
+from qdrant_client import models  # Asegúrate de tener esta importación
+
 
 class GrammarAutomataProcessor:
     def __init__(self):
@@ -12,7 +14,8 @@ class GrammarAutomataProcessor:
         # Inicializamos las colecciones en Qdrant
         self.exercise_collection = "exercise_vectors"
         self.documentation_collection = "documentation_vectors"
-        
+        self.algorithm_collection = "algorithm_vectors"
+
         # Almacena la pregunta anterior
         self.prev_question = None
         
@@ -64,6 +67,7 @@ Critical Instructions:
 - G0 stands for: Gramática sin restricciones
 - G1 stands for: Gramática sensible al contexto
 - ERD stands for: Expresión Regular Determinista
+2. Do not include abbreviations in your answer.
 
 Answer:
 """
@@ -73,8 +77,11 @@ Answer:
 You are a virtual tutor specializing in Regular Grammars, Context-Free Grammars, and Finite Automata.
 Always answer in Spanish.
 
-Context from Exercises:
+Reference exercises:
 {context_exercises}
+
+Reference Algorithm:
+{context_algorithm}
 
 Problem Statement:
 {problem_statement}
@@ -82,12 +89,19 @@ Problem Statement:
 User Solution:
 {user_solution}
 
-Instructions:
-1. Evaluate the user's solution to the given problem statement step by step.
-2. Use the provided context as a guide to identify any errors and explain where the user went wrong.
-3. Provide hints or guidance to help the user correct their mistakes without directly giving the solution.
-4. If the solution is correct, confirm it and explain why it works.
-5. Avoid unnecessary repetition.
+Evaluation Instructions:
+Step-by-step analysis:
+1. Break down the user's solution into clearly identifiable steps.
+2. Compare each step with the procedure described in the reference algorithm.
+3. Explicitly classify each step as "correct" or "incorrect", avoiding ambiguity in your evaluations.
+4. Use the reference exercises as a guide to identify any errors.
+5. For each incorrect step:
+    * Explain why it does not follow the standard procedure.
+    * Clearly indicate where the deviation occurs.
+    * Provide a counterexample or relevant theoretical reference if possible.
+    * Offer specific hints or suggestions to help the user correct the erroneous step.
+6. Do not provide complete solutions or rewrite the entire answer.  
+7. If the solution is correct, confirm it and explain why it works.
 
 Feedback:
 """
@@ -115,24 +129,38 @@ A single, standalone question that incorporates additional context only if neede
             api_key=os.getenv("QDRANT_API_KEY")
         )
 
-    def query_qdrant(self, collection_name, question):
+
+    # Modificar la sección de query_qdrant
+    def query_qdrant(self, collection_name, question, search_type="default"):
         model = SentenceTransformer('all-MiniLM-L6-v2')
         query_vector = model.encode(question)
+        
+        # Configurar parámetros de búsqueda según el tipo
+        if search_type == "algorithm":
+            search_params = models.SearchParams(
+                hnsw_ef=128,
+                exact=False
+            )
+        else:
+            search_params = None  # Usar parámetros por defecto
         
         search_results = self.client2.search(
             collection_name=collection_name,
             query_vector=query_vector,
-            limit=5
+            query_filter=None,  # Añadir si necesitas filtros
+            search_params=search_params,  # Parámetro correcto
+            limit=3
         )
+
         
         if not search_results:
             return None
             
-        best_result = max(search_results, key=lambda x: x.score)
-        return {
-            "content": best_result.payload["metadata"]["content"],
-            "source_file": best_result.payload.get("source_file", "Desconocido")
-        }
+        return [{
+            "content": result.payload["metadata"]["content"],
+            "source_file": result.payload.get("source_file", "Desconocido"),
+            "algorithm_type": result.payload.get("algorithm_type", None)
+        } for result in search_results]
 
     def _initialize_groq(self):
         """Inicializa el cliente Groq con la clave API desde las variables de entorno."""
@@ -163,13 +191,15 @@ A single, standalone question that incorporates additional context only if neede
     def answer_question(self, user_input: str) -> dict:
         """Responde preguntas del usuario utilizando contexto recuperado desde Qdrant."""
         standalone_question = self.analyze_context(self.prev_question, user_input)
-        best_doc = self.query_qdrant(self.documentation_collection, standalone_question)
+        docs = self.query_qdrant(self.documentation_collection, standalone_question)
         
-        if not best_doc:
-            return {"response": "No se encontró información relevante en la base de datos.", "source_file": None}
+        if not docs:
+            return {"response": "No se encontró información relevante.", "source_files": []}
         
-        context_docs = best_doc["content"]
-        
+        # Combina contenido de los 3 documentos
+        context_docs = "\n\n".join(doc["content"] for doc in docs)
+        source_files = list({doc["source_file"] for doc in docs})  
+
         completion = self.client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{
@@ -186,25 +216,47 @@ A single, standalone question that incorporates additional context only if neede
             stop=None,
         )
         
-        response = completion.choices[0].message.content.strip()
         self.prev_question = user_input
-        return {"response": response, "source_file": best_doc["source_file"]}
-
+        return {
+            "response": completion.choices[0].message.content.strip(),
+            "source_files": source_files
+        }
+    
     def evaluate_problem(self, problem_statement: str, user_solution: str) -> dict:
         """Evalúa un problema y la solución proporcionada por el usuario."""
-        best_exercise = self.query_qdrant(self.exercise_collection, problem_statement)
+        exercises  = self.query_qdrant(self.exercise_collection, problem_statement)
         
-        if not best_exercise:
-            return {"response": "No se encontró información relevante en la base de datos.", "source_file": None}
+        # Obtener algoritmos relevantes
+        algorithms = self.query_qdrant(
+            self.algorithm_collection, 
+            problem_statement,
+            search_type="algorithm"
+        )
+
+        if not exercises and not algorithms:
+            return {"response": "No se encontró información relevante.", "source_files": []}
         
-        context_exercises = best_exercise["content"]
+        context_exercises = "\n\n".join(ex["content"] for ex in exercises)
+        context_algorithms = "\n\n".join(
+            f"Algoritmo para {alg['algorithm_type']}:\n{alg['content']}" 
+            for alg in algorithms
+        )
         
+        # Obtener nombres de archivos únicos
+        source_files = list({
+            doc["source_file"] 
+            for doc in exercises + algorithms
+            if doc["source_file"]
+        })
+
         completion = self.client.chat.completions.create(
             model="llama-3.3-70b-versatile",
+            #model="meta-llama/llama-4-maverick-17b-128e-instruct",
             messages=[{
                 "role": "user",
                 "content": self.TEMPLATE_PROBLEM.format(
                     context_exercises=context_exercises,
+                    context_algorithm=context_algorithms,
                     problem_statement=problem_statement,
                     user_solution=user_solution
                 )
@@ -216,5 +268,7 @@ A single, standalone question that incorporates additional context only if neede
             stop=None,
         )
         
-        response = completion.choices[0].message.content.strip()
-        return {"response": response, "source_file": best_exercise["source_file"]}
+        return {
+            "response": completion.choices[0].message.content.strip(),
+            "source_files": source_files
+        }

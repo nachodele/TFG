@@ -1,6 +1,6 @@
 # AFD Equivalente a un AFND
 
-Un **autómata finito no determinista (AFND)** puede ser transformado en un **autómata finito determinista (AFD)** equivalente, es decir, un AFD que reconozca exactamente el mismo lenguaje que el AFND original. Este proceso se basa en el **algoritmo del subconjunto**, que construye un AFD mediante la combinación de los estados del AFND.
+Un autómata finito no determinista (AFND) puede ser transformado en un autómata finito determinista (AFD) equivalente, es decir, un AFD que reconozca exactamente el mismo lenguaje que el AFND original. Este proceso se basa en el algoritmo del subconjunto, que construye un AFD mediante la combinación de los estados del AFND.
 
 ---
 
@@ -15,21 +15,21 @@ L(AFND) = L(AFD)
 
 ## Algoritmo del Subconjunto
 
-El **algoritmo del subconjunto** es un método sistemático para convertir un AFND en un AFD equivalente. Este algoritmo utiliza la idea de que cada estado del AFD corresponde a un conjunto de estados del AFND.
+El algoritmo del subconjunto es un método sistemático para convertir un AFND en un AFD equivalente. Este algoritmo utiliza la idea de que cada estado del AFD corresponde a un conjunto de estados del AFND.
 
 ### Pasos del Algoritmo
 
-1. **Definir el Estado Inicial del AFD**:
+1. Definir el Estado Inicial del AFD:
    - El estado inicial del AFD corresponde al conjunto de estados alcanzables desde el estado inicial del AFND mediante transiciones- ε  (si existen).
 
-2. **Construir los Estados del AFD**:
+2. Construir los Estados del AFD:
    - Cada estado del AFD representa un subconjunto de estados del AFND.
    - Para cada símbolo  a ∈ Σ , calcular las transiciones desde cada subconjunto hacia otros subconjuntos.
 
-3. **Definir los Estados Finales**:
+3. Definir los Estados Finales:
    - Un estado del AFD es final si contiene al menos un estado final del AFND.
 
-4. **Repetir Hasta Completar**:
+4. Repetir Hasta Completar:
    - Continuar calculando transiciones y nuevos estados hasta que no se generen más subconjuntos nuevos.
 
 ---
@@ -72,13 +72,13 @@ Los conjuntos que contienen  q_2  son finales:
 
 ## Propiedades del Algoritmo
 
-1. **Equivalencia Garantizada**:
+1. Equivalencia Garantizada:
    - El AFD resultante reconoce exactamente el mismo lenguaje que el AFND original.
 
-2. **Determinismo**:
+2. Determinismo:
    - El autómata resultante es completamente determinista; para cada estado y símbolo existe una única transición definida.
 
-3. **Eficiencia**:
+3. Eficiencia:
    - Aunque el número de estados en el AFD puede ser exponencial respecto al número de estados en el AFND (en el peor caso), este proceso asegura una representación determinista.
 
 ---
@@ -98,13 +98,13 @@ Los conjuntos que contienen  q_2  son finales:
 
 ## Aplicaciones
 
-1. **Análisis Léxico**:
+1. Análisis Léxico:
    - En compiladores, los autómatas deterministas se utilizan para reconocer tokens debido a su eficiencia.
    
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Los autómatas deterministas permiten buscar patrones definidos por expresiones regulares.
 
-3. **Optimización**:
+3. Optimización:
    - La conversión a AFD es un paso previo necesario para minimizar autómatas finitos.
 
 ---

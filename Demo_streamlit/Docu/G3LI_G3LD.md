@@ -1,23 +1,23 @@
 # Gramáticas Regulares (G3): Lineal por la Derecha y Lineal por la Izquierda
 
-Las **gramáticas regulares** o de tipo 3 son el nivel más restringido dentro de la **Jerarquía de Chomsky**. Estas gramáticas generan los **lenguajes regulares**, que pueden ser reconocidos por autómatas finitos y descritos mediante expresiones regulares. Dentro de las gramáticas regulares, se distinguen dos variantes principales: **lineales por la derecha** y **lineales por la izquierda**, dependiendo de la posición del símbolo no terminal en las producciones.
+Las gramáticas regulares o de tipo 3 son el nivel más restringido dentro de la Jerarquía de Chomsky. Estas gramáticas generan los lenguajes regulares, que pueden ser reconocidos por autómatas finitos y descritos mediante expresiones regulares. Dentro de las gramáticas regulares, se distinguen dos variantes principales: lineales por la derecha y lineales por la izquierda, dependiendo de la posición del símbolo no terminal en las producciones.
 
 ---
 
 ## Definición Formal
 
 Una gramática regular  G = (N, T, P, S)  cumple las siguientes características:
--  N : Conjunto finito de **símbolos no terminales**.
--  T : Conjunto finito de **símbolos terminales**, con  N ∩ T = ∅ .
--  P : Conjunto finito de **producciones** que tienen una de estas formas:
+-  N : Conjunto finito de símbolos no terminales.
+-  T : Conjunto finito de símbolos terminales, con  N ∩ T = ∅ .
+-  P : Conjunto finito de producciones que tienen una de estas formas:
   -  A  → aB  o  A  → a , donde  A, B ∈ N  y  a ∈ T .
   - Opcionalmente,  A  → ε  si se permite la cadena vacía.
 -  S : Símbolo inicial ( S ∈ N ).
 
 ### Clasificación
 Dependiendo de la posición del símbolo no terminal en el lado derecho de las producciones, las gramáticas regulares se clasifican en:
-1. **Gramáticas lineales por la derecha**.
-2. **Gramáticas lineales por la izquierda**.
+1. Gramáticas lineales por la derecha.
+2. Gramáticas lineales por la izquierda.
 
 ---
 
@@ -97,8 +97,8 @@ Existe una equivalencia entre las gramáticas lineales por la derecha y las line
 
 ### Conversión de Gramática Lineal por la Derecha a Lineal por la Izquierda
 Para convertir una gramática lineal por la derecha en una lineal por la izquierda:
-1. **Invertir las producciones**: Cambiar el orden de los símbolos en el lado derecho de cada producción.
-2. **Reorganizar las reglas**: Ajustar las producciones para que el símbolo no terminal aparezca al principio del lado derecho.
+1. Invertir las producciones: Cambiar el orden de los símbolos en el lado derecho de cada producción.
+2. Reorganizar las reglas: Ajustar las producciones para que el símbolo no terminal aparezca al principio del lado derecho.
 
 #### Ejemplo
 Dada una gramática lineal por la derecha:
@@ -118,30 +118,30 @@ L(G) = a^n b : n ≥ 0.
 
 ## Propiedades Fundamentales de Gramáticas Regulares
 
-1. **Equivalencia con Autómatas Finitos**:
+1. Equivalencia con Autómatas Finitos:
    - Todo lenguaje generado por una gramática regular puede ser reconocido por un autómata finito determinista (AFD) o no determinista (AFND).
    - Inversamente, para todo autómata finito existe una gramática regular que genera el mismo lenguaje.
 
-2. **Reconocimiento Eficiente**:
+2. Reconocimiento Eficiente:
    - Los lenguajes regulares pueden ser procesados en tiempo lineal respecto al tamaño de la entrada.
 
-3. **Propiedades de Cierre**:
+3. Propiedades de Cierre:
    - Los lenguajes regulares son cerrados bajo las operaciones de unión, concatenación, intersección y complemento.
 
 ---
 
 ## Aplicaciones
 
-1. **Análisis Léxico**:
+1. Análisis Léxico:
    - Las gramáticas regulares se utilizan para definir los tokens en compiladores, como identificadores, palabras clave y operadores.
 
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Modelan patrones simples en cadenas mediante expresiones regulares para buscar y reemplazar texto.
 
-3. **Diseño Teórico**:
+3. Diseño Teórico:
    - Son fundamentales en el estudio de propiedades formales y límites computacionales.
 
-4. **Protocolos Simples**:
+4. Protocolos Simples:
    - Describen secuencias válidas en protocolos de comunicación.
 
 ---

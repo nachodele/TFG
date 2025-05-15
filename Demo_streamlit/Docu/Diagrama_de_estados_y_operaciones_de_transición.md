@@ -1,12 +1,12 @@
 # Diagrama de Estados y Operaciones de Transición de una Máquina de Turing (MT)
 
-Las **Máquinas de Turing (MT)** son modelos computacionales que operan mediante una cinta infinita, una cabeza lectora/escritora y un conjunto de estados. El **diagrama de estados** y las **operaciones de transición** son representaciones clave para entender cómo funciona una MT y cómo procesa cadenas para aceptar o rechazar un lenguaje.
+Las Máquinas de Turing (MT) son modelos computacionales que operan mediante una cinta infinita, una cabeza lectora/escritora y un conjunto de estados. El diagrama de estados y las operaciones de transición son representaciones clave para entender cómo funciona una MT y cómo procesa cadenas para aceptar o rechazar un lenguaje.
 
 ---
 
 ## Diagrama de Estados
 
-El **diagrama de estados** de una MT es un grafo dirigido donde:
+El diagrama de estados de una MT es un grafo dirigido donde:
 1. Cada nodo representa un estado del autómata.
 2. Cada arco entre nodos está etiquetado con:
    - El símbolo leído en la cinta.
@@ -25,11 +25,11 @@ Sea una MT que acepta cadenas con igual número de  a's  seguidos por  b's . La 
 
 
 #### Descripción del Diagrama
-1. **Estado Inicial ( q_0 )**:
+1. Estado Inicial ( q_0 ):
    - Busca un 'a' en la entrada, lo marca como procesado escribiendo 'X', y avanza hacia la derecha.
-2. **Estado Intermedio ( q_1 )**:
+2. Estado Intermedio ( q_1 ):
    - Busca un 'b', lo marca como procesado escribiendo 'X', y retrocede hacia la izquierda.
-3. **Estado Final ( q_2 )**:
+3. Estado Final ( q_2 ):
    - Si encuentra un símbolo blanco ( B ), acepta la cadena.
 
 ---
@@ -108,16 +108,16 @@ Para procesar "aabb":
 
 ## Importancia del Diagrama y las Operaciones
 
-1. **Visualización**:
+1. Visualización:
    - El diagrama de estados proporciona una representación gráfica clara del comportamiento de la máquina.
 
-2. **Formalización**:
+2. Formalización:
    - Las operaciones de transición formalizan cómo se procesan las cadenas en términos matemáticos.
 
-3. **Simulación**:
+3. Simulación:
    - Permiten simular el comportamiento paso a paso para verificar si una cadena es aceptada o rechazada.
 
-4. **Diseño Teórico**:
+4. Diseño Teórico:
    - Facilitan el diseño y análisis de máquinas para resolver problemas computacionales específicos.
 
 ---

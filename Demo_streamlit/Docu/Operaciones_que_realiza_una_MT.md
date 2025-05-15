@@ -1,6 +1,6 @@
 # Operaciones que Realiza una Máquina de Turing (MT)
 
-Las **Máquinas de Turing (MT)** son modelos matemáticos que simulan cualquier proceso computacional mediante un conjunto básico de operaciones. Estas operaciones permiten manipular una cinta infinita, leer y escribir símbolos, y moverse entre estados. A continuación, se describen las principales operaciones que realiza una MT y cómo estas contribuyen a su capacidad para resolver problemas computacionales.
+Las Máquinas de Turing (MT) son modelos matemáticos que simulan cualquier proceso computacional mediante un conjunto básico de operaciones. Estas operaciones permiten manipular una cinta infinita, leer y escribir símbolos, y moverse entre estados. A continuación, se describen las principales operaciones que realiza una MT y cómo estas contribuyen a su capacidad para resolver problemas computacionales.
 
 ---
 
@@ -8,23 +8,23 @@ Las **Máquinas de Turing (MT)** son modelos matemáticos que simulan cualquier 
 
 Una Máquina de Turing realiza las siguientes operaciones básicas:
 
-### 1. **Lectura del Símbolo en la Cinta**
+### 1. Lectura del Símbolo en la Cinta
    - La cabeza lectora/escritora de la MT lee el símbolo en la celda actual de la cinta.
    - Este símbolo determina, junto con el estado actual, qué acción realizará la máquina según la función de transición.
 
-### 2. **Escritura en la Cinta**
+### 2. Escritura en la Cinta
    - La MT puede sobrescribir el símbolo actual en la celda de la cinta con un nuevo símbolo del alfabeto de la cinta ( Γ ).
    - Esta operación permite modificar los datos almacenados en la cinta.
 
-### 3. **Movimiento de la Cabeza**
+### 3. Movimiento de la Cabeza
    - La cabeza lectora/escritora se mueve una posición hacia la izquierda ( L ) o hacia la derecha ( R ) sobre la cinta.
    - Este movimiento permite a la MT acceder a diferentes partes de la cinta para continuar el procesamiento.
 
-### 4. **Cambio de Estado**
+### 4. Cambio de Estado
    - La MT cambia su estado actual según lo definido por su función de transición  δ(q, X) = (q', Y, D) .
    - Este cambio refleja el progreso del cómputo.
 
-### 5. **Detención**
+### 5. Detención
    - La MT se detiene si alcanza un estado final ( q_f ∈ F ) o si no hay una transición definida para el estado y símbolo actuales.
    - La detención indica que el procesamiento ha concluido, ya sea aceptando o rechazando la cadena.
 
@@ -111,16 +111,16 @@ Para procesar "aabb":
 
 ## Aplicaciones Prácticas
 
-1. **Simulación Computacional**:
+1. Simulación Computacional:
    - Las MT son modelos teóricos para simular cualquier algoritmo computable.
 
-2. **Resolución Algorítmica**:
+2. Resolución Algorítmica:
    - Permiten analizar problemas decidibles e indecidibles.
 
-3. **Modelado Teórico**:
+3. Modelado Teórico:
    - Base para estudiar computabilidad y complejidad algorítmica.
 
-4. **Diseño de Lenguajes Formales**:
+4. Diseño de Lenguajes Formales:
    - Relacionan lenguajes recursivamente enumerables con procesos computacionales.
 
 ---

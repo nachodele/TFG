@@ -1,14 +1,14 @@
 # El Lema de Bombeo: Explicación Completa
 
-El **lema de bombeo** es una herramienta fundamental en la teoría de lenguajes formales, utilizada principalmente para demostrar que un lenguaje no pertenece a una determinada clase de lenguajes. Este documento detalla el lema de bombeo para lenguajes regulares y su aplicación.
+El lema de bombeo es una herramienta fundamental en la teoría de lenguajes formales, utilizada principalmente para demostrar que un lenguaje no pertenece a una determinada clase de lenguajes. Este documento detalla el lema de bombeo para lenguajes regulares y su aplicación.
 
 ---
 
-## **Definición del Lema de Bombeo para Lenguajes Regulares**
+## Definición del Lema de Bombeo para Lenguajes Regulares
 
 El lema de bombeo establece que cualquier lenguaje regular cumple con una propiedad específica: las cadenas suficientemente largas en el lenguaje pueden ser divididas en tres partes, donde una sección puede ser repetida (bombeada) un número arbitrario de veces, generando nuevas cadenas que también pertenecen al lenguaje.
 
-### **Enunciado Formal**
+### Enunciado Formal
 Sea L un lenguaje regular. Existe un entero n (llamado longitud de bombeo) tal que cualquier cadena w en L con |w| ≥ n puede ser escrita como:
 
 w = xyz
@@ -24,23 +24,23 @@ cumpliendo las siguientes condiciones:
 
 ---
 
-## **Interpretación Intuitiva**
+## Interpretación Intuitiva
 El lema implica que si una cadena es lo suficientemente larga, debe haber una repetición en algún punto debido a la naturaleza finita de los autómatas finitos que reconocen lenguajes regulares. Esta repetición permite "bombeos", es decir, duplicar o eliminar la parte repetida sin salir del lenguaje.
 
 ---
 
-## **Aplicación del Lema de Bombeo**
+## Aplicación del Lema de Bombeo
 
 El lema se utiliza principalmente para demostrar que un lenguaje no es regular mediante una prueba por contradicción. Los pasos típicos son:
 
-1. **Suposición inicial:** Asumir que el lenguaje es regular.
-2. **Aplicación del lema:** Identificar una cadena suficientemente larga ( w ) en el lenguaje y dividirla en tres partes ( x, y, z ) según las condiciones del lema.
-3. **Bombeo:** Modificar la parte  y  (repetirla o eliminarla) y verificar si la nueva cadena sigue perteneciendo al lenguaje.
-4. **Contradicción:** Si alguna cadena generada por el bombeo no pertenece al lenguaje, se concluye que el lenguaje no es regular.
+1. Suposición inicial: Asumir que el lenguaje es regular.
+2. Aplicación del lema: Identificar una cadena suficientemente larga ( w ) en el lenguaje y dividirla en tres partes ( x, y, z ) según las condiciones del lema.
+3. Bombeo: Modificar la parte  y  (repetirla o eliminarla) y verificar si la nueva cadena sigue perteneciendo al lenguaje.
+4. Contradicción: Si alguna cadena generada por el bombeo no pertenece al lenguaje, se concluye que el lenguaje no es regular.
 
 ---
 
-## **Ejemplo: Demostración de No Regularidad**
+## Ejemplo: Demostración de No Regularidad
 
 ### Lenguaje L = {0ⁿ1ⁿ : n ≥ 1}
 
@@ -60,14 +60,14 @@ El lema se utiliza principalmente para demostrar que un lenguaje no es regular m
 
 ---
 
-## **Limitaciones del Lema de Bombeo**
+## Limitaciones del Lema de Bombeo
 
 - El lema solo proporciona una condición necesaria para que un lenguaje sea regular; cumplirlo no garantiza regularidad.
 - Algunos lenguajes no regulares pueden cumplir el lema, por lo que su uso está limitado a pruebas negativas (demostrar no regularidad).
 
 ---
 
-## **Extensiones: Lema de Bombeo para Lenguajes Libres del Contexto**
+## Extensiones: Lema de Bombeo para Lenguajes Libres del Contexto
 
 Existe una versión más general del lema para lenguajes libres del contexto (LIC). En este caso, las cadenas suficientemente largas pueden ser divididas en cinco partes ( uvwxy ) con propiedades similares:
 1. |vwx| ≤ p,
@@ -81,6 +81,6 @@ Este lema se utiliza para demostrar que ciertos lenguajes no son libres del cont
 
 ---
 
-## **Conclusión**
+## Conclusión
 
 El lema de bombeo es una herramienta poderosa para analizar lenguajes formales y determinar su clasificación dentro de las clases de lenguajes regulares o libres del contexto. Aunque tiene limitaciones, su utilidad en pruebas negativas lo convierte en un recurso esencial en la teoría de autómatas y lenguajes formales.

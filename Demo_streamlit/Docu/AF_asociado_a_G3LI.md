@@ -1,6 +1,6 @@
 # Autómata Finito Asociado a una Gramática Lineal por la Izquierda (G3LI)
 
-Una **gramática lineal por la izquierda (G3LI)** es un tipo de gramática regular en la que las producciones tienen la forma:
+Una gramática lineal por la izquierda (G3LI) es un tipo de gramática regular en la que las producciones tienen la forma:
 -  A  → Ba , donde  A, B ∈ N  y  a ∈ T ,
 -  A  → a , donde  A ∈ N  y  a ∈ T .
 
@@ -14,22 +14,22 @@ Para construir un autómata finito determinista (AFD) asociado a una gramática 
 
 ### Pasos para la Construcción
 
-1. **Invertir la Gramática**:
+1. Invertir la Gramática:
    - Dada una G3LI  G = (N, T, P, S) , invertir las producciones para obtener una gramática lineal por la derecha (G3LD):
      - Si  A  → Ba , se convierte en  A'  → aB' .
      - Si  A  → a , se convierte en  A'  → a .
 
-2. **Construir el Autómata Finito No Determinista ( ε-AFND )**:
+2. Construir el Autómata Finito No Determinista ( ε-AFND ):
    - Asociar un estado del autómata a cada símbolo no terminal de la gramática.
    - Para cada producción invertida:
      - Si  A'  → aB' , añadir una transición del estado correspondiente a  A'  hacia el estado correspondiente a  B'  con el símbolo  a .
      - Si  A'  → a , añadir una transición del estado correspondiente a  A'  hacia un estado final con el símbolo  a .
 
-3. **Invertir el Autómata**:
+3. Invertir el Autómata:
    - Cambiar el sentido de las transiciones.
    - Intercambiar los estados inicial y final.
 
-4. **Convertir el  ε-AFND  en un AFD**:
+4. Convertir el  ε-AFND  en un AFD:
    - Aplicar el algoritmo del subconjunto para eliminar transiciones no deterministas y vacías ( ε-transiciones).
 
 ---
@@ -75,13 +75,13 @@ Aplicamos el algoritmo del subconjunto para obtener un autómata determinista eq
 
 ## Propiedades del Autómata Asociado
 
-1. **Equivalencia**:
+1. Equivalencia:
    - El lenguaje reconocido por el autómata es exactamente el mismo que el generado por la gramática original.
 
-2. **Determinismo**:
+2. Determinismo:
    - El autómata resultante es determinista después de aplicar el algoritmo del subconjunto.
 
-3. **Eficiencia**:
+3. Eficiencia:
    - La representación mediante un autómata permite procesar cadenas en tiempo lineal respecto al tamaño de la entrada.
 
 ---
@@ -94,13 +94,13 @@ Para toda gramática regular (lineal por la izquierda o por la derecha), existe 
 
 ## Aplicaciones
 
-1. **Análisis Léxico**:
+1. Análisis Léxico:
    - Los compiladores utilizan autómatas asociados a gramáticas regulares para reconocer tokens.
 
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Permiten buscar patrones definidos por expresiones regulares.
 
-3. **Diseño Teórico**:
+3. Diseño Teórico:
    - Facilitan la demostración de propiedades formales de lenguajes regulares.
 
 ---

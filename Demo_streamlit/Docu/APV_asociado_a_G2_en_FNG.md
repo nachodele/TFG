@@ -1,12 +1,12 @@
 # APV Asociado a una Gramática Independiente del Contexto (G2) en Forma Normal de Greibach (FNG)
 
-Un **autómata a pila por vaciado (APV)** es un modelo que acepta un lenguaje si, al finalizar el procesamiento de una cadena, la pila queda completamente vacía. Cuando se trabaja con una **gramática independiente del contexto (G2)** en **Forma Normal de Greibach (FNG)**, es posible construir un APV que reconozca el mismo lenguaje generado por la gramática. Este proceso se basa en la equivalencia entre autómatas a pila y gramáticas independientes del contexto.
+Un autómata a pila por vaciado (APV) es un modelo que acepta un lenguaje si, al finalizar el procesamiento de una cadena, la pila queda completamente vacía. Cuando se trabaja con una gramática independiente del contexto (G2) en Forma Normal de Greibach (FNG), es posible construir un APV que reconozca el mismo lenguaje generado por la gramática. Este proceso se basa en la equivalencia entre autómatas a pila y gramáticas independientes del contexto.
 
 ---
 
 ## Forma Normal de Greibach (FNG)
 
-Una gramática  G = (N, T, P, S)  está en **Forma Normal de Greibach** si todas sus producciones tienen la forma:
+Una gramática  G = (N, T, P, S)  está en Forma Normal de Greibach si todas sus producciones tienen la forma:
  
 A → aα,
   donde:
@@ -38,21 +38,21 @@ Dada una gramática  G = (N, T, P, S)  en FNG, el APV asociado  M = (Q, Σ, Γ, 
 
 ### Transiciones
 La función de transición  δ(q, a, X) = (p, w)  se define como:
-1. **Inicialización**:
+1. Inicialización:
    - Desde el estado inicial ( q_0 ), apilar el símbolo inicial de la gramática ( S ) junto con  Z_0 :
      -  δ(q_0, ε, Z_0) = (q_0, SZ_0). 
 
-2. **Procesamiento de Producciones**:
+2. Procesamiento de Producciones:
    - Para cada producción  A → aα :
      - Si el símbolo en la cima de la pila es  A , desapilarlo y apilar  αa^R  (los símbolos terminales y no terminales en orden inverso):
        -  δ(q_0, ε, A) = (q_0, αa). 
 
-3. **Consumo de Terminales**:
+3. Consumo de Terminales:
    - Si el símbolo en la cima de la pila coincide con el símbolo leído en la entrada ( a = b):
      - Desapilarlo y avanzar en la entrada:
        -  δ(q_0, a, a) = (q_0, ε). 
 
-4. **Aceptación**:
+4. Aceptación:
    - Cuando se alcanza una configuración con la pila vacía ( Z_0), el autómata acepta:
      -  δ(q_0, ε, Z_0) = (q_1, ε). 
 
@@ -108,44 +108,44 @@ El APV asociado tiene:
 
 Para procesar la cadena "aabb" utilizando el APV asociado a la gramática en FNG:
 
-1. **Inicialización**:  
+1. Inicialización:  
    Configuración inicial:  
     
 q_0, aabb, Z_0 → q_0, aabb, SZ_0
      
    Se apila el símbolo inicial  S  junto con  Z_0 .
 
-2. **Primera Producción ( S → aSb )**:  
+2. Primera Producción ( S → aSb ):  
    Usamos la producción  S → aSb , desapilamos  S  y apilamos  bSa :  
     
 q_0, aabb, SZ_0 → q_0, aabb, bSaZ_0
      
-3. **Consumo del Primer 'a'**:  
+3. Consumo del Primer 'a':  
    Leemos el primer 'a' de la entrada y desapilamos  a :  
     
 q_0, aabb, bSaZ_0 → q_0, abb, bSZ_0
      
-4. **Segunda Producción ( S → ab )**:  
+4. Segunda Producción ( S → ab ):  
    Usamos la producción  S → ab , desapilamos  S  y apilamos  ba :  
     
 q_0, abb, bSZ_0 → q_0, abb, bbaZ_0
      
-5. **Consumo del Segundo 'a'**:  
+5. Consumo del Segundo 'a':  
    Leemos el segundo 'a' de la entrada y desapilamos  a :  
     
 q_0, abb, bbaZ_0 → q_0, bb, bbZ_0
      
-6. **Consumo del Primer 'b'**:  
+6. Consumo del Primer 'b':  
    Leemos el primer 'b' de la entrada y desapilamos  b :  
     
 q_0, bb, bbZ_0 → q_0, b, bZ_0
      
-7. **Consumo del Segundo 'b'**:  
+7. Consumo del Segundo 'b':  
    Leemos el segundo 'b' de la entrada y desapilamos  b :  
     
 q_0, b, bZ_0 → q_0, ε, Z_0
      
-8. **Aceptación por Vaciado de Pila**:  
+8. Aceptación por Vaciado de Pila:  
    La pila queda vacía al alcanzar  Z_0, lo que indica que la cadena es aceptada:  
     
 q_0, ε, Z_0 → q_f, ε, ε
@@ -154,14 +154,14 @@ q_0, ε, Z_0 → q_f, ε, ε
 
 ## Observaciones
 
-1. **Equivalencia Garantizada**:
+1. Equivalencia Garantizada:
    - El APV simula directamente las derivaciones de la gramática en FNG.
    - Cada producción de la gramática corresponde a una transición en el APV.
 
-2. **Procesamiento Jerárquico**:
+2. Procesamiento Jerárquico:
    - La pila permite manejar estructuras jerárquicas como las generadas por gramáticas independientes del contexto.
 
-3. **Aceptación por Vaciado**:
+3. Aceptación por Vaciado:
    - El APV acepta únicamente si la pila queda completamente vacía al finalizar el procesamiento.
 
 ---

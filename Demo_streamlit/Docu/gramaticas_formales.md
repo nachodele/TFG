@@ -1,6 +1,6 @@
 # Gramáticas Formales
 
-Las **gramáticas formales** son estructuras matemáticas utilizadas para describir lenguajes formales mediante un conjunto de reglas que determinan cómo se generan las cadenas válidas de un lenguaje. Estas gramáticas son fundamentales en la teoría de lenguajes formales, autómatas y la computación, y tienen aplicaciones tanto en la lingüística como en las ciencias de la computación.
+Las gramáticas formales son estructuras matemáticas utilizadas para describir lenguajes formales mediante un conjunto de reglas que determinan cómo se generan las cadenas válidas de un lenguaje. Estas gramáticas son fundamentales en la teoría de lenguajes formales, autómatas y la computación, y tienen aplicaciones tanto en la lingüística como en las ciencias de la computación.
 
 ## Definición Formal
 
@@ -10,16 +10,16 @@ Una gramática formal se define como una cuádrupla:
 G = (N, T, S, P)
   
 Donde:
--  N : Conjunto finito de **símbolos no terminales** (variables). Representan categorías sintácticas intermedias.
--  T : Conjunto finito de **símbolos terminales**. Son los elementos finales del lenguaje.
--  S ∈ N : **Símbolo inicial** o axioma. Es el punto de partida para generar cadenas.
--  P : Conjunto finito de **reglas de producción**. Cada regla tiene la forma  u  → v , donde  u  y  v  son cadenas sobre  N ∪ T , y  u ≠ ε  (no vacío).
+-  N : Conjunto finito de símbolos no terminales (variables). Representan categorías sintácticas intermedias.
+-  T : Conjunto finito de símbolos terminales. Son los elementos finales del lenguaje.
+-  S ∈ N : Símbolo inicial o axioma. Es el punto de partida para generar cadenas.
+-  P : Conjunto finito de reglas de producción. Cada regla tiene la forma  u  → v , donde  u  y  v  son cadenas sobre  N ∪ T , y  u ≠ ε  (no vacío).
 
 El lenguaje generado por una gramática  G , denotado como  L(G) , es el conjunto de todas las cadenas formadas únicamente por símbolos terminales que pueden derivarse a partir del símbolo inicial  S  mediante las reglas de producción.
 
 ## Jerarquía de Chomsky
 
-Noam Chomsky clasificó las gramáticas formales en cuatro tipos según las restricciones en sus reglas de producción y los lenguajes que generan. Esta clasificación se conoce como la **Jerarquía de Chomsky**:
+Noam Chomsky clasificó las gramáticas formales en cuatro tipos según las restricciones en sus reglas de producción y los lenguajes que generan. Esta clasificación se conoce como la Jerarquía de Chomsky:
 
 | Tipo | Nombre                     | Restricciones en las Producciones                | Lenguaje Generado            | Máquina Reconocedora        |
 |------|----------------------------|--------------------------------------------------|------------------------------|-----------------------------|
@@ -53,15 +53,15 @@ Noam Chomsky clasificó las gramáticas formales en cuatro tipos según las rest
 ## Conceptos Relacionados
 
 ### Formas Sentenciales y Sentencias
-- Una **forma sentencial** es cualquier cadena derivada desde el símbolo inicial usando las reglas de producción.
-- Una **sentencia** es una forma sentencial compuesta únicamente por símbolos terminales.
+- Una forma sentencial es cualquier cadena derivada desde el símbolo inicial usando las reglas de producción.
+- Una sentencia es una forma sentencial compuesta únicamente por símbolos terminales.
 
 ### Derivaciones
-- **Derivación más a la izquierda**: Se aplica siempre la regla al símbolo no terminal más a la izquierda.
-- **Derivación más a la derecha**: Se aplica siempre la regla al símbolo no terminal más a la derecha.
+- Derivación más a la izquierda: Se aplica siempre la regla al símbolo no terminal más a la izquierda.
+- Derivación más a la derecha: Se aplica siempre la regla al símbolo no terminal más a la derecha.
 
 ### Ambigüedad
-Una gramática es **ambigua** si existe al menos una cadena que puede derivarse mediante dos o más árboles sintácticos diferentes. Esto puede evitarse rediseñando la gramática.
+Una gramática es ambigua si existe al menos una cadena que puede derivarse mediante dos o más árboles sintácticos diferentes. Esto puede evitarse rediseñando la gramática.
 
 ### Árboles de Derivación
 Un árbol de derivación representa gráficamente cómo se genera una cadena desde el símbolo inicial siguiendo las reglas de producción. Los nodos internos corresponden a símbolos no terminales, mientras que las hojas representan símbolos terminales.
@@ -70,13 +70,13 @@ Un árbol de derivación representa gráficamente cómo se genera una cadena des
 
 Para simplificar el análisis y procesamiento, las gramáticas libres de contexto pueden transformarse en formas normales:
 
-1. **Forma Normal de Chomsky (FNC)**:
+1. Forma Normal de Chomsky (FNC):
    - Todas las producciones tienen una de estas formas:
      -  A → BC, donde  B, C ∈ N.
      -  A → a, donde  a ∈ T.
    - No contiene producciones vacías ( ε) ni unitarias ( A → B).
 
-2. **Forma Normal de Greibach (FNG)**:
+2. Forma Normal de Greibach (FNG):
    - Todas las producciones tienen la forma:
      -  A → aα, donde  a ∈ T, α ∈ N^*.
 

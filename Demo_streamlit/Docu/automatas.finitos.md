@@ -1,14 +1,14 @@
 # Autómatas Finitos
 
-Los **autómatas finitos** son modelos matemáticos utilizados para representar y analizar sistemas que procesan cadenas de símbolos. Son fundamentales en la teoría de lenguajes formales y tienen aplicaciones prácticas en áreas como el diseño de compiladores, el análisis léxico y los sistemas de control.
+Los autómatas finitos son modelos matemáticos utilizados para representar y analizar sistemas que procesan cadenas de símbolos. Son fundamentales en la teoría de lenguajes formales y tienen aplicaciones prácticas en áreas como el diseño de compiladores, el análisis léxico y los sistemas de control.
 
 ---
 
 ## Definición General
 
-Un **autómata finito** es una máquina abstracta que consta de:
-1. Un conjunto finito de **estados**.
-2. Un alfabeto finito de **símbolos de entrada**.
+Un autómata finito es una máquina abstracta que consta de:
+1. Un conjunto finito de estados.
+2. Un alfabeto finito de símbolos de entrada.
 3. Una función de transición que define cómo se mueve entre estados en función de los símbolos de entrada.
 4. Un estado inicial desde el cual comienza la ejecución.
 5. Un conjunto de estados finales o de aceptación.
@@ -28,7 +28,7 @@ M = (Q, Σ, δ, q_0, F)
 ## Tipos de Autómatas Finitos
 
 ### 1. Autómatas Finitos Deterministas (DFA)
-Un **DFA** es un autómata donde:
+Un DFA es un autómata donde:
 - Para cada estado  q ∈ Q  y cada símbolo  a ∈ Σ , existe exactamente una transición definida ( δ(q, a)  es único).
 
 #### Propiedades:
@@ -49,7 +49,7 @@ Sea el lenguaje  L = w : w; termina en 01 . Un DFA que lo reconoce tiene:
 ---
 
 ### 2. Autómatas Finitos No Deterministas (NFA)
-Un **NFA** permite múltiples transiciones para un mismo estado y símbolo de entrada ( |δ(q, a)| > 1) o incluso ninguna transición.
+Un NFA permite múltiples transiciones para un mismo estado y símbolo de entrada ( |δ(q, a)| > 1) o incluso ninguna transición.
 
 #### Propiedades:
 - Reconoce los mismos lenguajes que un DFA.
@@ -63,7 +63,7 @@ Para el mismo lenguaje  L = w : w; termina en 01 , un NFA podría tener:
 ---
 
 ### 3. Autómatas Finitos con Transiciones Vacías ( ε-NFA )
-Un ** ε-NFA ** permite transiciones sin consumir ningún símbolo ( ε-transiciones).
+Un  ε-NFA  permite transiciones sin consumir ningún símbolo ( ε-transiciones).
 
 #### Propiedades:
 - Puede simplificar la construcción del autómata.
@@ -82,11 +82,11 @@ L(M) = w : w ∈ Σ^* , δ^*(q_0, w) ∈ F
 
 ## Propiedades Fundamentales
 
-1. **Equivalencia DFA-NFA**:
+1. Equivalencia DFA-NFA:
    - Todo lenguaje reconocido por un NFA también puede ser reconocido por un DFA equivalente.
    - La conversión se realiza mediante el algoritmo del subconjunto.
 
-2. **Cierre bajo Operaciones**:
+2. Cierre bajo Operaciones:
    Los lenguajes reconocidos por autómatas finitos son cerrados bajo las siguientes operaciones:
    - Unión,
    - Intersección,
@@ -94,7 +94,7 @@ L(M) = w : w ∈ Σ^* , δ^*(q_0, w) ∈ F
    - Concatenación,
    - Clausura de Kleene ( L^* = L^0 ∪ L^1 ∪ L^2 ∪ ...).
 
-3. **Relación con Expresiones Regulares**:
+3. Relación con Expresiones Regulares:
    - Todo lenguaje definido por una expresión regular puede ser reconocido por un autómata finito.
    - Inversamente, todo lenguaje reconocido por un autómata finito puede ser descrito mediante una expresión regular.
 
@@ -102,16 +102,16 @@ L(M) = w : w ∈ Σ^* , δ^*(q_0, w) ∈ F
 
 ## Aplicaciones
 
-1. **Análisis Léxico**:
+1. Análisis Léxico:
    - Los autómatas finitos se utilizan en compiladores para reconocer tokens como palabras clave e identificadores.
 
-2. **Procesamiento de Texto**:
+2. Procesamiento de Texto:
    - Se emplean para buscar patrones en cadenas mediante expresiones regulares.
 
-3. **Protocolos y Sistemas Secuenciales**:
+3. Protocolos y Sistemas Secuenciales:
    - Modelan sistemas con estados definidos y transiciones entre ellos (e.g., controladores lógicos programables).
 
-4. **Validación y Verificación**:
+4. Validación y Verificación:
    - Verifican si una cadena pertenece a un lenguaje formal o si cumple ciertas restricciones sintácticas.
 
 ---

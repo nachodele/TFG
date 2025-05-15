@@ -1,10 +1,10 @@
 # Producciones, Reglas de Escritura y Reglas de Derivación
 
-En el campo de las gramáticas formales, las **producciones**, también conocidas como reglas de escritura o reglas de derivación, son fundamentales para definir cómo se generan las cadenas de un lenguaje a partir de un conjunto inicial de símbolos. A continuación, se describen en detalle los conceptos, tipos y transformaciones relacionados con las producciones.
+En el campo de las gramáticas formales, las producciones, también conocidas como reglas de escritura o reglas de derivación, son fundamentales para definir cómo se generan las cadenas de un lenguaje a partir de un conjunto inicial de símbolos. A continuación, se describen en detalle los conceptos, tipos y transformaciones relacionados con las producciones.
 
 ## Concepto de Producción
 
-Una **producción** es una regla que especifica cómo un símbolo no terminal puede ser reemplazado por una secuencia de terminales y/o no terminales. Formalmente, una producción tiene la forma:
+Una producción es una regla que especifica cómo un símbolo no terminal puede ser reemplazado por una secuencia de terminales y/o no terminales. Formalmente, una producción tiene la forma:
 
  A  → α 
 
@@ -21,51 +21,51 @@ El conjunto de todas las producciones se denota como  P  y forma parte de la def
 
 Las producciones se clasifican según el tipo de gramática al que pertenecen:
 
-1. **Gramáticas Tipo 0 (Sin restricciones)**:
+1. Gramáticas Tipo 0 (Sin restricciones):
    - Producciones:  α  → β , donde  α, β ∈ (V ∪ T)^*  y  |α| > 0 .
    - Generan lenguajes recursivamente enumerables.
 
-2. **Gramáticas Tipo 1 (Sensibles al contexto)**:
+2. Gramáticas Tipo 1 (Sensibles al contexto):
    - Producciones:  Γ_1 A Γ_2  → Γ_1 δ Γ_2 , donde  A ∈ V, Γ_1, Γ_2, δ ∈ (V ∪ T)^*  y  |δ| > 0 .
    - Generan lenguajes sensibles al contexto.
 
-3. **Gramáticas Tipo 2 (Libres de contexto)**:
+3. Gramáticas Tipo 2 (Libres de contexto):
    - Producciones:  A  → β , donde  A ∈ V, β ∈ (V ∪ T)^* .
    - Generan lenguajes libres de contexto.
 
-4. **Gramáticas Tipo 3 (Regulares)**:
+4. Gramáticas Tipo 3 (Regulares):
    - Producciones:  A  → aB | a | B | aA | a, donde  A, B ∈ V, a ∈ T.
    - Generan lenguajes regulares.
 
 ## Tipos Específicos de Producciones
 
-### 1. **Producciones Simples**:
+### 1. Producciones Simples:
 Son aquellas en las que un símbolo no terminal deriva directamente en otro no terminal:
 
  A  → B, A, B ∈ V. 
 
 Estas producciones pueden ser eliminadas para simplificar la gramática.
 
-### 2. **Producciones Nulas (ε)**:
+### 2. Producciones Nulas (ε):
 Permiten que un símbolo no terminal derive la cadena vacía (ε):
 
  A  → ε. 
 
 Se eliminan durante la limpieza de una gramática para evitar ambigüedades o redundancias.
 
-### 3. **Producciones Unitarias**:
+### 3. Producciones Unitarias:
 Son aquellas en las que un símbolo no terminal deriva en otro símbolo no terminal:
 
  A  → B. 
 
 Estas también se eliminan mediante algoritmos específicos para simplificar la gramática.
 
-### 4. **Producciones Terminales**:
+### 4. Producciones Terminales:
 Son aquellas en las que un símbolo no terminal deriva exclusivamente en símbolos terminales:
 
  A → w, w ∈ T^*. 
 
-### 5. **Producciones Recursivas**:
+### 5. Producciones Recursivas:
 Cuando el lado derecho contiene el mismo símbolo que el izquierdo, se dice que es recursiva:
 
 - Recursión por la izquierda:  A → Ax | β.
@@ -78,10 +78,10 @@ La recursión por la izquierda puede eliminarse mediante técnicas como la facto
 Una derivación es el proceso mediante el cual se aplica una secuencia de producciones para transformar el axioma inicial en una cadena formada exclusivamente por símbolos terminales.
 
 ### Tipos de Derivaciones
-1. **Derivación más a la izquierda**:
+1. Derivación más a la izquierda:
    Se aplica siempre la producción al símbolo no terminal más a la izquierda.
    
-2. **Derivación más a la derecha**:
+2. Derivación más a la derecha:
    Se aplica siempre la producción al símbolo no terminal más a la derecha.
 
 Ambos tipos resultan útiles para construir árboles sintácticos y analizar estructuras gramaticales.

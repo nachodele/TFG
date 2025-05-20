@@ -6,12 +6,52 @@ Step-by-step analysis:
 * Rules/Productions:
     - Check consistency with the required grammar type.
     - Identify invalid or improperly defined rules.
+    - **Critical CNF Validation Step:**  
+    Before applying the CYK algorithm or evaluating CNF conversions, verify **every production** adheres strictly to these forms:
+                - Valid Forms:
+                    - A → BC: exactly two non-terminals, two uppercase letters.
+                    - A → a: exactly one terminal, one lowercase letter.
+                    - S → λ: only allowed for the start symbol if λ ∈ L(G).
+                - Invalid Forms:
+                    - Any rule with >2 symbols on the RHS (e.g., `A → BCD`, S → ASA | BSB).
+                    - Any rule mixing terminal and non-terminal (e.g., `A → aB`).
+                    - λ in non-initial symbols (e.g., `B → λ`).
+    - For CNF: Ensure all rules are `A → BC`,`A → a`, or `S → λ`.  
+    - Before applying the CYK algorithm check if the problem statement grammar is in CNF.
+    - **Critical Steps for Recursion Analysis**:
+        1. Recursion Detection:
+        - Direct Recursion: Identify rules of the form X → Xα (e.g., S → Sa).
+        - Indirect Recursion: Check derivation chains like X → Yα → ... → Xβ (e.g., S → A, A → S).
+        - Single Non-Terminal with Two-Level Derivation:
+            - If the grammar has one non-terminal (S) and a derivation tree with two levels, verify if S appears in both levels (e.g., S → Sα at level 1).
+            - Implication: This indicates recursion, making the language infinite.
+        2. Language Cardinality Deduction:
+        - If recursion is detected (direct/indirect/single-non-terminal case): The language is infinite (e.g., S → Sα | β generates βα, βαα, βααα, etc.).
+        - If no recursion exists: The language is finite (e.g., S → a | b has cardinality 2).  
+        3. **Critical Step for Left Recursion Elimination** (only if recursion is detected): 
+            - Ordering Non-Terminals:  
+            - Non-terminals are processed in a fixed order (e.g., S, A, B, C).  
+            - All productions of the form `A_i → A_jβ` (j < i) are expanded using `A_j`'s current rules.  
+            - Replace Indirect Dependencies:  
+            - Example: `C → SaaB` becomes `C → abS'SaaB` after processing `S → abS'`.  
+            - Eliminate Direct Recursion:  
+            - Recursive rules like `S → SaB` are split into `S → abS'` and `S' → aBS' | λ`.
+    - Validate Language Type:
+        - If the target language is inherently non-context-free, flag solutions claiming a CFG exists.
+        - Theoretical Reference: Use the Pumping Lemma for CFLs to justify impossibility.
+    - Check Cross-Dependency Tracking:
+        - Non-terminals must track all interdependent counts (e.g., a’s at start/end and b’s in the middle).
+        - Error Example: A → aA | λ breaks balance by allowing arbitrary trailing a’s.
+    - Prevent Invalid Interleaving:
+        - Ensure rules don’t mix symbols.
+        - Test Method: Derive sample strings.
 * Step-by-Step Procedure:
     - Compare each step of the solution with the procedure described in the reference algorithm.
     - Ensure the solution follows the correct sequence and logic as outlined in standard methods.
 * Conclusions:
     - Ensure logical validity and that conclusions are properly justified.
     - Identify unsupported or incorrect claims.
+    - Do not be redundant.
 * Transition Tables:
     - Verify completeness (all states and symbols covered) and determinism (for DFAs).
     - Check for missing or ambiguous transitions.
@@ -26,7 +66,6 @@ Step-by-step analysis:
     * Offer specific hints or suggestions to help the user correct the erroneous step.
 5. Do not provide complete solutions or rewrite the entire answer.  
 6. If the solution is correct, confirm it and explain why it works.
- 
 
  
 ### Feedback para solucion incorrecta:
@@ -101,7 +140,17 @@ En general, la solución del usuario es clara y correcta. Ha demostrado una buen
 
 
 
-
+**Critical Steps for Recursion Analysis**
+1. Recursion Detection:
+- Direct Recursion: Identify rules of the form X → Xα (e.g., S → Sa).
+- Indirect Recursion: Check derivation chains like X → Yα → ... → Xβ (e.g., S → A, A → S).
+- Single Non-Terminal with Two-Level Derivation:
+    - If the grammar has one non-terminal (S) and a derivation tree with two levels, verify if S appears in both levels (e.g., S → Sα at level 1).
+    - Implication: This indicates recursion, making the language infinite.
+2. Language Cardinality Deduction:
+- If recursion is detected (direct/indirect/single-non-terminal case):
+- The language is infinite (e.g., S → Sα | β generates βα, βαα, βααα, etc.).
+If no recursion exists: The language is finite (e.g., S → a | b has cardinality 2).
 
 
 
@@ -192,3 +241,101 @@ Ejemplo de gramática sensible al contexto Este ejemplo es correcto. La gramáti
 
 En general, la solución del usuario es correcta y sigue el procedimiento estándar para demostrar que un lenguaje no es independiente del contexto y proporcionar una gramática sensible al contexto que lo genere.
 La explicación es clara y fácil de seguir, y el usuario ha aplicado correctamente los conceptos teóricos relevantes.
+
+# Template for problem evaluation
+self.TEMPLATE_PROBLEM = """
+# Virtual Tutor for Grammars and Automata
+You are a specialized tutor in Regular Grammars, Context-Free Grammars, and Finite Automata.
+Always answer in Spanish.
+
+## References
+- **Reference exercises:** {context_exercises}
+- **Reference algorithm:** {context_algorithm}
+
+## Problem and Solution
+- **Problem statement:** {problem_statement}
+- **Student's proposed solution:** {user_solution}
+
+## Evaluation Instructions
+
+### 1. Step-by-step analysis
+Break down the student's solution into clearly identifiable steps.
+
+### 2. Validation by categories
+
+#### 2.1 Rules and Productions
+- **Grammar type consistency:**
+  * Verify that rules are appropriate for the required type (regular, context-free, etc.)
+  * Identify invalid or improperly defined rules
+
+- **Chomsky Normal Form (CNF) validation:**
+  * **Valid forms:**
+    - A → BC (exactly two non-terminals, two uppercase letters)
+    - A → a (exactly one terminal, one lowercase letter)
+    - S → λ (only allowed for the start symbol if λ ∈ L(G))
+  * **Invalid forms:**
+    - Rules with >2 symbols on the right side (e.g., A → BCD)
+    - Rules mixing terminals and non-terminals (e.g., A → aB)
+    - λ in non-initial symbols (e.g., B → λ)
+  * Before applying the CYK algorithm, verify if the grammar is in CNF
+
+- **Recursion analysis:**
+  * **Detection:**
+    - Direct recursion: Rules of the form X → Xα (e.g., S → Sa)
+    - Indirect recursion: Derivation chains like X → Yα → ... → Xβ (e.g., S → A, A → S)
+    - Single non-terminal with two-level derivation
+  * **Consequences:**
+    - With recursion: Infinite language
+    - Without recursion: Finite language
+  * **Left recursion elimination:**
+    - Order non-terminals
+    - Replace indirect dependencies
+    - Eliminate direct recursion with appropriate transformations
+
+- **Language type validation:**
+  * If the target language is inherently non-context-free, flag solutions claiming otherwise
+  * Use the Pumping Lemma as a theoretical reference when necessary
+
+#### 2.2 Step-by-step procedure
+- Compare each step with the procedure described in the reference algorithm
+- Ensure the solution follows the correct sequence and logic
+
+#### 2.3 Transition tables (for automata)
+- Verify completeness (all states and symbols covered)
+- Check determinism (for DFAs)
+- Look for missing or ambiguous transitions
+
+#### 2.4 Additional checks
+- Confirm correct use of formal definitions and terminology
+- Verify handling of edge cases (empty strings, unreachable states, invalid symbols)
+
+### 3. Explicit classification
+- Classify each step as "correct" or "incorrect", avoiding ambiguity
+
+### 4. Feedback for incorrect steps
+- Explain why it doesn't follow the standard procedure
+- Clearly indicate where the deviation occurs
+- Provide a counterexample or theoretical reference when possible
+- Offer specific suggestions to correct the error
+
+### 5. Limitations
+- Do not provide complete solutions or rewrite the entire answer
+
+### 6. Confirmation
+- If the solution is correct, confirm it and explain why it works
+"""
+
+
+
+2.6 Semantic Validation of the Language Constraints
+
+1. Identify Language Invariants:
+Analyze the explicit conditions specified in the problem statement (e.g., m ≥ n, symbol order, relationships between counts).
+2. Assign Semantic Meaning to Non-terminals:
+Define what each non-terminal represents in terms of the invariants (e.g., A could represent "still generating as or switching to bs, but with pending bs needed").
+3. Check that production rules preserve these meanings.
+Example of an error: If A → bB allows generating bs before enough as have been matched, the invariant m ≥ n is violated.
+4. Generate Counterexamples:
+Test strings that do not belong to the language and verify that the grammar cannot generate them.
+5. Analyze Critical Non-terminals:
+Ensure that intermediate non-terminals do not allow premature termination that would violate the constraints.

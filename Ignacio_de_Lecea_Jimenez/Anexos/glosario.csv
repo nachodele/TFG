@@ -1,0 +1,59 @@
+Expresión,Texto Plano,Ejemplo de uso
+cdot,·,A·B
+dot{x},ẋ,ẋ
+dots,...,"a₁, a₂, ..., aₙ"
+cup,∪,A ∪ B
+cap,∩,A ∩ B
+leq,≤,x ≤ y
+geq,≥,x ≥ y
+sigma,σ,σ
+Sigma,Σ,Σ
+lambda,λ,λ
+neq,≠,x ≠ y
+bigcup,⋃,⋃
+infty,∞,∞
+epsilon,ε,ε
+varepsilon,ϵ,ϵ
+notin,∉,x ∉ A
+in,∈,x ∈ A
+delta,δ,δ
+Delta,Δ,Δ
+omega,ω,ω
+Omega,Ω,Ω
+setminus,∖,A∖B
+overline,-,Ā
+forall,∀,∀x
+exists,∃,∃x
+subset,⊂,A⊂B
+supset,⊃,A⊃B
+subseteq,⊆,A⊆B
+supseteq,⊇,A⊇B
+to,→,A→B
+sum,∑,∑
+product,∏,∏
+approx,≈,x≈y
+mid,∣,x∣y
+times,×,A×B
+hat,^,x̂
+alpha,α,α
+beta,β,β
+emptyset,∅,∅
+Gamma,Γ,Γ
+equiv,≡,a ≡ b
+leftrightarrow,⇔,A ⇔ B  
+rightarrow,→,A→B
+leftarrow,←,A←B
+Theta,Θ,Θ
+vdash,⊢,⊢
+bar{x},x̄,x̄
+overset{*}{x},*x,*x
+mathbb{N},ℕ,ℕ
+mathbb{Z},ℤ,ℤ
+mathbb{R},ℝ,ℝ
+mathbb{Q},ℚ,ℚ
+mathbb{I},ℑ,ℑ
+eta,η,η
+theta,θ,θ  
+mu,μ,μ
+oplus,⊕,A ⊕ B  
+otimes,⊗,A ⊗ B
